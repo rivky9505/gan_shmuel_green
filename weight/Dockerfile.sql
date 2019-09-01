@@ -1,2 +1,4 @@
 FROM mysql/mysql-server
-ADD test.sql  /docker-entrypoint-initdb.d
+COPY test.sql  /docker-entrypoint-initdb.d
+
+
