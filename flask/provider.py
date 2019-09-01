@@ -22,7 +22,7 @@ def index():
 
 @app.route('/health')
 def health():
-	return 'OK'	
+	return '{ "ErrorCode" : 0 , "Description" : "OK" }'	
   
 app.run(host='0.0.0.0')
 
