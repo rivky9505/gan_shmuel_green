@@ -28,17 +28,17 @@ def hello():
 def get_health():
     db = getMysqlConnection()
     try:
-        logging.info('info') # ADD TO PROPER PLACE
-        logging.error('error')# ADD TO PROPER PLACE
+        logging.info('info health test') # CHANGE TO PROPER MESSAGE
+        logging.error('error health test') # CHANGE TO PROPER MESSAGE
         sqlstr = "SELECT 1"
         cur = db.cursor()
         cur.execute(sqlstr)
         output_json = cur.fetchall()
     except Exception as e:
-        logging.error("ERROR , while trying :", sqlstr)
+        logging.error('error') # CHANGE TO PROPER MESSAGE
         return jsonify("500 Internal server error")
     finally:
-        logging.info("200 OK Weight is healthy")
+        logging.info("200 OK")
         db.close()
     return jsonify(results=output_json)
 
@@ -58,10 +58,10 @@ def insertprovider():
         db.commit()
         cursor.close()
         db.close()
-        #ADD LOG  
+        logging.info('info') # CHANGE TO PROPER MESSAGE  
         return "{ 'id' : " + request.form["name"] + " }," #CHANGE 
     except Exception as e:
-        #ADD LOG
+        logging.error('error') # CHANGE TO PROPER MESSAGE
         return str(e)
 
 
@@ -70,10 +70,10 @@ def insertprovider():
 @app.route('/rates', methods=["GET"])
 def getrates():
     try:
-        #ADD LOG
+        logging.info('info') # CHANGE TO PROPER MESSAGE
         return send_from_directory('in', "rates.xlsx",mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     except Exception as e:
-        #ADD LOG
+        logging.error('error') # CHANGE TO PROPER MESSAGE
         return "FILE NOT FOUND"
         return str(e)
 
@@ -110,10 +110,10 @@ def postrates():
         db.commit()
         cur.close()
         db.close()
-        #ADD LOG
+        logging.info('info') # CHANGE TO PROPER MESSAGE
         return "RATES UPLOADED"
     except Exception as e:
-        #ADD LOG
+        logging.error('error') # CHANGE TO PROPER MESSAGE
         return e
 
 
@@ -127,21 +127,32 @@ def inserttruck(id):
     try:
         db = getMysqlConnection()
         cur = connection.cursor()  
-        cur.execute('UPDATE truck SET providerId = "{0}" WHERE truckId = {1}'.format(request.form["providerId"], id))
+        cur.execute('')
         db.commit()
         cur.close()
         db.close()
-        #ADD LOG
-        return "ok"
+        logging.info('info') # CHANGE TO PROPER MESSAGE
+        return "OK"
     except Exception as e:
-        #ADD LOG
+        logging.error('error') # CHANGE TO PROPER MESSAGE
         return str(e)
     
 
 # PUT /truck/{id} can be used to update provider id
 @app.route('/truck/<id>', methods=["PUT"])
 def updatetruck(id):
-    return "TODO"
+    try:
+        db = getMysqlConnection()
+        cur = connection.cursor()  
+        cur.execute('')
+        db.commit()
+        cur.close()
+        db.close()
+        logging.info('info') # CHANGE TO PROPER MESSAGE
+        return "OK"
+    except Exception as e:
+        logging.error('error') # CHANGE TO PROPER MESSAGE
+        return str(e)
 
 
 # GET /truck/<id>?from=t1&to=t2
@@ -155,7 +166,18 @@ def updatetruck(id):
 #}
 @app.route('/truck/<id>', methods=["GET"])
 def truckinfo(id):
-    return "TODO"
+    try:
+        db = getMysqlConnection()
+        cur = connection.cursor()  
+        cur.execute('')
+        db.commit()
+        cur.close()
+        db.close()
+        logging.info('info') # CHANGE TO PROPER MESSAGE
+        return "OK"
+    except Exception as e:
+        logging.error('error') # CHANGE TO PROPER MESSAGE
+        return str(e)
 
 
 # GET /bill/<id>?from=t1&to=t2
@@ -180,7 +202,20 @@ def truckinfo(id):
 #   ],
 #   "total": <int> // agorot
 # }
-
+@app.route('/bill/<id>?from=<t1>&to=<t2>', methods=["GET"])
+def getbilling(id):
+    try:
+        db = getMysqlConnection()
+        cur = connection.cursor()  
+        cur.execute('')
+        db.commit()
+        cur.close()
+        db.close()
+        logging.info('info') # CHANGE TO PROPER MESSAGE
+        return "OK"
+    except Exception as e:
+        logging.error('error') # CHANGE TO PROPER MESSAGE
+        return str(e)
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
