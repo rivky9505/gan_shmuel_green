@@ -19,12 +19,15 @@ def index():
 def health():
 
     return '{ "ErrorCode" : 0 , "Description" : "OK" }'	
+
+# Boris START Code
+@app.route('/rates')
+def rates():
+	return "This is RATES!!!!!"	
+
+
+# Boris End Code
   
 app.run(host='0.0.0.0')
 
 
-# Boris START Code
-
-
-
-# Boris End Code
