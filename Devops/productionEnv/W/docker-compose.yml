@@ -18,4 +18,4 @@ services:
       MYSQL_USER: testing
       MYSQL_PASSWORD: testing
     ports:
-      - "3306:3306" 
+      - "8081:3306" 
