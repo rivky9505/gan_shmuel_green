@@ -3,15 +3,23 @@
 --
  
 CREATE DATABASE IF NOT EXISTS `weight`;
+
  
 -- --------------------------------------------------------
  
 --
 -- Table structure for table `containers-registered`
 --
+
  
 USE weight;
  
+CREATE TABLE IF NOT EXISTS `unknown` (
+  `container_id` varchar(15) NOT NULL,
+  `weight` int(12) DEFAULT NULL,
+  `unit` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`container_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
  
 CREATE TABLE IF NOT EXISTS `containers_registered` (
   `container_id` varchar(15) NOT NULL,
@@ -19,7 +27,9 @@ CREATE TABLE IF NOT EXISTS `containers_registered` (
   `unit` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`container_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
+
  
+
 -- --------------------------------------------------------
  
 --
@@ -38,12 +48,14 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `neto` int(12) DEFAULT NULL,
   `produce` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
+
 ) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
  
 show tables;
  
 describe containers_registered;
 describe transactions;
+describe unknown;
  
  
  
