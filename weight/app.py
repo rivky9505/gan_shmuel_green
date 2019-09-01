@@ -13,23 +13,8 @@ def getMysqlConnection():
 def hello():
     return "Flask inside Docker!!"
 
-@app.route('/api/getMonths', methods=['GET'])
-@cross_origin() # allow all origins all methods.
-def get_months():
-    db = getMysqlConnection()
-    print(db)
-    try:
-        sqlstr = "SELECT * from containers_registered"
-        print(sqlstr)
-        cur = db.cursor()
-        cur.execute(sqlstr)
-        output_json = cur.fetchall()
-    except Exception as e:
-        print("Error in SQL:\n", e)
-    finally:
-        db.close()
-    return jsonify(results=output_json)
 
+@cross_origin() # allow all origins all methods.
 
 
 @app.route('/health', methods=['GET'])
@@ -38,13 +23,14 @@ def get_health():
     print(db)
     try:
         sqlstr = "SELECT 1"
-        logging.info("This is an info message")
         cur = db.cursor()
         cur.execute(sqlstr)
         output_json = cur.fetchall()
     except Exception as e:
-        print("Error in SQL:\n", e)
+        logging.error("ERROR , while trying :", sqlstr)
+        return jsonify("500 Internal server error")
     finally:
+        logging.info("200 OK Weight is healthy")
         db.close()
     return jsonify(results=output_json)
 
@@ -52,3 +38,4 @@ def get_health():
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
+
