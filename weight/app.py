@@ -6,7 +6,7 @@ import logging
 app = Flask(__name__)
 
 def getMysqlConnection():
-    return mysql.connector.connect(user='testing', host='mysql', port='3306', password='testing', database='test')
+    return mysql.connector.connect(user='root', host='mysql', port='3306', password='root', database='weight')
 
 
 @app.route("/")
@@ -46,7 +46,7 @@ def get_health():
         print("Error in SQL:\n", e)
     finally:
         db.close()
-    return jsonify(results=output_json)
+        return jsonify(results=output_json)
 
 
 

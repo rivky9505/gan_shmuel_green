@@ -46,7 +46,21 @@ describe containers_registered;
 describe transactions;
  
  
- 
+-- Table structure for table 'weight'
+
+
+CREATE TABLE IF NOT EXISTS `weight` (
+  `direction` int(12) NOT NULL AUTO_INCREMENT,
+  `containers` datetime DEFAULT NULL,
+  `weight` varchar(10) DEFAULT NULL,
+  `unit` varchar(50) DEFAULT NULL,
+  `force` varchar(10000) DEFAULT NULL,
+  `produce` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`direction`)
+) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
+
+
+
 --
 -- Dumping data for table `test`
 --
