@@ -82,16 +82,17 @@ CREATE TABLE IF NOT EXISTS `Trucks` (
 -- Dumping data
 --
  
-/*
-INSERT INTO Provider (`name`) VALUES ('ALL'), ('pro1'),
-(3, 'pro2');
+
+INSERT INTO Provider (`name`) VALUES ('ALL'), ('provider 1'), ('provider 2'), ('provider 3'), ('provider 4');
  
-INSERT INTO Rates (`product_id`, `rate`, `scope`) VALUES ('1', 2, 'ALL'),
-(2, 4, 'pro1');
+INSERT INTO Rates (`product_id`, `rate`, `scope`) VALUES ('Navel', '93', 'All'), ('Blood', '112', 'All'), ('Mandarin', '104', 'All'), 
+('Shamuti', '84', 'All'), ('Tangerine', '92', 'All'), ('Clementine', '113', 'All'), 
+('Grapefruit', '88', 'All'), ('Valencia', '87', 'All'), ('Mandarin', '102', '43'), 
+('Mandarin', '120', '45'), ('Tangerine', '85', '12'), ('Valencia', '90', '45');
  
-INSERT INTO Trucks (`id`, `provider_id`) VALUES ('134-33-443', 2),
-('222-33-111', 1);
-*/
+INSERT INTO Trucks (`id`, `provider_id`) VALUES ('134-33-443', 10001), ('124-55-443', 10003),
+('222-33-111', 10003), ('212-33-441', 10004),('432-98-541', 10001), ('212-99-466', 10002);
+
 --
 -- Dumping data for table `test`
 --
