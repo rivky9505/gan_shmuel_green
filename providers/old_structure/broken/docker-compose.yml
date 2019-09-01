@@ -18,4 +18,4 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: 123
     ports:
-      - "3306:3302" 
+      - "3307:3307" 
