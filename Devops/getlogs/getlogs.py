@@ -15,10 +15,11 @@ def whealthlog:
 
 
 
-@app.route("/provider/healthlog" , methods=['GET'])
+@app.route("/provider/getlog" , methods=['GET'])
 def whealthlog: 
     #TODO add path to the log file in order for us to get the log file
-    with open('path', 'r') as file:
+
+    with open('/provider/getlogs/app.log', 'r') as file:
     data = []
     for line in file:
         data.append(line.strip() + "\n")
