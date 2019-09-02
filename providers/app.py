@@ -94,10 +94,11 @@ def selectAll():
         logging.info("This is an select all request massege")
         cur = db.cursor()
         cur.execute(data_query)
-        output_json = cur.fetchall()
+        
     except Exception as e:
-        print("Error in SQL:\n", e)
+        return("Error in SQL:\n", e)
     finally:
+        output_json = cur.fetchall()
         db.close()
         return jsonify(results=output_json)
         # return "Hello"
@@ -186,17 +187,21 @@ def postrates():
 # - provider - known provider id
 # - id - the truck license plate 
 
-@app.route('/truck/<id>', methods=["POST"])
-def inserttruck(id):
+@app.route('/truck/<provider_id>/<truck_lisence>', methods=['GET','POST'])
+def inserttruck(provider_id, truck_lisence):
     try:
         db = getMysqlConnection()
-        cur = connection.cursor()  
-        cur.execute('')
+        data_query2="SELECT id FROM Provider WHERE id="+str(provider_id)
+        cur = db.cursor()
+        cur.execute(data_query2)
+        if cur.fetchone() != None:
+            data_query = "INSERT  INTO Trucks (`id`,`provider_id`) VALUES  (%s,%s)"
+            data=(truck_lisence,provider_id)
+            cur.execute(data_query,data)
         db.commit()
         cur.close()
         db.close()
-        logging.info('info') # CHANGE TO PROPER MESSAGE
-        return "OK"
+        return jsonify("OK")
     except Exception as e:
         logging.error('error') # CHANGE TO PROPER MESSAGE
         return str(e)
@@ -207,7 +212,7 @@ def inserttruck(id):
 def updatetruck(id):
     try:
         db = getMysqlConnection()
-        cur = connection.cursor()  
+        cur = db.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
@@ -276,7 +281,7 @@ def truckinfo(id):
 def getbilling(id):
     try:
         db = getMysqlConnection()
-        cur = connection.cursor()  
+        cur = db.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
