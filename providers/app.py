@@ -158,7 +158,7 @@ def inserttruck(id):
 def updatetruck(id):
     try:
         db = getMysqlConnection()
-        cur = connection.cursor()  
+        cur = db.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
@@ -183,7 +183,7 @@ def updatetruck(id):
 def truckinfo(id):
     try:
         db = getMysqlConnection()
-        cur = connection.cursor()  
+        cur = db.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
@@ -221,7 +221,7 @@ def truckinfo(id):
 def getbilling(id):
     try:
         db = getMysqlConnection()
-        cur = connection.cursor()  
+        cur = db.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
