@@ -5,6 +5,8 @@ from flask_cors import CORS, cross_origin
 import logging
 import csv
 from openpyxl import Workbook
+import xlsxwriter
+
 app = Flask(__name__)
 
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
@@ -44,7 +46,20 @@ def get_health():
     return jsonify(results=output_json)
 
 
-""" @app.route('/rates', methods=['GET'])
+def json_to_excel(ws, data, row=0, col=0):
+    ws.write('A1', 'Product')
+    ws.write('B1', 'Rate')
+    ws.write('C1', 'Scope')
+    row += 1
+    for product_id, rate, scope in data:
+        ws.write(row, col, product_id)
+        ws.write(row, col + 1, rate)
+        ws.write(row, col + 2, scope)
+        row += 1
+
+# GET /rates
+# Will download a copy of the same excel that was uploaded using POST /rates 
+@app.route('/rates', methods=['GET'])
 def get_rates():
     db = getMysqlConnection()
     try:
@@ -58,7 +73,14 @@ def get_rates():
     finally:
         logging.info("200 OK SQL completed query: ", sqlstr)
         db.close()
-    return jsonify(output_jason) """
+    data = output_jason
+    wb = xlsxwriter.Workbook("output_from_Rates_Table.xlsx")
+    ws = wb.add_worksheet()
+    json_to_excel(ws, data)
+    wb.close()
+    return "Excel Created"
+
+
 # POST /provider
 # Creates a new provider record:
 # - name - provider name. must be unique.
@@ -79,20 +101,6 @@ def insertprovider():
     except Exception as e:
         logging.error('error') # CHANGE TO PROPER MESSAGE
         return str(e)
-
-
-# GET /rates
-# Will download a copy of the same excel that was uploaded using POST /rates    
-@app.route('/rates', methods=["GET"])
-def getrates():
-    try:
-        logging.info('info') # CHANGE TO PROPER MESSAGE
-        return send_from_directory('in', "rates.xlsx",mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-    except Exception as e:
-        logging.error('error') # CHANGE TO PROPER MESSAGE
-        return "FILE NOT FOUND"
-        return str(e)
-
 
 
 # POST /rates
