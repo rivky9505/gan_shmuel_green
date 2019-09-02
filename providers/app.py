@@ -105,7 +105,7 @@ def selectAll():
 
 @app.route('/provider/<provider_name>', methods=['GET','POST'])
 def insert_provider(provider_name):
-        db = getMysqlConnection()
+    db = getMysqlConnection()
     try:
         data_query = "INSERT INTO Provider (`name`) VALUES  (%s)"
         data=(provider_name,)
