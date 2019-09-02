@@ -1,5 +1,5 @@
-from flask import Flask, request, jsonify, Response
-import json
+from flask import Flask, request, jsonify, Response, render_template
+import json, pprint
 import mysql.connector
 from flask_cors import CORS, cross_origin
 import logging
@@ -71,6 +71,8 @@ def post_batch_weight():
         db.close()
         return 'done'
 
+
+
 @app.route('/item/<id>', methods=['GET'])
 def get_item_id(id):
 # GET /item/<id>?from=t1&to=t2
@@ -105,7 +107,6 @@ def get_item_id(id):
             # append to JSON to return
 
 # trucks querying,
-
     except Exception:
         logging.error("ERROR , while trying : %s", data_query)
         return jsonify("404 item id not found")
@@ -113,6 +114,56 @@ def get_item_id(id):
         logging.info("200 OK Weight is healthy")
         db.close()
     return jsonify(results=item_id_json)
+
+
+
+@app.route('/weight', methods=['GET', 'POST'])
+def postweight():
+    db = getMysqlConnection()
+    if request.method == "POST":
+
+        lastval = 'select direction from weight ORDER By Created_at DESC LIMIT 1;'
+        cur = db.cursor()
+        cur.execute(lastval)
+        output_json = cur.fetchall()
+
+        a = output_json
+        pformat_a = pprint.pformat(a)
+
+
+        details = request.form
+        direction = details['direction']
+        truckid = details['truckid']
+        containers = details['containers']
+        weight = details['weight']
+        unit = details['unit']
+        forc = details['forc']
+        produce = details['produce']
+        cur = db.cursor()
+        cur.execute("INSERT INTO weight(direction, truckid, containers, weight, unit, forc, produce) VALUES (%s, %s, %s, %s, %s, %s, %s)", (direction, truckid, containers, weight, unit, forc, produce))
+
+        currentval = 'select direction from weight ORDER By Created_at DESC LIMIT 1;'
+        cur2 = db.cursor()
+        cur2.execute(currentval)
+        output_json2 = cur.fetchall()
+
+        b = output_json2
+        pformat_b = pprint.pformat(b)
+
+
+        if pformat_a == pformat_b:
+            return "GREAT"
+        return "Not equal!"
+
+
+        conn = getMysqlConnection()
+        conn.commit()
+        cur.close()
+        return 'Success'
+    return render_template('weight.html')
+
+
+
 
 
 if __name__ == "__main__":

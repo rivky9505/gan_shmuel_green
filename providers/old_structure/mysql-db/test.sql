@@ -4,32 +4,22 @@
  
 CREATE DATABASE IF NOT EXISTS `weight`;
  
- 
 -- --------------------------------------------------------
  
 --
 -- Table structure for table `containers-registered`
 --
  
- 
 USE weight;
  
-CREATE TABLE IF NOT EXISTS `unknown` (
+ 
+CREATE TABLE IF NOT EXISTS `containers_registered` (
   `container_id` varchar(15) NOT NULL,
   `weight` int(12) DEFAULT NULL,
   `unit` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`container_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
  
- 
-CREATE TABLE IF NOT EXISTS `containers_registered` (
-  `id` varchar(15) NOT NULL,
-  `kg` int(12) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
- 
-
-
 -- --------------------------------------------------------
  
 --
@@ -48,37 +38,27 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `neto` int(12) DEFAULT NULL,
   `produce` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-
 ) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
  
-
-INSERT INTO transactions(`id`, `datetime`, `direction`) VALUES ('10', '2011-12-18 13:17:17', 'in');
-
 show tables;
  
 describe containers_registered;
 describe transactions;
-describe unknown;
  
  
--- Table structure for table 'weight'
+ --
+-- Database: `billdb`
+--
  
-
-CREATE TABLE IF NOT EXISTS `weight` (
-  `direction` varchar(15) NOT NULL,
-  `truckid` varchar(50) DEFAULT NULL, 
-  `containers` varchar(1000) DEFAULT NULL,
-  `weight` int(10) DEFAULT NULL,
-  `unit` varchar(50) DEFAULT NULL,
-  `forc` BOOLEAN NOT NULL DEFAULT 0,
-  `produce` varchar(50) DEFAULT NULL, `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
-
-
-
-
-INSERT INTO weight (`direction`, `truckid`, `containers`, `weight`, `unit`, `forc`, `produce`) VALUES ('in', 'truckID', 'str10', '10', 'unit', '0', 'tomatoes');
-
-
+CREATE DATABASE IF NOT EXISTS `billdb`;
+USE `billdb`;
+ 
+-- --------------------------------------------------------
+ 
+--
+-- Table structure
+--
+ 
 CREATE TABLE IF NOT EXISTS `Provider` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -110,16 +90,8 @@ INSERT INTO Rates (`product_id`, `rate`, `scope`) VALUES ('Navel', '93', 'All'),
 ('Grapefruit', '88', 'All'), ('Valencia', '87', 'All'), ('Mandarin', '102', '43'), 
 ('Mandarin', '120', '45'), ('Tangerine', '85', '12'), ('Valencia', '90', '45');
  
-INSERT INTO unknown (container_id , weight ,unit) VALUES ('1c' , '400' , 'NULL');
-INSERT INTO unknown (container_id , weight ,unit) VALUES ('1d' , '800' , 'NULL');
-
- 
-=======
 INSERT INTO Trucks (`id`, `provider_id`) VALUES ('134-33-443', 10001), ('124-55-443', 10003),
 ('222-33-111', 10003), ('212-33-441', 10004),('432-98-541', 10001), ('212-99-466', 10002);
-
-
-
 
 --
 -- Dumping data for table `test`
@@ -127,4 +99,3 @@ INSERT INTO Trucks (`id`, `provider_id`) VALUES ('134-33-443', 10001), ('124-55-
  
 -- INSERT INTO `test` (`id`, `aa`) VALUES
 -- (1, 'aaaa'),
-

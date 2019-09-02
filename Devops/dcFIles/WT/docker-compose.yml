@@ -1,0 +1,21 @@
+version: '2' 
+services:
+  web:
+    build:
+            context: .
+    ports:
+     - "8081:5000"
+    volumes:
+     - .:/code
+  mysql:
+    build:
+            context: .
+            dockerfile: Dockerfile.sql
+    environment:
+      MYSQL_DATABASE: weight
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: 0.0.0.0
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    ports:
+      - "8083:3306" 
