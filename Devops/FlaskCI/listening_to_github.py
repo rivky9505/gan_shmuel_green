@@ -25,8 +25,8 @@ def api():
 def api_gh_message():
     if request.headers['Content-Type'] == 'application/json':
         info = json.dumps(request.json)
-        branch = info[info.find("refs/heads")+10:info.find("refs/heads")+50]
-        branch = branch[1:branch.find("", "")]
+        TempBranch = info[info.find("refs/heads")+10:info.find("refs/heads")+50]
+        branch = TempBranch[1:TempBranch.find("repo")-4]
         print (info)
         print (branch)
         return info
