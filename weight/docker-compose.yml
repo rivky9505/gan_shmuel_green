@@ -12,7 +12,7 @@ services:
             context: .
             dockerfile: Dockerfile.sql
     environment:
-      MYSQL_DATABASE: test
+      MYSQL_DATABASE: weight
       MYSQL_ROOT_PASSWORD: root
       MYSQL_ROOT_HOST: 0.0.0.0
       MYSQL_USER: testing

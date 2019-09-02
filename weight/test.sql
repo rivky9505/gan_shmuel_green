@@ -20,12 +20,12 @@ CREATE TABLE IF NOT EXISTS `unknown` (
   `unit` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`container_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
+
  
 CREATE TABLE IF NOT EXISTS `containers_registered` (
-  `container_id` varchar(15) NOT NULL,
-  `weight` int(12) DEFAULT NULL,
-  `unit` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`container_id`)
+  `id` varchar(15) NOT NULL,
+  `kg` int(12) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
 
  
@@ -59,9 +59,7 @@ describe unknown;
  
  
  
---
--- Dumping data for table `test`
---
+INSERT INTO unknown (container_id , weight ,unit) VALUES ('1c' , '400' , 'NULL');
+INSERT INTO unknown (container_id , weight ,unit) VALUES ('1d' , '800' , 'NULL');
+
  
--- INSERT INTO `test` (`id`, `aa`) VALUES
--- (1, 'aaaa'),
