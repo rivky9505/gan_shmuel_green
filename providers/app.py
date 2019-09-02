@@ -71,7 +71,7 @@ def insertprovider():
         cur = db.cursor()  
         cur.execute('INSERT INTO Provider (`name`) VALUES ({0})',request.form["name"])
         db.commit()
-        cursor.close()
+        cur.close()
         db.close()
         logging.info('info') # CHANGE TO PROPER MESSAGE  
         return "{ 'id' : " + request.form["name"] + " }," #CHANGE 
@@ -230,6 +230,15 @@ def getbilling(id):
         return "OK"
     except Exception as e:
         logging.error('error') # CHANGE TO PROPER MESSAGE
+        return str(e)
+
+@app.route('/getlogs', methods=["GET"])
+def getlogs():
+    try:
+        with open('app.log', 'r') as file:
+            return file.read()
+    except Exception as e:
+        logging.error('file not found')
         return str(e)
 
 if __name__ == "__main__":
