@@ -40,8 +40,3 @@ sleep(2)
 os.system(copyGlobalDCFW)
 sleep(2)
 runEnv()
-
-#sleep(3)
-
-#os.chdir('../P')
-#runEnv()
