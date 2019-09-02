@@ -94,10 +94,11 @@ def selectAll():
         logging.info("This is an select all request massege")
         cur = db.cursor()
         cur.execute(data_query)
-        output_json = cur.fetchall()
+        
     except Exception as e:
-        print("Error in SQL:\n", e)
+        return("Error in SQL:\n", e)
     finally:
+        output_json = cur.fetchall()
         db.close()
         return jsonify(results=output_json)
         # return "Hello"
@@ -120,6 +121,23 @@ def insert_provider(provider_name):
         db.close()
         return jsonify( "id:",(output_json))
 
+#PUT /provider/{id} can be used to update provider name 
+@app.route('/provider/<id>', methods=['PUT'])
+def putprovider(id):
+    try:
+        newname = request.form["newname"]
+        #return newname
+        db = getMysqlConnection()
+        cur = db.cursor()  
+        cur.execute('UPDATE Provider SET name = ' + '"' +str(newname)+ '"' + ' WHERE id =' + id)
+        db.commit()
+        cur.close()
+        db.close()
+        logging.info('info') # CHANGE TO PROPER MESSAGE
+        return id
+    except Exception as e:
+        logging.error('error') # CHANGE TO PROPER MESSAGE
+        return str(e)
 
 
 
@@ -169,17 +187,25 @@ def postrates():
 # - provider - known provider id
 # - id - the truck license plate 
 
-@app.route('/truck/<id>', methods=["POST"])
-def inserttruck(id):
+@app.route('/truck/<provider_id>/<truck_lisence>', methods=['GET','POST'])
+def inserttruck(provider_id, truck_lisence):
     try:
         db = getMysqlConnection()
         cur = db.cursor()  
         cur.execute('')
+        cur = connection.cursor()  
+        cur.execute('')
+        data_query2="SELECT id FROM Provider WHERE id="+str(provider_id)
+        cur = db.cursor()
+        cur.execute(data_query2)
+        if cur.fetchone() != None:
+            data_query = "INSERT  INTO Trucks (`id`,`provider_id`) VALUES  (%s,%s)"
+            data=(truck_lisence,provider_id)
+            cur.execute(data_query,data)
         db.commit()
         cur.close()
         db.close()
-        logging.info('info') # CHANGE TO PROPER MESSAGE
-        return "OK"
+        return jsonify("OK")
     except Exception as e:
         logging.error('error') # CHANGE TO PROPER MESSAGE
         return str(e)
@@ -215,7 +241,7 @@ def updatetruck():
             if int(query_result[0][0]) > 0: # if more than 0, then update the record.
                 querystr = "UPDATE Trucks SET provider_id = '" + provider_id + "' WHERE id = '" + truck_id + "'" 
                 cur.execute(querystr)
-                db.commit()
+        db.commit()
                 result_message = "Updated Truck no: " + truck_id + " for provider: " + provider_name
             else:
                 result_message = "No Truck ID with this id: " + truck_id
@@ -228,8 +254,8 @@ def updatetruck():
     except Exception as e:
         logging.error('error') # CHANGE TO PROPER MESSAGE
         return str(e)
-    
-    
+
+
 
 # GET /truck/<id>?from=t1&to=t2
 # - id is the truck license. 404 will be returned if non-existent
@@ -243,13 +269,19 @@ def updatetruck():
 @app.route('/truck/<id>', methods=["GET"])
 def truckinfo(id):
     try:
+        #return id
+        #return id+str(request.args.get('from')+str(request.args.get('to')))
         db = getMysqlConnection()
         cur = db.cursor()  
-        cur.execute('')
+        cur.execute('SELECT id , provider_id FROM Trucks WHERE id='+'"' + id + '"')
+        results = cur.fetchall()
+        return str(results)
+        #HERE WE SHOULD MAKE A REQUEST TO WEIGHT API AND GET WITH THE ID BETWEEN DATES BY ID ?
         db.commit()
         cur.close()
         db.close()
         logging.info('info') # CHANGE TO PROPER MESSAGE
+        tempJson = { "id"}
         return "OK"
     except Exception as e:
         logging.error('error') # CHANGE TO PROPER MESSAGE
