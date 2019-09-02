@@ -3,7 +3,6 @@
 import requests as req
 import datetime
 
-
 weightAPI = "http://green.develeap.com:8080"
 provAPI ="http://green.develeap.com:8090"
 testapi = "https://api.github.com"
