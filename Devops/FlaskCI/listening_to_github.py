@@ -6,6 +6,7 @@ app = Flask(__name__)
 @app.route('/')
 def api():
     strd = "Happy birthday"
+    mainFunc()
     return str(strd.find("py"))
 
 @app.route('/github', methods=['POST'])
