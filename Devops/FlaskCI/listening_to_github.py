@@ -1,4 +1,4 @@
-from flask import json, request, Flask, debughelpers
+from flask import json, request, Flask
 from startProd import mainFunc, testFunc
 
 app = Flask(__name__)
