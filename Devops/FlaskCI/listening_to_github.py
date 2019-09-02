@@ -18,6 +18,7 @@ def api_gh_message():
         if branch == "master":
                 print ("its a master")
                 mainFunc()
+        print(branch)
         return info
 
 if __name__ == '__main__':
