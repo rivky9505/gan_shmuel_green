@@ -173,7 +173,7 @@ def postrates():
 def inserttruck(id):
     try:
         db = getMysqlConnection()
-        cur = connection.cursor()  
+        cur = db.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
@@ -185,22 +185,51 @@ def inserttruck(id):
         return str(e)
     
 
+
 # PUT /truck/{id} can be used to update provider id
-@app.route('/truck/<id>', methods=["PUT"])
-def updatetruck(id):
+# This request needs two argumnets.
+# Implenting as a query string in url
+# http://localhost:5000/truck/?id=222-33-111&name=new_provider_for_truck
+@app.route('/truck/', methods=["PUT"])
+def updatetruck():
+    result_message = ""
+    result_count_string = ""
     try:
+        # get values from query string
+        truck_id = request.args.get('id')
+        provider_name = request.args.get('name')
+
         db = getMysqlConnection()
-        cur = connection.cursor()  
-        cur.execute('')
-        db.commit()
+        cur = db.cursor()
+        # get id of provider (owner of the truck id)
+        querystr = "SELECT id FROM Provider WHERE name = '" + provider_name + "'"
+        cur.execute(querystr)
+        query_result = cur.fetchall()
+        result_count_string = "   Result count: " + str(cur.rowcount)
+        if cur.rowcount > 0: # test if there is at least one record
+            provider_id = str(query_result[0][0])
+            # count how many records have the desired truck id
+            querystr = "SELECT COUNT(IF(id='" + truck_id + "',1, NULL)) 'id' FROM Trucks"
+            cur.execute(querystr)
+            query_result = cur.fetchall()
+            if int(query_result[0][0]) > 0: # if more than 0, then update the record.
+                querystr = "UPDATE Trucks SET provider_id = '" + provider_id + "' WHERE id = '" + truck_id + "'" 
+                cur.execute(querystr)
+                db.commit()
+                result_message = "Updated Truck no: " + truck_id + " for provider: " + provider_name
+            else:
+                result_message = "No Truck ID with this id: " + truck_id
+        else:
+            result_message = "No provider with this name: " + provider_name
         cur.close()
         db.close()
         logging.info('info') # CHANGE TO PROPER MESSAGE
-        return "OK"
+        return result_message
     except Exception as e:
         logging.error('error') # CHANGE TO PROPER MESSAGE
         return str(e)
-
+    
+    
 
 # GET /truck/<id>?from=t1&to=t2
 # - id is the truck license. 404 will be returned if non-existent
@@ -215,7 +244,7 @@ def updatetruck(id):
 def truckinfo(id):
     try:
         db = getMysqlConnection()
-        cur = connection.cursor()  
+        cur = db.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
@@ -253,7 +282,7 @@ def truckinfo(id):
 def getbilling(id):
     try:
         db = getMysqlConnection()
-        cur = connection.cursor()  
+        cur = db.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
