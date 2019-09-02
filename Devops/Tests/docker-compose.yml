@@ -21,7 +21,16 @@ services:
 
   providersdb:
     build:
-      context: ./gan-shmuel-green/providers/mysql-db
+      context: ./gan-shmuel-green/providers/
       dockerfile: Dockerfile.sql
     ports:
       - "8091:3306"
+
+  test:
+    build:
+      context: ./endtoend
+    volumes:
+      - /endtoend/logs:/endtoend/log
+
+
+    

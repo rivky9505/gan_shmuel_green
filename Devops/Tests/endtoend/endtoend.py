@@ -14,12 +14,11 @@ testapipost = 'https://httpbin.org/post'
 
 def checkRequest(methoda , urla):
     resp = req.request(method=methoda, url=urla)
-    print("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
+    #print("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
+    f=open("logs/e2e.log", "a+")
+    f.write("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
     return(resp)
 
-def posRequest(urla , data)
-    resp = req.post(urla, data)
-    
 
 #####################################################################################################
 #! Weight tests
@@ -33,21 +32,8 @@ def checkUnknown():
 def checkSession(number):
     checkRequest(get , weightAPI + "/session/" + str(number))#check session
 
-def checkGETrates():
+def checkrates():
     checkRequest(get , weightAPI + "/rates")
-
-def checkWeightFrom(t1to , t2from , filter)
-#TODO check the way we use to and from and fiter
-    checkRequest(get , weightAPI + "/weight?from="+str(t1to)+"&to="+str(t2from)+"&filter="str(filter))
-
-def checkItemFrom(itemID,fromt1 , fromt2)
-    checkRequest(get , weightAPI + "/item/"+str(itemID)+"?from="+str(fromt1)+"&to="+str(fromt2)+"&filter="str(filter))
-
-def postBatchWeight(filename)
-    posRequest(weightAPI + "/batch-weight" , filename)
-
-def postWeight(direction , license , containers ,weight ,unit , force , produce)
-
 
 def weightRequests():
     checkhealthWeight()
@@ -55,7 +41,7 @@ def weightRequests():
     checkSession(1)
     checkSession(2)
     checkSession(3)
-    checkGETrates()
+    checkrates()
 
 
 #####################################################################################################
