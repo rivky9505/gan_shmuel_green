@@ -18,13 +18,16 @@ dateNow = datetime.datetime.now()
 def startReport():
     with open(logfile, 'a') as the_file:
         the_file.write("End2End Report: "+ str(dateNow)+'\n')
-        dataToEmail = dataToEmail + "End2End Report: "+ str(dateNow)+'\n'
         the_file.write("******************************************"+'\n')
+        dataToEmail = dataToEmail + "End2End Report: "+ str(dateNow)+'\n'
+        dataToEmail = dataToEmail + "******************************************"+'\n'
 
 def endReport():
     with open(logfile, 'a') as the_file:
         the_file.write("End Report "+'\n')
-        the_file.write("******************************************"+'\n')
+        the_file.write(End Report "+'\n')
+        dataToEmail = dataToEmail + "End2End Report: "+ str(dateNow)+'\n'
+        dataToEmail = dataToEmail + "******************************************"+'\n'
 
 def checkRequest(methoda , urla):
     resp = req.request(method=methoda, url=urla)
@@ -33,6 +36,7 @@ def checkRequest(methoda , urla):
     print("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
     # print(resp.content)
     print(resp.status_code)
+    dataToEmail = dataToEmail + "the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'n'
     if 200 <= resp.status_code <= 299:
         return True
     return False
@@ -42,6 +46,7 @@ def posRequest(urla , data ):
     with open(logfile, 'a') as the_file:
         the_file.write("the method Post to " +str(urla)+ " got the response " +str(resp)+'\n')
         # print("the method Post to " +str(urla)+ " got the response " +str(resp))
+    dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\n'
     if 200 <= resp.status_code <= 299:
         return True
     return False
@@ -51,6 +56,7 @@ def putRequest(urla , data ):
     with open(logfile, 'a') as the_file:
         the_file.write("the method Put to " +str(urla)+ " got the response " +str(resp)+'\n')
         # print("the method Put to " +str(urla)+ " got the response " +str(resp))
+    dataToEmail = dataToEmail + "the method Put to " +str(urla)+ " got the response " +str(resp)+'\n'
     if 200 <= resp.status_code <= 299:
         return True
     return False
