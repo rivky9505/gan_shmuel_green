@@ -34,7 +34,7 @@ def get_health():
         cur = db.cursor()
         cur.execute(sqlstr)
         output_json = cur.fetchall()
-    except Exception as e:
+    except Exception :
         logging.error('error') # CHANGE TO PROPER MESSAGE
         return jsonify("500 Internal server error")
     finally:
@@ -43,7 +43,7 @@ def get_health():
     return jsonify(results=output_json)
 
 
-""" @app.route('/rates', methods=['GET'])
+@app.route('/rates', methods=['GET'])
 def get_rates():
     db = getMysqlConnection()
     try:
@@ -51,13 +51,13 @@ def get_rates():
         cur = db.cursor()
         cur.execute(sqlstr)
         output_jason = cur.fetchall()
-    except Exception as e:
-        logging.error("ERROR , whilr trying: ", sqlstr)
+    except Exception :
+        logging.error("ERROR , whilr trying: %s", (sqlstr))
         return jsonify("500 Internal server error")
     finally:
-        logging.info("200 OK SQL completed query: ", sqlstr)
+        logging.info("200 OK SQL completed query: %s", (sqlstr))
         db.close()
-    return jsonify(output_jason) """
+    return jsonify(output_jason)
 # POST /provider
 # Creates a new provider record:
 # - name - provider name. must be unique.
@@ -66,12 +66,12 @@ def get_rates():
 @app.route('/provider', methods=['GET']) #CHANGE TO POST
 def insertprovider():
     try:
-        return request.form["name"] #CHECK INSERT
+        # return request.form["name"] #CHECK INSERT
         db = getMysqlConnection()
         cur = db.cursor()  
         cur.execute('INSERT INTO Provider (`name`) VALUES ({0})',request.form["name"])
         db.commit()
-        cursor.close()
+        cur.close()
         db.close()
         logging.info('info') # CHANGE TO PROPER MESSAGE  
         return "{ 'id' : " + request.form["name"] + " }," #CHANGE 
@@ -87,10 +87,10 @@ def getrates():
     try:
         logging.info('info') # CHANGE TO PROPER MESSAGE
         return send_from_directory('in', "rates.xlsx",mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-    except Exception as e:
+    except Exception:
         logging.error('error') # CHANGE TO PROPER MESSAGE
         return "FILE NOT FOUND"
-        return str(e)
+        # return str(e)
 
 
 
@@ -119,7 +119,7 @@ def postrates():
             rate = ws.cell(row, 2).value
             scope = ws.cell(row, 3).value
             i_tuple = (product, rate, scope)
-            cursor.execute(query, i_tuple)
+            cur.execute(query, i_tuple)
             row += 1
 
         db.commit()
@@ -141,7 +141,7 @@ def postrates():
 def inserttruck(id):
     try:
         db = getMysqlConnection()
-        cur = db.cursor()  
+        cur = connection.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
@@ -158,7 +158,7 @@ def inserttruck(id):
 def updatetruck(id):
     try:
         db = getMysqlConnection()
-        cur = db.cursor()  
+        cur = connection.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
@@ -183,7 +183,7 @@ def updatetruck(id):
 def truckinfo(id):
     try:
         db = getMysqlConnection()
-        cur = db.cursor()  
+        cur = connection.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
@@ -221,7 +221,7 @@ def truckinfo(id):
 def getbilling(id):
     try:
         db = getMysqlConnection()
-        cur = db.cursor()  
+        cur = connection.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
@@ -234,4 +234,3 @@ def getbilling(id):
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
-
