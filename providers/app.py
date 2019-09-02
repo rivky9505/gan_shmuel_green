@@ -174,10 +174,13 @@ def postrates():
 def inserttruck(provider_id, truck_lisence):
     try:
         db = getMysqlConnection()
-        data_query = "INSERT  INTO Trucks (`id`,`provider_id`) VALUES  (%s,%s) WHERE EXIST (SELECT id FROM Provider WHERE `id`=%s)"
-        data=(provider_id,truck_lisence,provider_id)
+        data_query2="SELECT id FROM Provider WHERE id="+str(provider_id)
         cur = db.cursor()
-        cur.execute(data_query,data)
+        cur.execute(data_query2)
+        if cur.fetchone() != None:
+            data_query = "INSERT  INTO Trucks (`id`,`provider_id`) VALUES  (%s,%s)"
+            data=(truck_lisence,provider_id)
+            cur.execute(data_query,data)
         db.commit()
         cur.close()
         db.close()
