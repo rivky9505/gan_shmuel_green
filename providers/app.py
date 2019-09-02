@@ -4,6 +4,7 @@ import mysql.connector
 from flask_cors import CORS, cross_origin
 import logging
 import csv
+from openpyxl import Workbook
 app = Flask(__name__)
 
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
@@ -248,6 +249,15 @@ def getbilling(id):
         return "OK"
     except Exception as e:
         logging.error('error') # CHANGE TO PROPER MESSAGE
+        return str(e)
+
+@app.route('/getlogs', methods=["GET"])
+def getlogs():
+    try:
+        with open('app.log', 'r') as file:
+            return file.read()
+    except Exception as e:
+        logging.error('file not found')
         return str(e)
 
 if __name__ == "__main__":
