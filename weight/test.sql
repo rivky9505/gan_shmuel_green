@@ -66,16 +66,17 @@ describe unknown;
 
 CREATE TABLE IF NOT EXISTS `weight` (
   `direction` varchar(15) NOT NULL,
-  `containers` varchar(10) DEFAULT NULL,
+  `truckid` varchar(50) DEFAULT NULL, 
+  `containers` varchar(1000) DEFAULT NULL,
   `weight` int(10) DEFAULT NULL,
   `unit` varchar(50) DEFAULT NULL,
-  `force` varchar(10000) DEFAULT NULL,
+  `forc` BOOLEAN NOT NULL DEFAULT 0,
   `produce` varchar(50) DEFAULT NULL, `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
 
 
 
 
-INSERT INTO weight (`direction`, `containers`, `weight`, `unit`, `force`, `produce`) VALUES ('in', 'str10', '10', 'unit', 'false', 'tomatoes');
+INSERT INTO weight (`direction`, `truckid`, `containers`, `weight`, `unit`, `forc`, `produce`) VALUES ('in', 'truckID', 'str10', '10', 'unit', '0', 'tomatoes');
 
 
 CREATE TABLE IF NOT EXISTS `Provider` (

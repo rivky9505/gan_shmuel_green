@@ -77,9 +77,14 @@ def postweight():
     if request.method == "POST":
         details = request.form
         direction = details['direction']
+        truckid = details['truckid']
         containers = details['containers']
+        weight = details['weight']
+        unit = details['unit']
+        forc = details['forc']
+        produce = details['produce']
         cur = db.cursor()
-        cur.execute("INSERT INTO weight(direction, containers) VALUES (%s, %s)", (direction, containers))
+        cur.execute("INSERT INTO weight(direction, truckid, containers, weight, unit, forc, produce) VALUES (%s, %s, %s, %s, %s, %s, %s)", (direction, truckid, containers, weight, unit, forc, produce))
         conn = getMysqlConnection()
         conn.commit()
         cur.close()
