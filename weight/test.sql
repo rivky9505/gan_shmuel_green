@@ -65,17 +65,17 @@ describe unknown;
  
 
 CREATE TABLE IF NOT EXISTS `weight` (
-  `direction` int(12) NOT NULL AUTO_INCREMENT,
-  `containers` datetime DEFAULT NULL,
+  `direction` varchar(15) NOT NULL,
+  `containers` varchar(10) DEFAULT NULL,
   `weight` int(10) DEFAULT NULL,
   `unit` varchar(50) DEFAULT NULL,
   `force` varchar(10000) DEFAULT NULL,
-  `produce` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`direction`)
-) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
+  `produce` varchar(50) DEFAULT NULL, `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
 
 
-INSERT INTO weight (`direction`, `weight`, `unit`, `force`, `produce`) VALUES ('10', '500', 'kg', 'true', 'orange');
+
+
+INSERT INTO weight (`direction`, `containers`, `weight`, `unit`, `force`, `produce`) VALUES ('in', 'str10', '10', 'unit', 'false', 'tomatoes');
 
 
 CREATE TABLE IF NOT EXISTS `Provider` (

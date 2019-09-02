@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, render_template
 import json
 import mysql.connector
 from flask_cors import CORS, cross_origin
@@ -67,6 +67,21 @@ def post_batch_weight():
     finally:
         db.close()
         return 'done'
+
+@app.route('/weight', methods=['GET', 'POST'])
+def postweight():
+    db = getMysqlConnection()
+    if request.method == "POST":
+        details = request.form
+        direction = details['direction']
+        containers = details['containers']
+        cur = db.cursor()
+        cur.execute("INSERT INTO weight(direction, containers) VALUES (%s, %s)", (direction, containers))
+        conn = getMysqlConnection()
+        conn.commit()
+        cur.close()
+        return 'Success'
+    return render_template('weight.html')
 
 
 
