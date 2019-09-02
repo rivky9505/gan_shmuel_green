@@ -14,7 +14,9 @@ testapipost = 'https://httpbin.org/post'
 
 def checkRequest(methoda , urla):
     resp = req.request(method=methoda, url=urla)
-    print("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
+    #print("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
+    f=open("logs/e2e.log", "a+")
+    f.write("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
     return(resp)
 
 
