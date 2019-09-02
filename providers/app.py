@@ -62,23 +62,41 @@ def get_rates():
 # Creates a new provider record:
 # - name - provider name. must be unique.
 # Returns a unique provider id as json: { "id":<str>}
+@cross_origin() # allow all origins all methods.
 
-@app.route('/provider', methods=['GET']) #CHANGE TO POST
-def insertprovider():
+@app.route('/selectAll', methods=['GET'])
+def selectAll():
+    db = getMysqlConnection()
     try:
-        # return request.form["name"] #CHECK INSERT
-        db = getMysqlConnection()
-        cur = db.cursor()  
-        cur.execute('INSERT INTO Provider (`name`) VALUES ({0})',request.form["name"])
-        db.commit()
-        cur.close()
-        db.close()
-        logging.info('info') # CHANGE TO PROPER MESSAGE  
-        return "{ 'id' : " + request.form["name"] + " }," #CHANGE 
+        data_query = "SELECT * from Provider"
+        logging.info("This is an select all request massege")
+        cur = db.cursor()
+        cur.execute(data_query)
+        output_json = cur.fetchall()
     except Exception as e:
-        logging.error('error') # CHANGE TO PROPER MESSAGE
-        return str(e)
+        print("Error in SQL:\n", e)
+    finally:
+        db.close()
+        return jsonify(results=output_json)
+        # return "Hello"
+@cross_origin() # allow all origins all methods.
 
+@app.route('/provider/<provider_name>', methods=['GET','POST'])
+def insert_provider(provider_name):
+    db = getMysqlConnection()
+    try:
+        data_query = "INSERT IGNORE INTO Provider (`name`) VALUES  (%s)"
+        data=(provider_name,)
+        logging.info("This is an select all request massege")
+        cur = db.cursor()
+        cur.execute(data_query,data)
+        output_json = cur.lastrowid
+        output_json = cur.fetchone()
+    except Exception as e:
+        print('Could not save duplicate name', str(e))
+    finally:
+        db.close()
+        return jsonify( "id:",(output_json))
 
 # GET /rates
 # Will download a copy of the same excel that was uploaded using POST /rates    
