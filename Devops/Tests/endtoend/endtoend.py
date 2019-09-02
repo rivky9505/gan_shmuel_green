@@ -12,11 +12,13 @@ put = 'PUT'
 delete = 'DELETE'
 testapipost = 'https://httpbin.org/post'
 logfile = 'end2endreport.log'
+dataToEmail = ''
 dateNow = datetime.datetime.now()
 
 def startReport():
     with open(logfile, 'a') as the_file:
         the_file.write("End2End Report: "+ str(dateNow)+'\n')
+        dataToEmail = dataToEmail + "End2End Report: "+ str(dateNow)+'\n'
         the_file.write("******************************************"+'\n')
 
 def endReport():
