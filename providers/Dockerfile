@@ -4,7 +4,7 @@ COPY . /app
 
 WORKDIR /app
 
-RUN pip install flask mysql-connector-python flask-cors
+RUN pip install flask mysql-connector-python flask-cors openpyxl
 
 ENTRYPOINT ["python"]
 
