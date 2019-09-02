@@ -214,13 +214,19 @@ def updatetruck(id):
 @app.route('/truck/<id>', methods=["GET"])
 def truckinfo(id):
     try:
+        #return id
+        #return id+str(request.args.get('from')+str(request.args.get('to')))
         db = getMysqlConnection()
-        cur = connection.cursor()  
-        cur.execute('')
+        cur = db.cursor()  
+        cur.execute('SELECT id , provider_id FROM Trucks WHERE id='+'"' + id + '"')
+        results = cur.fetchall()
+        return str(results)
+        #HERE WE SHOULD MAKE A REQUEST TO WEIGHT API AND GET WITH THE ID BETWEEN DATES BY ID ?
         db.commit()
         cur.close()
         db.close()
         logging.info('info') # CHANGE TO PROPER MESSAGE
+        tempJson = { "id"}
         return "OK"
     except Exception as e:
         logging.error('error') # CHANGE TO PROPER MESSAGE
