@@ -109,7 +109,6 @@ INSERT INTO Rates (`product_id`, `rate`, `scope`) VALUES ('Navel', '93', 'All'),
 ('Grapefruit', '88', 'All'), ('Valencia', '87', 'All'), ('Mandarin', '102', '43'), 
 ('Mandarin', '120', '45'), ('Tangerine', '85', '12'), ('Valencia', '90', '45');
  
-<<<<<<< HEAD
 INSERT INTO unknown (container_id , weight ,unit) VALUES ('1c' , '400' , 'NULL');
 INSERT INTO unknown (container_id , weight ,unit) VALUES ('1d' , '800' , 'NULL');
 
@@ -127,4 +126,4 @@ INSERT INTO Trucks (`id`, `provider_id`) VALUES ('134-33-443', 10001), ('124-55-
  
 -- INSERT INTO `test` (`id`, `aa`) VALUES
 -- (1, 'aaaa'),
->>>>>>> 0706fd03d8d5c274ae31a4564df1edbaceaaa338
+
