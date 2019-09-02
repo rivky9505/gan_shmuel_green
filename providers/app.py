@@ -43,7 +43,7 @@ def get_health():
     return jsonify(results=output_json)
 
 
-@app.route('/rates', methods=['GET'])
+""" @app.route('/rates', methods=['GET'])
 def get_rates():
     db = getMysqlConnection()
     try:
@@ -57,7 +57,7 @@ def get_rates():
     finally:
         logging.info("200 OK SQL completed query: ", sqlstr)
         db.close()
-    return jsonify(output_jason)
+    return jsonify(output_jason) """
 # POST /provider
 # Creates a new provider record:
 # - name - provider name. must be unique.
