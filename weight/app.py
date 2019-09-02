@@ -37,16 +37,19 @@ def get_health():
 def get_unknown():
     db = getMysqlConnection()
     try:
-        data_query = "SELECT * from unknown"
+        data_query = "SELECT * FROM unknown"
         logging.info("This is an unknown request massege")
         cur = db.cursor()
         cur.execute(data_query)
         output_json = cur.fetchall()
     except Exception as e:
-        print("Error in SQL:\n", e)
+        logging.error("ERROR , while trying :", data_query)
+        return jsonify("500 Internal server error")
     finally:
+        logging.info("200 OK Weight is healthy")
         db.close()
-        return jsonify(results=output_json)
+    return jsonify(results=output_json)
+
 
 @app.route('/batch-weight', methods=['GET','POST'])
 def post_batch_weight():
@@ -54,11 +57,11 @@ def post_batch_weight():
     try:
         with open ('containers1.csv', 'r') as f:
             reader = csv.reader(f)
-            return reader
-            columns = next(reader) 
-            query = 'INSERT INTO unknown({1}) values ({1})'
-            query = query.format(','.join(columns), ','.join('?' * len(columns)))
-            cursor = connection.cursor()
+            data = next(reader) 
+            query = 'insert into containers_registered values ({0})'
+            query = query.format(','.join('?' * len(data)))
+            cursor = db.cursor()
+            cursor.execute(query, data)
             for data in reader:
                 cursor.execute(query, data)
             cursor.commit()
