@@ -15,7 +15,7 @@ def api_gh_message():
         print (info)
         TempBranch = info[info.find("refs/heads")+10:info.find("refs/heads")+50]
         branch = TempBranch[1:TempBranch.find("repo")-4]
-        print (info)
+        #print (info)
         print (branch)
         return info
 
