@@ -1,4 +1,5 @@
 from flask import json, request, Flask, debughelpers
+from startProd import mainFunc, testFunc
 
 app = Flask(__name__)
 
@@ -7,7 +8,6 @@ def api():
     strd = "Happy birthday"
     return str(strd.find("py"))
 
-
 @app.route('/github', methods=['POST'])
 def api_gh_message():
     if request.headers['Content-Type'] == 'application/json':
@@ -15,8 +15,9 @@ def api_gh_message():
         print (info)
         TempBranch = info[info.find("refs/heads")+10:info.find("refs/heads")+50]
         branch = TempBranch[1:TempBranch.find("repo")-4]
-        #print (info)
-        print (branch)
+        if branch == "master":
+                print ("its a master")
+                mainFunc()
         return info
 
 if __name__ == '__main__':
