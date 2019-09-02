@@ -13,7 +13,7 @@ def runEnv():
 
 os.chdir('/home/ubuntu/prod')
 deleteRepo = 'rm -rf gan_shmuel_green/'
-gitcloneCMD = 'git clone git@github.com:greendeveleap/gan_shmuel_green.git'
+gitcloneCMD = '12345 | git clone git@github.com:greendeveleap/gan_shmuel_green.git'
 answerPW = '12345'
 rmDCfile = 'rm docker-compose.yml'
 copyGlobalDCF = 'cp /home/ubuntu/src/dockerComposeFiles/dcFIles/PP/docker-compose.yml /home/ubuntu/prod/gan_shmuel_green/providers/docker-compose.yml'
@@ -23,9 +23,9 @@ sleep(3)
 os.system(gitcloneCMD)
 print("git clone cmd executed")
 sleep(2)
-os.system(answerPW)
-print("password set")
-sleep(2)
+#os.system(answerPW)
+#print("password set")
+#sleep(2)
 os.chdir('/home/ubuntu/prod/gan_shmuel_green/providers')
 sleep(2)
 os.system(rmDCfile)
