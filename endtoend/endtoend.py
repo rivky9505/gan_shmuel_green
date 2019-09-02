@@ -5,13 +5,16 @@ import requests as req
 
 weightAPI = "127.0.0.1:8080"
 provAPI ="127.0.0.1:8090"
+testapi = "https://api.github.com"
 get = 'GET'
 post = 'POST'
 put = 'PUT'
 delete = 'DELETE'
+testapipost = 'https://httpbin.org/post'
 
 def checkRequest(methoda , urla):
-    resp = req.request(method='GET', url=weightAPI)
+    resp = req.request(method=methoda, url=urla)
+    print("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
     return(resp)
 
 
@@ -19,7 +22,7 @@ def checkRequest(methoda , urla):
 #! Weight tests
 
 def checkhealthWeight():
-    return checkRequest(methoda , weightAPI + "/health")
+    return checkRequest(get , weightAPI + "/health")
 
 def checkUnknown():
     checkRequest(get , weightAPI + "/unknown")#check unknown list
@@ -47,5 +50,5 @@ def checkhealthprov():
 
 
 weightRequests()
-
- 
+# checkRequest(post , testapipost)
+# checkRequest(get , testapi)
