@@ -18,21 +18,21 @@ answerPW = '12345'
 rmDCfile = 'rm docker-compose.yml'
 copyGlobalDCF = 'cp /home/ubuntu/src/dockerComposeFiles/dcFIles/PP/docker-compose.yml /home/ubuntu/prod/gan_shmuel_green/providers/docker-compose.yml'
 os.system(deleteRepo)
-print "Repo deleted from prod dir"
+print("Repo deleted from prod dir")
 sleep(3)
 os.system(gitcloneCMD)
-print "git clone cmd executed"
+print("git clone cmd executed")
 sleep(2)
 os.system(answerPW)
-print "password set"
+print("password set")
 sleep(2)
 os.chdir('/home/ubuntu/prod/gan_shmuel_green/providers')
 sleep(2)
 os.system(rmDCfile)
-print "DC file removed from repo"
+print("DC file removed from repo")
 sleep(2)
 os.system(copyGlobalDCF)
-print "New DC file added to the repo"
+print ("New DC file added to the repo")
 sleep(2)
 runEnv()
 
