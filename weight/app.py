@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, Response, render_template
-import json
+import json, pprint
 import mysql.connector
 from flask_cors import CORS, cross_origin
 import logging
@@ -75,6 +75,16 @@ def post_batch_weight():
 def postweight():
     db = getMysqlConnection()
     if request.method == "POST":
+
+        lastval = 'select direction from weight ORDER By Created_at DESC LIMIT 1;'
+        cur = db.cursor()
+        cur.execute(lastval)
+        output_json = cur.fetchall()
+
+        a = output_json
+        pformat_a = pprint.pformat(a)
+
+
         details = request.form
         direction = details['direction']
         truckid = details['truckid']
@@ -85,6 +95,21 @@ def postweight():
         produce = details['produce']
         cur = db.cursor()
         cur.execute("INSERT INTO weight(direction, truckid, containers, weight, unit, forc, produce) VALUES (%s, %s, %s, %s, %s, %s, %s)", (direction, truckid, containers, weight, unit, forc, produce))
+
+        currentval = 'select direction from weight ORDER By Created_at DESC LIMIT 1;'
+        cur2 = db.cursor()
+        cur2.execute(currentval)
+        output_json2 = cur.fetchall()
+
+        b = output_json2
+        pformat_b = pprint.pformat(b)
+
+
+        if pformat_a == pformat_b:
+            return "GREAT"
+        return "Not equal!"
+
+
         conn = getMysqlConnection()
         conn.commit()
         cur.close()
