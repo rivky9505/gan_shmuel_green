@@ -6,8 +6,10 @@ app = Flask(__name__)
 def api_gh_message():
     if request.headers['Content-Type'] == 'application/json':
         info = json.dumps(request.json)
-        branch = request.json.ref
+        
+        branch = info.ref
         print (info)
+        print (branch)
         return info
 
 if __name__ == '__main__':
