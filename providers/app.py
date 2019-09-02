@@ -34,6 +34,21 @@ def get_health():
     return jsonify(results=output_json)
 
 
+@app.route('/rates', methods=['GET'])
+def get_rates():
+    db = getMysqlConnection()
+    try:
+        sqlstr = "SELECT * FROM Rates"
+        cur = db.cursor()
+        cur.execute(sqlstr)
+        output_jason = cur.fetchall()
+    except Exception as e:
+        logging.error("ERROR , whilr trying: ", sqlstr)
+        return jsonify("500 Internal server error")
+    finally:
+        logging.info("200 OK SQL completed query: ", sqlstr)
+        db.close()
+    return jsonify(output_jason)
 
 
 if __name__ == "__main__":
