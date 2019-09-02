@@ -120,7 +120,24 @@ def insert_provider(provider_name):
         db.close()
         return jsonify( "id:",(output_json))
 
-
+#PUT /provider/{id} can be used to update provider name 
+@app.route('/provider/<id>', methods=['PUT'])
+def putprovider(id):
+    try:
+        newname = request.form["newname"]
+        #return newname
+        db = getMysqlConnection()
+        cur = db.cursor()  
+        cur.execute('UPDATE Provider SET name = ' + '"' +str(newname)+ '"' + ' WHERE id =' + id)
+        db.commit()
+        cur.close()
+        db.close()
+        logging.info('info') # CHANGE TO PROPER MESSAGE
+        return id
+    except Exception as e:
+        logging.error('error') # CHANGE TO PROPER MESSAGE
+        return str(e)
+    
 
 
 
