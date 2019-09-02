@@ -17,10 +17,11 @@ password = "Type your password and press enter:"
 datatosend = []
 with open('end2endreport.log') as fp:
     line = fp.readline()
-        while line:
-            datatosend.append(line.strip)
-            line = fp.readline()
-
+    while line:
+        datatosend.append(line)
+        # datatosend.append('\n')
+        line = fp.readline()
+print(datatosend)
 
 context = ssl.create_default_context()
 with smtplib.SMTP(smtp_server, port) as server:
