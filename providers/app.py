@@ -69,7 +69,7 @@ def get_rates():
         output_jason = cur.fetchall()
     except Exception :
         logging.error("ERROR , whilr trying: %s", (sqlstr))
-        return jsonify("500 Internal server error")
+        return jsonify("ERROR , whilr trying: %s", (sqlstr))
     finally:
         logging.info("200 OK SQL completed query: %s", (sqlstr))
         db.close()
