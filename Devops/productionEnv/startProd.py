@@ -11,10 +11,27 @@ def runEnv():
     sleep(2)
     os.system(DCUp)
 
-os.chdir('./W')
-runEnv()
-
+os.chdir('/home/ubuntu/prod')
+deleteRepo = 'rm -rf gan_shmuel_green/'
+gitcloneCMD = 'git clone git@github.com:greendeveleap/gan_shmuel_green.git'
+answerPW = '12345'
+rmDCfile = 'rm docker-compose.yml'
+copyGlobalDCF = 'cp /home/ubuntu/src/dockerComposeFiles/dcFIles/PP/docker-compose.yml /home/ubuntu/prod/gan_shmuel_green/providers/docker-compose.yml'
+os.system(deleteRepo)
 sleep(3)
-
-os.chdir('../P')
+os.system(gitcloneCMD)
+sleep(2)
+os.system(answerPW)
+sleep(2)
+os.chdir('/home/ubuntu/prod/gan_shmuel_green/providers')
+sleep(2)
+os.system(rmDCfile)
+sleep(2)
+os.system(copyGlobalDCF)
+sleep(2)
 runEnv()
+
+#sleep(3)
+
+#os.chdir('../P')
+#runEnv()
