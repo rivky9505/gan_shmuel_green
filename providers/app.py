@@ -107,7 +107,7 @@ def selectAll():
 def insert_provider(provider_name):
         db = getMysqlConnection()
     try:
-        data_query = "INSERT IGNORE INTO Provider (`name`) VALUES  (%s)"
+        data_query = "INSERT INTO Provider (`name`) VALUES  (%s)"
         data=(provider_name,)
         logging.info("This is an select all request massege")
         cur = db.cursor()  
@@ -135,13 +135,15 @@ def insert_provider(provider_name):
 
 @app.route("/rates",methods=["POST"])
 def postrates():
-    filename = request.args.get("file")
+    #filename = "./in/rates.xlsx"
     try:
+        details = request.form
+        filename = str(details["file"])
         db = getMysqlConnection()
-        wb = xl.load_workbook("/in/" + filename )
+        wb = load_workbook(filename)
         ws = wb.get_active_sheet()
         cur = db.cursor()
-        cur.execute('TRUNCATE TABLE Rates') #TRUNCATE
+        cur.execute('TRUNCATE TABLE Rates') 
         query = "INSERT INTO Rates (product_id, rate, scope) VALUES (%s, %s, %s)" #INSERT
         row = 2
         while ws.cell(row, 1).value is not None:
