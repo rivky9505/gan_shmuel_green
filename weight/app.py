@@ -7,7 +7,7 @@ import csv
 app = Flask(__name__)
 
 def getMysqlConnection():
-    return mysql.connector.connect(user='testing', host='mysql', port='3306', password='testing', database='weight')
+    return mysql.connector.connect(user='root', host='mysql', port='3306', password='root', database='weight')
 
 @app.route("/")
 def hello():
@@ -49,8 +49,7 @@ def get_unknown():
         logging.info("200 OK Weight is healthy")
         db.close()
     return jsonify(results=output_json)
-        
-    
+
 
 @app.route('/batch-weight', methods=['GET','POST'])
 def post_batch_weight():
