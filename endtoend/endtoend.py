@@ -4,8 +4,8 @@ import requests as req
 import datetime
 
 
-weightAPI = "green.develeap.com:8080"
-provAPI ="green.develeap.com:8090"
+weightAPI = "http://green.develeap.com:8080"
+provAPI ="http://green.develeap.com:8090"
 testapi = "https://api.github.com"
 get = 'GET'
 post = 'POST'
@@ -30,7 +30,7 @@ def checkRequest(methoda , urla):
     with open(logfile, 'a') as the_file:
         the_file.write("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\n')
     print("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
-    print(resp.content)
+    # print(resp.content)
     print(resp.status_code)
     if 200 <= resp.status_code <= 299:
         return True
@@ -93,9 +93,13 @@ def postWeight(direction , license1 , containers ,weight ,unit , force , produce
 
 
 def weightRequests():
- return  checkhealthWeight() and checkUnknown() and checkSession(1) and checkSession(2) and checkGETrates() and postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato")  
-
-
+    toReturn = True
+    toReturn= checkUnknown() and toReturn
+    toReturn= checkSession(1) and toReturn
+    toReturn= checkSession(2) and toReturn
+    toReturn= checkGETrates() and toReturn
+    toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato") and toReturn
+    return  toReturn
 
     
 
@@ -129,11 +133,11 @@ def checkPostRates(file , product , rate , scope):
 
 def postTruck(pName , id1):
     datatoSend = {'provider': pName , 'id':id1}
-    postRequest(provAPI+"/truck/"+str(pName) , datatoSend)
+    posRequest(provAPI+"/truck/"+str(pName) , datatoSend)
 
 def putTruck(id1):
     datatoSend = {'id':id1}
-    putRequest(provAPI+"/truck/"+str(pName) , datatoSend)
+    putRequest(provAPI+"/truck/"+str(id1) , datatoSend)
 
 def putProvider(pName):
     datatoSend = {'id': pName}
@@ -142,7 +146,13 @@ def putProvider(pName):
 # data={'number': 12524, 'type': 'issue', 'action': 'show'}
 
 def provRequests():
-    return  checkHealthProv() and checkGetRatesPROV() and  checkPostProvider(1111111) and putProvider(1111111) and postTruck(1111111 , 2212) and putTruck(2212)
+    toReturn = True
+    toReturn= checkGetRatesPROV() and toReturn
+    toReturn= checkPostProvider(1111111) and toReturn
+    toReturn= putProvider(1111111) and toReturn
+    toReturn= postTruck(1111111 , 2212) and toReturn
+    toReturn= putTruck(2212)and toReturn
+    return  toReturn
 
 #####################################################################################################
 #! Main
@@ -154,6 +164,6 @@ if checkHealthProv()  == True:
     provRequests()
 
 endReport()
-# checkRequest(get , "green.develeap.com:8080/health")
-# checkRequest(post , testapipost)
+# checkRequest(get , "http://green.develeap.com:8080/health")
 # checkRequest(get , testapi)
+# checkRequest(post , testapipost)
