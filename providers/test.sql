@@ -60,11 +60,12 @@ USE `billdb`;
 --
  
 CREATE TABLE IF NOT EXISTS `Provider` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11)   NOT NULL AUTO_INCREMENT,
+  `name` varchar(255)   UNIQUE DEFAULT NULL ,
+   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  AUTO_INCREMENT=10001 ;
  
+
 CREATE TABLE IF NOT EXISTS `Rates` (
   `product_id` varchar(50) NOT NULL,
   `rate` int(11) DEFAULT 0,

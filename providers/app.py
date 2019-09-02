@@ -37,7 +37,7 @@ def get_health():
         cur = db.cursor()
         cur.execute(sqlstr)
         output_json = cur.fetchall()
-    except Exception as e:
+    except Exception :
         logging.error('error') # CHANGE TO PROPER MESSAGE
         return jsonify("500 Internal server error")
     finally:
@@ -67,11 +67,11 @@ def get_rates():
         cur = db.cursor()
         cur.execute(sqlstr)
         output_jason = cur.fetchall()
-    except Exception as e:
-        logging.error("ERROR , whilr trying: ", sqlstr)
+    except Exception :
+        logging.error("ERROR , whilr trying: %s", (sqlstr))
         return jsonify("500 Internal server error")
     finally:
-        logging.info("200 OK SQL completed query: ", sqlstr)
+        logging.info("200 OK SQL completed query: %s", (sqlstr))
         db.close()
     data = output_jason
     wb = xlsxwriter.Workbook("output_from_Rates_Table.xlsx")
@@ -80,27 +80,48 @@ def get_rates():
     wb.close()
     return "Excel Created"
 
-
 # POST /provider
 # Creates a new provider record:
 # - name - provider name. must be unique.
 # Returns a unique provider id as json: { "id":<str>}
+@cross_origin() # allow all origins all methods.
 
-@app.route('/provider', methods=['GET']) #CHANGE TO POST
-def insertprovider():
+@app.route('/selectAll', methods=['GET'])
+def selectAll():
+    db = getMysqlConnection()
     try:
-        return request.form["name"] #CHECK INSERT
-        db = getMysqlConnection()
-        cur = db.cursor()  
-        cur.execute('INSERT INTO Provider (`name`) VALUES ({0})',request.form["name"])
-        db.commit()
-        cur.close()
-        db.close()
-        logging.info('info') # CHANGE TO PROPER MESSAGE  
-        return "{ 'id' : " + request.form["name"] + " }," #CHANGE 
+        data_query = "SELECT * from Provider"
+        logging.info("This is an select all request massege")
+        cur = db.cursor()
+        cur.execute(data_query)
+        output_json = cur.fetchall()
     except Exception as e:
-        logging.error('error') # CHANGE TO PROPER MESSAGE
-        return str(e)
+        print("Error in SQL:\n", e)
+    finally:
+        db.close()
+        return jsonify(results=output_json)
+        # return "Hello"
+@cross_origin() # allow all origins all methods.
+
+@app.route('/provider/<provider_name>', methods=['GET','POST'])
+def insert_provider(provider_name):
+        db = getMysqlConnection()
+    try:
+        data_query = "INSERT IGNORE INTO Provider (`name`) VALUES  (%s)"
+        data=(provider_name,)
+        logging.info("This is an select all request massege")
+        cur = db.cursor()  
+        cur.execute(data_query,data)
+        output_json = cur.lastrowid
+        output_json = cur.fetchone()
+    except Exception as e:
+        print('Could not save duplicate name', str(e))
+    finally:
+        db.close()
+        return jsonify( "id:",(output_json))
+
+
+
 
 
 # POST /rates
@@ -128,7 +149,7 @@ def postrates():
             rate = ws.cell(row, 2).value
             scope = ws.cell(row, 3).value
             i_tuple = (product, rate, scope)
-            cursor.execute(query, i_tuple)
+            cur.execute(query, i_tuple)
             row += 1
 
         db.commit()
@@ -150,7 +171,7 @@ def postrates():
 def inserttruck(id):
     try:
         db = getMysqlConnection()
-        cur = db.cursor()  
+        cur = connection.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
@@ -167,7 +188,7 @@ def inserttruck(id):
 def updatetruck(id):
     try:
         db = getMysqlConnection()
-        cur = db.cursor()  
+        cur = connection.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
@@ -192,7 +213,7 @@ def updatetruck(id):
 def truckinfo(id):
     try:
         db = getMysqlConnection()
-        cur = db.cursor()  
+        cur = connection.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
@@ -230,7 +251,7 @@ def truckinfo(id):
 def getbilling(id):
     try:
         db = getMysqlConnection()
-        cur = db.cursor()  
+        cur = connection.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
@@ -252,4 +273,3 @@ def getlogs():
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
-
