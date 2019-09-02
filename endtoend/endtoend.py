@@ -4,8 +4,8 @@ import requests as req
 import datetime
 
 
-weightAPI = "127.0.0.1:8080"
-provAPI ="127.0.0.1:8090"
+weightAPI = "green.develeap.com:8080"
+provAPI ="green.develeap.com:8090"
 testapi = "https://api.github.com"
 get = 'GET'
 post = 'POST'
@@ -29,9 +29,9 @@ def checkRequest(methoda , urla):
     resp = req.request(method=methoda, url=urla)
     with open(logfile, 'a') as the_file:
         the_file.write("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\n')
-    # print("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
-    # print(resp.content)
-    # print(resp.status_code)
+    print("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
+    print(resp.content)
+    print(resp.status_code)
     if 200 <= resp.status_code <= 299:
         return True
     return False
@@ -154,5 +154,6 @@ if checkHealthProv()  == True:
     provRequests()
 
 endReport()
+# checkRequest(get , "green.develeap.com:8080/health")
 # checkRequest(post , testapipost)
 # checkRequest(get , testapi)
