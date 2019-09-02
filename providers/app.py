@@ -126,7 +126,7 @@ def postrates():
 def inserttruck(id):
     try:
         db = getMysqlConnection()
-        cur = connection.cursor()  
+        cur = db.cursor()  
         cur.execute('')
         db.commit()
         cur.close()
