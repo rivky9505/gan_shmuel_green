@@ -43,3 +43,5 @@ def mainFunc():
     os.system(copyGlobalDCFW)
     sleep(2)
     runEnv()
+
+mainFunc()
