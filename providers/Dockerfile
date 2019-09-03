@@ -15,13 +15,13 @@ RUN pip install flask
 RUN pip install flask-cors
 
 COPY . /app
-
+ 
 
 
 
 
 #RUN pip3 install XlsxWriter
-
+COPY . /app
 ENTRYPOINT ["python"]
 
 CMD ["app.py"]

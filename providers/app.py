@@ -23,28 +23,38 @@ def hello():
 @cross_origin() # Allow all origins all methods.
 
 
+#ERROR CODES 
+#(0) - SUCCESS
+#(-1) - 500 INTERNAL SERVER ERROR
+#(-2) - DATABASE CONNECTION ERROR
+#(-3) - DATABASE BASE QUERY EXECUTION ERROR
+#(-4) - I/O ERROR
+
+
 # GET /health
 # - By default returns "OK" and status 200 OK
 # -If system depends on external resources (e.g. db), 
 # and they are not available (e.g. "select 1;" fails ) 
 # then it should return "Failure" and 500 Internal Server Error
-
 @app.route('/health', methods=['GET'])
-def get_health():
-    db = getMysqlConnection()
+def checkhealth():
     try:
-        logging.info('[GET][SUCCESS] health request') 
-        sqlstr = "SELECT 1"
+    db = getMysqlConnection()
+    except:
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+    try:
+        query = "SELECT 1"
         cur = db.cursor()
-        cur.execute(sqlstr)
-        output_json = cur.fetchall()
+        cur.execute(query)
+        result = cur.fetchall()
+        logging.info('[GET][SUCCESS] health request . QUERY:' + query)
+        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK" }) , 200 
     except Exception as e:
-        logging.error('[GET][FAILURE] health request')
-        return jsonify("500 Internal server error")
+        logging.error('[GET][FAILURE] /health request . QUERY:' + query)
+        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500 
     finally:
         logging.info("200 OK")
         db.close()
-    return jsonify(results=output_json)
 
 
 def json_to_excel(ws, data, row=0, col=0):
@@ -66,6 +76,8 @@ def get_rates():
     file_name = "output.xlsx"
     excel_path = "./" + dir_name + "/" + file_name
     db = getMysqlConnection()
+    except:
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
     try:
         sqlstr = "SELECT * FROM Rates"
         cur = db.cursor()
@@ -86,6 +98,35 @@ def get_rates():
     if os.path.exists(excel_path):
         return send_from_directory(dir_name, filename=file_name, as_attachment=True, attachment_filename="Rates.xlsx", mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     return "Excel Created"
+
+
+#FOR TESTING
+@app.route('/rates2', methods=['GET'])
+def get_rates2():
+    try:
+        db = getMysqlConnection()
+    except:
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200 
+    try:
+        query = "SELECT * FROM Rates"
+        cur = db.cursor()
+        cur.execute(query)
+        output_jason = cur.fetchall()
+        logging.info("[GET][SUCCESS] rates request - : %s", (query))
+        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK : Excel Created" }) , 200 
+    except Exception :
+        logging.error("[GET][FAILURE] rates request , ON QUERY: %s", (query))
+        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
+    finally:
+        db.close()
+    try:
+        data = output_jason
+        wb = xlsxwriter.Workbook("output_from_Rates_Table.xlsx")
+        ws = wb.add_worksheet()
+        json_to_excel(ws, data)
+        wb.close()
+    except:
+        return jsonify({ "errorCode" : -4 , "errorDescription" : "I/O ERROR : writing Excel file" }) , 500
 
 # POST /provider
 # Creates a new provider record:
@@ -109,7 +150,7 @@ def selectAll():
         db.close()
         return jsonify(results=output_json)
         # return "Hello"
-@cross_origin() # allow all origins all methods.
+
 
 @app.route('/provider/<provider_name>', methods=['GET','POST'])
 def insert_provider(provider_name):
@@ -128,6 +169,29 @@ def insert_provider(provider_name):
         db.close()
         return jsonify( "id:",(output_json))
 
+
+#FOR TESTING
+@app.route('/provider2/<provider_name>', methods=['GET','POST'])
+def insert_provider2(provider_name):
+    try:
+        db = getMysqlConnection()
+    except:
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+    try:
+        data_query = "INSERT INTO Provider (`name`) VALUES  (%s)"
+        data=(provider_name,)
+        logging.info("[POST][SUCCESS] provider/<provider_name>")
+        cur = db.cursor()  
+        cur.execute(data_query,data)
+        output_json = cur.lastrowid
+        output_json = cur.fetchone()
+        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK" , "id:":(output_json) }) , 200
+    except Exception as e:
+        logging.error('[POST][FAILURE] while trying:', str(e))
+        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
+    finally:
+        db.close()
+        
 #PUT /provider/{id} can be used to update provider name 
 @app.route('/provider/<id>', methods=['PUT'])
 def putprovider(id):
@@ -146,7 +210,26 @@ def putprovider(id):
         logging.error('[PUT][FAILURE] provider/<id>') # CHANGE TO PROPER MESSAGE
         return str(e)
 
-
+#FOR TESTING
+@app.route('/providerr/<id>', methods=['PUT'])
+def putprovider2(id):
+    try:
+        db = getMysqlConnection()
+    except:
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+    try:
+        newname = request.get_json()#request.form["newname"]
+        #return str(newname["newname"])
+        cur = db.cursor()  
+        cur.execute('UPDATE Provider SET name = ' + '"' +str(newname["newname"])+ '"' + ' WHERE id =' + id)
+        db.commit()
+        cur.close()
+        db.close()
+        logging.info('[PUT][SUCCESS] provider/<id>') 
+        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK" }) , 200
+    except Exception as e:
+        logging.error('[PUT][FAILURE] provider/<id>') 
+        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
 
 
 # POST /rates
@@ -188,6 +271,47 @@ def postrates():
         logging.error('[POST][FAILURE] /rates , on query:%s', query ) # CHANGE TO PROPER MESSAGE
         return e
 
+#FOR TESTING
+@app.route("/rates2",methods=["POST"])
+def postrates2():
+    #filename = "./in/rates.xlsx"
+    try:
+        db = getMysqlConnection()
+    except:
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+    try:
+
+        #details = request.form
+        filename_tmp = request.get_json()
+        
+        filename = str(filename_tmp["file"])
+        #return "./in/"+ filename
+        
+        #filename = str(details["file"])
+        wb = load_workbook("./in/rates.xlsx")
+        ws = wb.get_active_sheet()
+        cur = db.cursor()
+        
+        cur.execute('TRUNCATE TABLE Rates') 
+        
+        query = "INSERT INTO Rates (product_id, rate, scope) VALUES (%s, %s, %s)" #INSERT
+        row = 2
+        while ws.cell(row, 1).value is not None:
+            product = ws.cell(row, 1).value
+            rate = ws.cell(row, 2).value
+            scope = ws.cell(row, 3).value
+            i_tuple = (product, rate, scope)
+            cur.execute(query, i_tuple)
+            row += 1
+
+        db.commit()
+        cur.close()
+        db.close()
+        logging.info('[POST][SUCCESS] /rates ') # CHANGE TO PROPER MESSAGE
+        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK" }) , 200
+    except Exception as e:
+        logging.error('[POST][FAILURE] /rates') # CHANGE TO PROPER MESSAGE
+        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
 
 # POST /truck
 # registers a truck in the system
@@ -218,7 +342,28 @@ def inserttruck(provider_id, truck_lisence):
         return str(e)
     
 
-
+#FOR TESTING
+@app.route('/truck2/<provider_id>/<truck_lisence>', methods=['GET','POST'])
+def inserttruck2(provider_id, truck_lisence):
+    try:
+        db = getMysqlConnection()
+    except:
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+    try:
+        cur = db.cursor()  
+        data_query2="SELECT id FROM Provider WHERE id="+str(provider_id)
+        cur.execute(data_query2)
+        if cur.fetchone() != None:
+            data_query = "INSERT  INTO Trucks (`id`,`provider_id`) VALUES  (%s,%s)"
+            data=(truck_lisence,provider_id)
+            cur.execute(data_query,data)
+        db.commit()
+        cur.close()
+        db.close()
+        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK" }) , 200
+    except Exception as e:
+        logging.error('[POST][FAILURE] /truck/<provider_id>/<truck_lisence>') # CHANGE TO PROPER MESSAGE
+        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
 # PUT /truck/{id} can be used to update provider id
 # This request needs two argumnets.
 # Implenting as a query string in url
@@ -262,7 +407,48 @@ def updatetruck():
         logging.error('[PUT][FAILURE] /truck/ : QUERY:' + querystr) # CHANGE TO PROPER MESSAGE
         return str(e)
 
+#FOR TESTING
+@app.route('/truck2/', methods=["PUT"])
+def updatetruck2():
+    result_message = ""
+    result_count_string = ""
+    try:
+        db = getMysqlConnection()
+    except:
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+    try:
+        # get values from query string
+        truck_id = request.args.get('id')
+        provider_name = request.args.get('name')
 
+        cur = db.cursor()
+        # get id of provider (owner of the truck id)
+        querystr = "SELECT id FROM Provider WHERE name = '" + provider_name + "'"
+        cur.execute(querystr)
+        query_result = cur.fetchall()
+        result_count_string = "   Result count: " + str(cur.rowcount)
+        if cur.rowcount > 0: # test if there is at least one record
+            provider_id = str(query_result[0][0])
+            # count how many records have the desired truck id
+            querystr = "SELECT COUNT(IF(id='" + truck_id + "',1, NULL)) 'id' FROM Trucks"
+            cur.execute(querystr)
+            query_result = cur.fetchall()
+            if int(query_result[0][0]) > 0: # if more than 0, then update the record.
+                querystr = "UPDATE Trucks SET provider_id = '" + provider_id + "' WHERE id = '" + truck_id + "'" 
+                cur.execute(querystr)
+                db.commit()
+                result_message = "Updated Truck no: " + truck_id + " for provider: " + provider_name
+            else:
+                result_message = "No Truck ID with this id: " + truck_id
+        else:
+            result_message = "No provider with this name: " + provider_name
+        cur.close()
+        db.close()
+        logging.info('[PUT][SUCCESS] /truck/') # CHANGE TO PROPER MESSAGE
+        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK"  , "result": result_message}) , 200 
+    except Exception as e:
+        logging.error('[PUT][FAILURE] /truck/ : QUERY:' + querystr) # CHANGE TO PROPER MESSAGE
+        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
 
 # GET /truck/<id>?from=t1&to=t2
 # - id is the truck license. 404 will be returned if non-existent
@@ -294,6 +480,31 @@ def truckinfo(id):
         logging.error('[GET][FAILURE] /truck/<id>') # CHANGE TO PROPER MESSAGE
         return str(e)
 
+
+#FOR TESTING
+@app.route('/truck2/<id>', methods=["GET"])
+def truckinfo2(id):
+    try:
+        db = getMysqlConnection()
+    except:
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+    try:
+        #return id
+        #return id+str(request.args.get('from')+str(request.args.get('to')))
+        cur = db.cursor()  
+        cur.execute('SELECT id , provider_id FROM Trucks WHERE id='+'"' + id + '"')
+        results = cur.fetchall()
+        return str(results)
+        #HERE WE SHOULD MAKE A REQUEST TO WEIGHT API AND GET WITH THE ID BETWEEN DATES BY ID ?
+        db.commit()
+        cur.close()
+        db.close()
+        logging.info('[GET][SUCCESS] /truck/<id>') # CHANGE TO PROPER MESSAGE
+        tempJson = { "id"}
+        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK" }) , 200
+    except Exception as e:
+        logging.error('[GET][FAILURE] /truck/<id>') # CHANGE TO PROPER MESSAGE
+        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
 
 # GET /bill/<id>?from=t1&to=t2
 # - id is provider id

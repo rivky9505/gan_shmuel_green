@@ -1,0 +1,112 @@
+test_name: /health
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: health test
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/health
+      method: GET
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: 0
+---
+test_name: /rates
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name:  rates
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/rates2
+      method: GET
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: 0
+---
+test_name: /provider
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name:  provider
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/provider2/test_provider
+      method: GET
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: 0
+---
+test_name: /provider
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name:  wrong URL
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/provider2/
+      method: GET
+
+    # ...and the expected response code and body
+    response:
+      status_code: 404
+---
+test_name: /provider
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name:  providerPUT
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/providerr/10001
+      json:
+        newname: abc1234
+      method: PUT
+      headers:
+        content-type: application/json  
+      
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: 0
+---
+test_name: /truck
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name:  truck
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/truck2/10001/134-33-445
+      method: GET
+       
+      
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: 0
+
+
+### TODO ###
+# WRONG INPUT OR DB NOT FOUND
+# PUT TRUCK 
+# BILL WHEN READY
