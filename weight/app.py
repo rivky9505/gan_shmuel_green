@@ -141,6 +141,7 @@ def get_item_id(id):
     from_t1 = request.form.get('from', default = "1st of month at 000000" , type = str)
     to_t2 = request.form.get('to', default = "now" , type = str)
     item_id = id
+    
 
     try:
         # Query all entries in containers_registered between times
