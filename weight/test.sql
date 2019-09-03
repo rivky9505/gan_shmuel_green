@@ -47,12 +47,6 @@ CREATE TABLE IF NOT EXISTS `transactions` (
 
 INSERT INTO transactions(`id`, `datetime`, `direction`) VALUES ('10', '2011-12-18 13:17:17', 'in');
 
-show tables;
- 
-describe containers_registered;
-describe transactions;
-describe unknown;
- 
  
 -- Table structure for table 'weight'
  
@@ -73,11 +67,6 @@ CREATE TABLE IF NOT EXISTS `weight` (
 
 INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('in', 'truckID', 'str10', '10', 'unit', '0', 'tomatoes');
 
-----Table structure for sessions
-
-
---GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;
---FLUSH PRIVILEGES;
 
 
 
@@ -89,4 +78,12 @@ CREATE TABLE IF NOT EXISTS 'sessions' (
   `bruto` int(12) DEFAULT NULL, 
   `truckTara` int(12) DEFAULT NULL, 
   `neto` int(12) DEFAULT NULL, 
-PRIMARY KEY (`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001
+   PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=10001;
+
+show tables;
+ 
+describe containers_registered;
+describe transactions;
+describe sessions;
+describe weight;
