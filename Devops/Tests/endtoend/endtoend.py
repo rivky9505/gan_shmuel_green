@@ -2,6 +2,13 @@
 
 import requests as req
 import datetime
+import smtplib
+
+gmail_user = 'develeapgreen@gmail.com'
+gmail_password = 'Aa!123!456'
+
+sent_from = gmail_user
+to = ['kobiavshalom@gmail.com', 'yuvalalfassi@gmail.com' , 'ofirami3@gmail.com','danielharsheffer@gmail.com' ,'hire.saar@gmail.com' ,'danarlowski11@gmail.com' ,'89leon@gmail.com' ,'tsinfob@gmail.com' ,'aannoonniimmyy57@gmail.com' ,'roialfassi@gmail.com'  ]
 
 weightAPI = "http://green.develeap.com:8080"
 provAPI ="http://green.develeap.com:8090"
@@ -14,6 +21,10 @@ testapipost = 'https://httpbin.org/post'
 logfile = 'end2endreport.log'
 dataToEmail = ''
 dateNow = datetime.datetime.now()
+
+subject = "End2End Report: "+ str(dateNow)+'\n'
+body = dataToEmail
+
 
 def startReport():
     with open(logfile, 'a') as the_file:
@@ -55,6 +66,30 @@ def putRequest(urla , data ):
         return True
     return False
     
+#####################################################################################################
+#! Send mail
+def sendMail():
+
+    subject = "End2End Report: "+ str(dateNow)+'\n'
+    body = dataToEmail
+    email_text = """\
+    From: %s
+    To: %s
+    Subject: %s
+
+    %s
+    """ % (sent_from, ", ".join(to), subject, body)
+
+    try:
+        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+        server.ehlo()
+        server.login(gmail_user, gmail_password)
+        server.sendmail(sent_from, to, email_text)
+        server.close()
+
+        print ('Email sent!')
+    except:
+        print ('Something went wrong...')
 
 #####################################################################################################
 #! Weight tests
@@ -165,6 +200,8 @@ if checkHealthProv()  == True:
     provRequests()
 
 endReport()
+sendMail()
 # checkRequest(get , "http://green.develeap.com:8080/health")
 # checkRequest(get , testapi)
 # checkRequest(post , testapipost)
+
