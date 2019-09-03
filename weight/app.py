@@ -12,7 +12,7 @@ def getMysqlConnection():
 
 @app.route("/")
 def hello():
-    return "Flask inside Docker!!"
+    return render_template('index.html')
 
 
 @cross_origin() # allow all origins all methods.
@@ -170,7 +170,7 @@ def get_item_id(id):
 
 
 
-@app.route('/weight', methods=['POST'])
+@app.route('/weight', methods=['GET', 'POST'])
 def postweight():
     db = getMysqlConnection()
     if request.method == "POST":
