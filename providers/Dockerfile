@@ -1,6 +1,6 @@
 FROM python:latest
 
-COPY . /app
+
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ RUN pip install openpyxl
 RUN pip install XlsxWriter
 
 #RUN pip3 install XlsxWriter
-
+COPY . /app
 ENTRYPOINT ["python"]
 
 CMD ["app.py"]
