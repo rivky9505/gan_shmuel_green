@@ -122,7 +122,7 @@ def get_item_id(id):
 
 
 
-@app.route('/weight', methods=['GET', 'POST'])
+@app.route('/weight', methods=['POST'])
 def postweight():
     db = getMysqlConnection()
     if request.method == "POST":
