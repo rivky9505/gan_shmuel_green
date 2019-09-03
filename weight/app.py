@@ -1,3 +1,4 @@
+
 from flask import Flask, request, jsonify, Response, render_template
 import json, pprint
 import mysql.connector
@@ -37,6 +38,7 @@ def get_health():
 @app.route('/unknown', methods=['GET'])
 def get_unknown():
     db = getMysqlConnection()
+    cur = db.cursor()
     try:
         data_query = "SELECT * FROM containers_registered"
         # logging.info("Looking for items with unknown weights")
@@ -59,23 +61,69 @@ def get_unknown():
 
 @app.route('/batch-weight', methods=['GET','POST'])
 def post_batch_weight():
-    db = getMysqlConnection()
-    try:
-        with open ('containers1.csv', 'r') as f:
-            reader = csv.reader(f)
-            data = next(reader) 
-            query = 'insert into containers_registered values ({0})'
-            query = query.format(','.join('?' * len(data)))
-            cursor = db.cursor()
-            cursor.execute(query, data)
-            for data in reader:
-                cursor.execute(query, data)
-            cursor.commit()
-    except Exception as e:
-        print("Error in SQL:\n", e)
-    finally:
-        db.close()
-        return 'done'
+    
+    if request.method == 'POST':
+        file_input = request.form['file']
+        formt = file_input.split(".")
+        db = getMysqlConnection()
+        cur = db.cursor()
+        cur.execute("TRUNCATE TABLE containers_registered;")
+        kg ="kg"
+        na = "na"
+        if (formt[1] == "csv"):
+            try:
+                data=[]
+                with open('/app/in/%s' % file_input, 'rU') as f:   
+                    reader = csv.reader(f)
+                    i = next(reader)
+                    for line in f:
+                        line = line.replace('\n', '')
+                        if (len(line) != 0):
+                            data = line.split(',')
+                            if ((data[1]) == 'na'):
+                                cur.execute("INSERT INTO containers_registered (container_id, weight,unit) VALUES (%s,%s,%s)", (data[0], na, kg))
+                            else:
+                                if(i[1] == "lbs"):
+                                    data[1] = int(int(data[1])*0.453592)
+                                cur.execute("INSERT INTO containers_registered (container_id, weight,unit) VALUES (%s,%s,%s)", (data[0], data[1], kg))
+                    db.commit()
+                    cur.close()
+            except Exception as e:
+                logging.error("ERROR , while trying batch:")
+                return jsonify("500 csv file error")
+            finally:
+                db.close()
+            return "uploaded"
+        elif (formt[1] == "json"):
+            try:
+                data=[]
+                with open('/app/in/%s' % file_input, 'rU') as f: 
+                    next(f)
+                    for line in f:
+                        if( line != '[' and line != ']'):
+                            line = line.replace('{', '').replace('}', '').replace('"', '').replace('\n', '').replace("unit", '').replace("id", '').replace(":", '').replace("weight", '').replace(":", '')
+                            data = line.split(',')
+                            if (data[1] == "na"):
+                                cur.execute("INSERT INTO containers_registered (container_id, weight,unit) VALUES (%s,%s,%s)", (data[0], na, kg))
+                            else:
+                                if(data[2] == "lbs"):
+                                    data[1] = int(int(data[1])*0.453592)
+                                cur.execute("INSERT INTO containers_registered (container_id, weight,unit) VALUES (%s,%s,%s)", (data[0], data[1], kg))
+                    db.commit()
+                    cur.close()
+            except Exception as e:
+                logging.error("ERROR , while trying batch-weight")
+                return jsonify("500 json file error")
+            finally:
+                db.close()
+            return render_template('batch-weight.html')
+
+    return render_template('batch-weight.html')
+
+
+
+        
+
 
 
 
