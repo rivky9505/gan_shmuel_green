@@ -6,8 +6,8 @@ from time import sleep
 app = Flask(__name__)
 
 def runEnv():
-    DCDown = 'docker-compose down'
-    DCUp = 'docker-compose up -d --build'
+    DCDown = 'sudo docker-compose down'
+    DCUp = 'sudo docker-compose up -d --build'
     cmd = 'pwd'
     os.system(cmd)
     sleep(2)
