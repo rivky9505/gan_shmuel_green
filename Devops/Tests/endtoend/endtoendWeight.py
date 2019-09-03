@@ -209,8 +209,7 @@ startReport()
 if checkhealthWeight() == True:
     testResult = weightRequests()
 
-if checkHealthProv()  == True:
-    testResult = provRequests()
+
 endReport(testResult)
 # print (dataToEmail)
 sendMail(dataToEmail)

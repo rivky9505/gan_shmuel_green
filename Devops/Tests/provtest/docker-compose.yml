@@ -1,0 +1,16 @@
+version: '3'
+services:
+  providerssrv:
+    build:
+      context: ./gan-shmuel-green/providers/
+
+  providersdb:
+    build:
+      context: ./gan-shmuel-green/providers/
+      dockerfile: Dockerfile.sql
+
+  test:
+    build:
+      context: ./endtoend
+    volumes:
+      - /endtoend/logs:/endtoend/log

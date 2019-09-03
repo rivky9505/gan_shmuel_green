@@ -26,10 +26,11 @@ testResult = True
 
 def startReport():
     global dataToEmail 
-    dataToEmail = "End2End Report: "+ str(dateNow)+'\n'
+    dataToEmail = "End2End Report Provider: "+ str(dateNow)+'\n'
     with open(logfile, 'a') as the_file:
-        the_file.write("End2End Report: "+ str(dateNow)+'\n')
+        the_file.write("End2End Report Provider: "+ str(dateNow)+'\n')
         the_file.write("******************************************"+'\n')
+    
 
 def endReport(testResult1):
     global dataToEmail 
@@ -48,7 +49,6 @@ def checkRequest(methoda , urla):
     print("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
     # print(resp.content)
     print(resp.status_code)
-    dataToEmail = dataToEmail + "the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'n'
     if 200 <= resp.status_code <= 299:
         return True
     return False
@@ -60,7 +60,6 @@ def posRequest(urla , data ):
     with open(logfile, 'a') as the_file:
         the_file.write("the method Post to " +str(urla)+ " got the response " +str(resp)+'\n')
         # print("the method Post to " +str(urla)+ " got the response " +str(resp))
-    dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\n'
     if 200 <= resp.status_code <= 299:
         return True
     return False
@@ -72,7 +71,6 @@ def putRequest(urla , data ):
     with open(logfile, 'a') as the_file:
         the_file.write("the method Put to " +str(urla)+ " got the response " +str(resp)+'\n')
         # print("the method Put to " +str(urla)+ " got the response " +str(resp))
-    dataToEmail = dataToEmail + "the method Put to " +str(urla)+ " got the response " +str(resp)+'\n'
     if 200 <= resp.status_code <= 299:
         return True
     return False
@@ -147,7 +145,7 @@ def weightRequests():
     toReturn= checkSession(1) and toReturn
     toReturn= checkSession(2) and toReturn
     toReturn= checkGETrates() and toReturn
-    toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato") and postBatchWeight("containers1.csv") and toReturn 
+    toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato") and toReturn
     return  toReturn
 
     
@@ -208,8 +206,6 @@ def provRequests():
 #####################################################################################################
 #! Main
 startReport()
-if checkhealthWeight() == True:
-    testResult = weightRequests()
 
 if checkHealthProv()  == True:
     testResult = provRequests()
