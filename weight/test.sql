@@ -13,7 +13,18 @@ CREATE DATABASE IF NOT EXISTS `weight`;
  
  
 USE weight;
+<<<<<<< HEAD
 
+=======
+ 
+CREATE TABLE IF NOT EXISTS `unknown` (
+  `container_id` varchar(15) NOT NULL,
+  `weight` int(12) DEFAULT NULL,
+  `unit` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`container_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
+ 
+>>>>>>> eb34e2161c1de781e0f76f4d9502c36b8c1d4444
  
 CREATE TABLE IF NOT EXISTS `containers_registered` (
   `container_id` varchar(15) NOT NULL,
@@ -57,66 +68,43 @@ describe unknown;
  
 -- Table structure for table 'weight'
  
-
 CREATE TABLE IF NOT EXISTS `weight` (
-  `direction` int(12) NOT NULL AUTO_INCREMENT,
-  `containers` datetime DEFAULT NULL,
-  `weight` int(10) DEFAULT NULL,
+  `id` int(12) NOT NULL AUTO_INCREMENT,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `direction` varchar(10) DEFAULT NULL,
+  `truckid` varchar(50) DEFAULT NULL,
+  `containers` varchar(1000) DEFAULT NULL,
+  `bruto` int(12) DEFAULT NULL,
   `unit` varchar(50) DEFAULT NULL,
-  `force` varchar(10000) DEFAULT NULL,
-  `produce` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`direction`)
-) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
+  `forc` BOOLEAN NOT NULL DEFAULT 0,
+  `produce` varchar(50) DEFAULT NULL, PRIMARY KEY(`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
 
 
-INSERT INTO weight (`direction`, `weight`, `unit`, `force`, `produce`) VALUES ('10', '500', 'kg', 'true', 'orange');
 
 
-CREATE TABLE IF NOT EXISTS `Provider` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  AUTO_INCREMENT=10001 ;
- 
-CREATE TABLE IF NOT EXISTS `Rates` (
-  `product_id` varchar(50) NOT NULL,
-  `rate` int(11) DEFAULT 0,
-  `scope` varchar(50) DEFAULT NULL,
-  FOREIGN KEY (scope) REFERENCES `Provider`(`id`)
-) ENGINE=MyISAM ;
- 
-CREATE TABLE IF NOT EXISTS `Trucks` (
-  `id` varchar(10) NOT NULL,
-  `provider_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`provider_id`) REFERENCES `Provider`(`id`)
-) ENGINE=MyISAM ;
---
--- Dumping data
---
- 
 
-INSERT INTO Provider (`name`) VALUES ('ALL'), ('provider 1'), ('provider 2'), ('provider 3'), ('provider 4');
- 
-INSERT INTO Rates (`product_id`, `rate`, `scope`) VALUES ('Navel', '93', 'All'), ('Blood', '112', 'All'), ('Mandarin', '104', 'All'), 
-('Shamuti', '84', 'All'), ('Tangerine', '92', 'All'), ('Clementine', '113', 'All'), 
-('Grapefruit', '88', 'All'), ('Valencia', '87', 'All'), ('Mandarin', '102', '43'), 
-('Mandarin', '120', '45'), ('Tangerine', '85', '12'), ('Valencia', '90', '45');
- 
-INSERT INTO unknown (container_id , weight ,unit) VALUES ('1c' , '400' , 'NULL');
-INSERT INTO unknown (container_id , weight ,unit) VALUES ('1d' , '800' , 'NULL');
+INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('in', 'truckID', 'str10', '10', 'unit', '0', 'tomatoes');
 
+<<<<<<< HEAD
 
 INSERT INTO Trucks (`id`, `provider_id`) VALUES ('134-33-443', 10001), ('124-55-443', 10003),
 ('222-33-111', 10003), ('212-33-441', 10004),('432-98-541', 10001), ('212-99-466', 10002);
+=======
+----Table structure for sessions
+>>>>>>> eb34e2161c1de781e0f76f4d9502c36b8c1d4444
+
+
+--GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;
+--FLUSH PRIVILEGES;
 
 
 
 
---
--- Dumping data for table `test`
---
- 
--- INSERT INTO `test` (`id`, `aa`) VALUES
--- (1, 'aaaa'),
-
+CREATE TABLE IF NOT EXISTS 'sessions' (
+  `id` int(12) NOT NULL AUTO_INCREMENT, 
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+  `truckid` varchar(50) DEFAULT NULL, 
+  `bruto` int(12) DEFAULT NULL, 
+  `truckTara` int(12) DEFAULT NULL, 
+  `neto` int(12) DEFAULT NULL, 
+PRIMARY KEY (`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001
