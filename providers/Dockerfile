@@ -1,14 +1,26 @@
 FROM python:latest
 
-COPY . /app
-
 WORKDIR /app
 
-RUN pip install flask mysql-connector-python flask-cors openpyxl
+RUN mkdir out
 
 RUN pip install XlsxWriter
 
-RUN pip3 install XlsxWriter
+RUN pip install openpyxl
+
+RUN pip install mysql-connector-python
+
+RUN pip install flask
+
+RUN pip install flask-cors
+
+COPY . /app
+
+
+
+
+
+#RUN pip3 install XlsxWriter
 
 ENTRYPOINT ["python"]
 
