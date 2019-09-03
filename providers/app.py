@@ -86,7 +86,7 @@ def get_rates():
     finally:
         db.close()
     data = output_jason
-    wb = xlsxwriter.Workbook("output_from_Rates_Table.xlsx")
+    wb = xlsxwriter.Workbook("./out/output.xlsx")
     ws = wb.add_worksheet()
     json_to_excel(ws, data)
     wb.close()
