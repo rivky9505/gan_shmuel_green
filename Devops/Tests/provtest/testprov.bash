@@ -7,7 +7,7 @@ git checkout providers_branch
 cd ..
 touch "$(pwd)"/endtoend/logs/end2endreport.log
 docker-compose up --build -d
-sleep 5
+sleep 30
 python3 "$(pwd)"/endtoend/endtoendProv.py
 sleep 5
 docker-compose down
@@ -20,8 +20,6 @@ then
 else
     echo 1
 fi
-
-
 rm -rf gan_shmuel_green
 rm "$(pwd)"/endtoend/logs/end2endreport.log
-
+docker rmi $(docker images -q) --force
