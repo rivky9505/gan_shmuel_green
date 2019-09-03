@@ -15,7 +15,7 @@ app = Flask(__name__)
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
 
 def getMysqlConnection():
-    return mysql.connector.connect(user='root', host='mysql', port='3306', password='root', database='billdb')
+    return mysql.connector.connect(user='root', host='mysql', port='3306', password='123', database='billdb')
 
 @app.route("/")
 def hello():
@@ -40,7 +40,7 @@ def hello():
 @app.route('/health', methods=['GET'])
 def checkhealth():
     try:
-    db = getMysqlConnection()
+        db = getMysqlConnection()
     except:
         return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
     try:
@@ -73,10 +73,11 @@ def json_to_excel(ws, data, row=0, col=0):
 # Will download a copy of the same excel that was uploaded using POST /rates 
 @app.route('/rates', methods=['GET'])
 def get_rates():
-    dir_name = "out"
-    file_name = "output.xlsx"
-    excel_path = "./" + dir_name + "/" + file_name
-    db = getMysqlConnection()
+    try:
+        dir_name = "out"
+        file_name = "output.xlsx"
+        excel_path = "./" + dir_name + "/" + file_name
+        db = getMysqlConnection()
     except:
         return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
     try:
