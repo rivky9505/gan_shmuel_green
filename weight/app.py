@@ -189,7 +189,6 @@ def postweight():
 
 
         if pformat_b == pformat_jsonin and True == True:
-            cur.execute("""CREATE TABLE IF NOT EXISTS sessions(`id` int(12) NOT NULL AUTO_INCREMENT, `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, `truckid` varchar(50) DEFAULT NULL, `bruto` int(12) DEFAULT NULL, `truckTara` int(12) DEFAULT NULL, `neto` int(12) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001""")
             cur.execute("INSERT INTO sessions(truckid, bruto, truckTara, neto) VALUES (%s, %s, %s, %s)", (truckid, bruto, truckTara, neto))
 
             db.commit()
