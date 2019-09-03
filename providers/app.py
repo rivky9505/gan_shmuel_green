@@ -31,14 +31,13 @@ def hello():
 def get_health():
     db = getMysqlConnection()
     try:
-        logging.info('info health test') # CHANGE TO PROPER MESSAGE
-        logging.error('error health test') # CHANGE TO PROPER MESSAGE
+        logging.info('[GET][SUCCESS] health request') 
         sqlstr = "SELECT 1"
         cur = db.cursor()
         cur.execute(sqlstr)
         output_json = cur.fetchall()
-    except Exception :
-        logging.error('error') # CHANGE TO PROPER MESSAGE
+    except Exception as e:
+        logging.error('[GET][FAILURE] health request')
         return jsonify("500 Internal server error")
     finally:
         logging.info("200 OK")
@@ -67,11 +66,11 @@ def get_rates():
         cur = db.cursor()
         cur.execute(sqlstr)
         output_jason = cur.fetchall()
+        logging.info("[GET][SUCCESS] rates request - : %s", (sqlstr))
     except Exception :
-        logging.error("ERROR , whilr trying: %s", (sqlstr))
-        return jsonify("ERROR , whilr trying: %s", (sqlstr))
+        logging.error("[GET][FAILURE] rates request , ON QUERY: %s", (sqlstr))
+        return jsonify("ERROR , while trying: %s", (sqlstr))
     finally:
-        logging.info("200 OK SQL completed query: %s", (sqlstr))
         db.close()
     data = output_jason
     wb = xlsxwriter.Workbook("output_from_Rates_Table.xlsx")
@@ -110,13 +109,13 @@ def insert_provider(provider_name):
     try:
         data_query = "INSERT INTO Provider (`name`) VALUES  (%s)"
         data=(provider_name,)
-        logging.info("This is an select all request massege")
+        logging.info("[POST][SUCCESS] provider/<provider_name>")
         cur = db.cursor()  
         cur.execute(data_query,data)
         output_json = cur.lastrowid
         output_json = cur.fetchone()
     except Exception as e:
-        print('Could not save duplicate name', str(e))
+        print('[POST][FAILURE] while trying:', str(e))
     finally:
         db.close()
         return jsonify( "id:",(output_json))
@@ -133,10 +132,10 @@ def putprovider(id):
         db.commit()
         cur.close()
         db.close()
-        logging.info('info') # CHANGE TO PROPER MESSAGE
+        logging.info('[PUT][SUCCESS] provider/<id>') # CHANGE TO PROPER MESSAGE
         return id
     except Exception as e:
-        logging.error('error') # CHANGE TO PROPER MESSAGE
+        logging.error('[PUT][FAILURE] provider/<id>') # CHANGE TO PROPER MESSAGE
         return str(e)
 
 
@@ -175,10 +174,10 @@ def postrates():
         db.commit()
         cur.close()
         db.close()
-        logging.info('info') # CHANGE TO PROPER MESSAGE
+        logging.info('[POST][SUCCESS] /rates ') # CHANGE TO PROPER MESSAGE
         return "RATES UPLOADED"
     except Exception as e:
-        logging.error('error') # CHANGE TO PROPER MESSAGE
+        logging.error('[POST][FAILURE] /rates , on query:%s', query ) # CHANGE TO PROPER MESSAGE
         return e
 
 
@@ -207,7 +206,7 @@ def inserttruck(provider_id, truck_lisence):
         db.close()
         return jsonify("OK")
     except Exception as e:
-        logging.error('error') # CHANGE TO PROPER MESSAGE
+        logging.error('[POST][FAILURE] /truck/<provider_id>/<truck_lisence>' + data_query) # CHANGE TO PROPER MESSAGE
         return str(e)
     
 
@@ -241,7 +240,7 @@ def updatetruck():
             if int(query_result[0][0]) > 0: # if more than 0, then update the record.
                 querystr = "UPDATE Trucks SET provider_id = '" + provider_id + "' WHERE id = '" + truck_id + "'" 
                 cur.execute(querystr)
-        db.commit()
+                db.commit()
                 result_message = "Updated Truck no: " + truck_id + " for provider: " + provider_name
             else:
                 result_message = "No Truck ID with this id: " + truck_id
@@ -249,10 +248,10 @@ def updatetruck():
             result_message = "No provider with this name: " + provider_name
         cur.close()
         db.close()
-        logging.info('info') # CHANGE TO PROPER MESSAGE
+        logging.info('[PUT][SUCCESS] /truck/') # CHANGE TO PROPER MESSAGE
         return result_message
     except Exception as e:
-        logging.error('error') # CHANGE TO PROPER MESSAGE
+        logging.error('[PUT][FAILURE] /truck/ : QUERY:' + querystr) # CHANGE TO PROPER MESSAGE
         return str(e)
 
 
@@ -280,11 +279,11 @@ def truckinfo(id):
         db.commit()
         cur.close()
         db.close()
-        logging.info('info') # CHANGE TO PROPER MESSAGE
+        logging.info('[GET][SUCCESS] /truck/<id>') # CHANGE TO PROPER MESSAGE
         tempJson = { "id"}
         return "OK"
     except Exception as e:
-        logging.error('error') # CHANGE TO PROPER MESSAGE
+        logging.error('[GET][FAILURE] /truck/<id>') # CHANGE TO PROPER MESSAGE
         return str(e)
 
 
@@ -319,10 +318,10 @@ def getbilling(id):
         db.commit()
         cur.close()
         db.close()
-        logging.info('info') # CHANGE TO PROPER MESSAGE
+        logging.info('[GET][SUCCESS] /bill/<id>?from=<t1>&to=<t2>') # CHANGE TO PROPER MESSAGE
         return "OK"
     except Exception as e:
-        logging.error('error') # CHANGE TO PROPER MESSAGE
+        logging.error('[GET][FAILURE] /bill/<id>?from=<t1>&to=<t2>') # CHANGE TO PROPER MESSAGE
         return str(e)
 
 @app.route('/getlogs', methods=["GET"])
