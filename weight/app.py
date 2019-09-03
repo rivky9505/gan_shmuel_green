@@ -85,24 +85,63 @@ def postweight():
         pformat_a = pprint.pformat(a)
 
 
+        jsonin = [('in',)]
+        jsonout = [("out",)]
+#        true = [('{"1": true}',)
+        pformat_jsonin = pprint.pformat(jsonin)
+        pformat_jsonout = pprint.pformat(jsonout)
+#        pformat_true = pprint.pformat(true)
+
+
+
         details = request.form
         direction = details['direction']
         truckid = details['truckid']
         containers = details['containers']
-        weight = details['weight']
+        bruto = details['bruto']
         unit = details['unit']
         forc = details['forc']
+        truckTara = details['bruto']
+        neto = details['bruto']
         produce = details['produce']
+
+
         cur = db.cursor()
-        cur.execute("INSERT INTO weight(direction, truckid, containers, weight, unit, forc, produce) VALUES (%s, %s, %s, %s, %s, %s, %s)", (direction, truckid, containers, weight, unit, forc, produce))
+        cur.execute("INSERT INTO weight(direction, truckid, containers, bruto, unit, forc, produce) VALUES (%s, %s, %s, %s, %s, %s, %s)", (direction, truckid, containers, bruto, unit, forc, produce))
 
         currentval = 'select direction from weight ORDER By Created_at DESC LIMIT 1;'
+        currenttruck = "SELECT truckid from weight ORDER BY created_at DESC LIMIT 1;"
+
+        cur.execute(currenttruck)
+        output_currenttruck = cur.fetchall()
+
+        ischeckin = "SELECT JSON_OBJECT(direction='in', truckid='truckid') from weight LIMIT 1;"
+        ischeckout = 'SELECT truckid from weight;'
+
+        cur.execute(ischeckin)
+        output_ischeckin = cur.fetchall()
+        pformat_ischeckin = pprint.pformat(output_ischeckin)
+
+
         cur2 = db.cursor()
         cur2.execute(currentval)
         output_json2 = cur.fetchall()
 
         b = output_json2
         pformat_b = pprint.pformat(b)
+        
+
+        if pformat_b == pformat_jsonout:
+            if pformat_ischeckin == True:
+                return "That's the truck to checkout!"
+#        return pformat_ischeckin
+
+
+        if pformat_b == pformat_jsonin and True == True:
+            cur.execute("""CREATE TABLE IF NOT EXISTS sessions(`id` int(12) NOT NULL AUTO_INCREMENT, `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, `truckid` varchar(50) DEFAULT NULL, `bruto` int(12) DEFAULT NULL, `truckTara` int(12) DEFAULT NULL, `neto` int(12) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001""")
+            cur.execute("INSERT INTO sessions(truckid, bruto, truckTara, neto) VALUES (%s, %s, %s, %s)", (truckid, bruto, truckTara, neto))
+
+            db.commit()
 
 
         if pformat_a == pformat_b:
@@ -115,6 +154,22 @@ def postweight():
         cur.close()
         return 'Success'
     return render_template('weight.html')
+
+@app.route('/session/<id>', methods=['GET'])
+def session(id):
+    db = getMysqlConnection()
+    if request.method == 'GET':
+
+        getsession = "SELECT JSON_ARRAYAGG(JSON_OBJECT('id', id, 'created', created_at, 'truckid', truckid, 'Bruto', bruto, 'truckTara', truckTara, 'Neto', neto)) from sessions where id='%s'" %id
+
+
+        cur = db.cursor()
+        cur.execute(getsession)
+        output_session = cur.fetchall()
+
+        return jsonify(output_session)
+        db.close()
+    return jsonify(results=output_session)
 
 
 

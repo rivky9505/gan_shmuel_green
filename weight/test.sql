@@ -63,20 +63,22 @@ describe unknown;
  
 -- Table structure for table 'weight'
  
-
 CREATE TABLE IF NOT EXISTS `weight` (
-  `direction` varchar(15) NOT NULL,
-  `truckid` varchar(50) DEFAULT NULL, 
+  `id` int(12) NOT NULL AUTO_INCREMENT,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `direction` varchar(10) DEFAULT NULL,
+  `truckid` varchar(50) DEFAULT NULL,
   `containers` varchar(1000) DEFAULT NULL,
-  `weight` int(10) DEFAULT NULL,
+  `bruto` int(12) DEFAULT NULL,
   `unit` varchar(50) DEFAULT NULL,
   `forc` BOOLEAN NOT NULL DEFAULT 0,
-  `produce` varchar(50) DEFAULT NULL, `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
+  `produce` varchar(50) DEFAULT NULL, PRIMARY KEY(`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
 
 
 
 
-INSERT INTO weight (`direction`, `truckid`, `containers`, `weight`, `unit`, `forc`, `produce`) VALUES ('in', 'truckID', 'str10', '10', 'unit', '0', 'tomatoes');
+
+INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('in', 'truckID', 'str10', '10', 'unit', '0', 'tomatoes');
 
 
 CREATE TABLE IF NOT EXISTS `Provider` (
@@ -114,11 +116,6 @@ INSERT INTO unknown (container_id , weight ,unit) VALUES ('1c' , '400' , 'NULL')
 INSERT INTO unknown (container_id , weight ,unit) VALUES ('1d' , '800' , 'NULL');
 
  
-=======
-INSERT INTO Trucks (`id`, `provider_id`) VALUES ('134-33-443', 10001), ('124-55-443', 10003),
-('222-33-111', 10003), ('212-33-441', 10004),('432-98-541', 10001), ('212-99-466', 10002);
-
-
 
 
 --
