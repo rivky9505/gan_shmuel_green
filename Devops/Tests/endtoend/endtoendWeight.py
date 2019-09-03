@@ -6,9 +6,9 @@ import smtplib
 
 gmail_user = 'develeapgreen@gmail.com'
 gmail_password = 'Aa!123!456'
-
+#'yuvalalfassi@gmail.com'
 sent_from = gmail_user
-to = ['kobiavshalom@gmail.com', 'yuvalalfassi@gmail.com' , 'ofirami3@gmail.com','danielharsheffer@gmail.com' ,'hire.saar@gmail.com' ,'danarlowski11@gmail.com' ,'89leon@gmail.com' ,'tsinfob@gmail.com' ,'aannoonniimmyy57@gmail.com' ,'roialfassi@gmail.com'  ]
+to = ['kobiavshalom@gmail.com' , 'ofirami3@gmail.com','danielharsheffer@gmail.com' ,'hire.saar@gmail.com' ,'danarlowski11@gmail.com' ,'89leon@gmail.com' ,'tsinfob@gmail.com' ,'aannoonniimmyy57@gmail.com']
 
 weightAPI = "http://green.develeap.com:8080"
 provAPI ="http://green.develeap.com:8090"
@@ -19,28 +19,30 @@ put = 'PUT'
 delete = 'DELETE'
 testapipost = 'https://httpbin.org/post'
 logfile = 'end2endreport.log'
-dataToEmail = ""
+# dataToEmail = ""
 dateNow = datetime.datetime.now()
-
-subject = "End2End Report: "+ str(dateNow)+'\n'
-body = ''
+testResult = True
 
 
-def startReport(dataToEmail):
-    dataToEmail += "End2End Report: "+ str(dateNow)+'\n'
+def startReport():
+    global dataToEmail 
+    dataToEmail = "End2End Report Weight: "+ str(dateNow)+'\n'
     with open(logfile, 'a') as the_file:
-        the_file.write("End2End Report: "+ str(dateNow)+'\n')
+        the_file.write("End2End Report Weight: "+ str(dateNow)+'\n')
         the_file.write("******************************************"+'\n')
     
 
-def endReport(dataToEmail):
-    dataToEmail = dataToEmail + "End2End Report: "+ "End Report "+'\n'
+def endReport(testResult1):
+    global dataToEmail 
+    # print ("data to email before " + dataToEmail)
+    dataToEmail = dataToEmail + "End2End Report: "+ "End Report "+ str(testResult1) +'\n'
     with open(logfile, 'a') as the_file:
-        the_file.write("End Report "+'\n')
+        the_file.write("End Report "+str(testResult1) +'\n')
         the_file.write("******************************************"+'\n')
 
 def checkRequest(methoda , urla):
     resp = req.request(method=methoda, url=urla)
+    global dataToEmail
     dataToEmail = dataToEmail + "the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)
     with open(logfile, 'a') as the_file:
         the_file.write("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\n')
@@ -53,6 +55,7 @@ def checkRequest(methoda , urla):
 
 def posRequest(urla , data ):
     resp = req.post(urla, data)
+    global dataToEmail
     dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\n'
     with open(logfile, 'a') as the_file:
         the_file.write("the method Post to " +str(urla)+ " got the response " +str(resp)+'\n')
@@ -63,6 +66,7 @@ def posRequest(urla , data ):
 
 def putRequest(urla , data ):
     resp = req.put(urla, data)
+    global dataToEmail
     dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\n'
     with open(logfile, 'a') as the_file:
         the_file.write("the method Put to " +str(urla)+ " got the response " +str(resp)+'\n')
@@ -75,7 +79,7 @@ def putRequest(urla , data ):
 #! Send mail
 def sendMail(dataToEmail):
 
-    subject = "End2End Report: "+ str(dateNow)+'\n'
+    subject = "End2End Report: "+ str(dateNow)
     body = dataToEmail
     email_text = """\
     From: %s
@@ -103,8 +107,10 @@ def checkhealthWeight():
     try: 
         return checkRequest(get , weightAPI + "/health")
     except:
+        global dataToEmail
+        dataToEmail = dataToEmail + "Weight ApI is down "+'\n'
         with open(logfile, 'a') as the_file:
-            the_file.write("Weight ApI is down"+'\n')
+            the_file.write("Weight ApI is down "+'\n')
 
 def checkUnknown():
     checkRequest(get , weightAPI + "/unknown")#check unknown list
@@ -152,6 +158,8 @@ def checkHealthProv():
     try:
         return checkRequest(get , provAPI + "/health")
     except:
+        global dataToEmail
+        dataToEmail = dataToEmail + "Weight ApI is down "+'\n'
         with open(logfile, 'a') as the_file:
             the_file.write("Provider ApI is down"+'\n')
 
@@ -197,13 +205,14 @@ def provRequests():
 
 #####################################################################################################
 #! Main
-startReport(dataToEmail)
+startReport()
 if checkhealthWeight() == True:
-    weightRequests()
+    testResult = weightRequests()
 
-
-
-endReport(dataToEmail)
+if checkHealthProv()  == True:
+    testResult = provRequests()
+endReport(testResult)
+# print (dataToEmail)
 sendMail(dataToEmail)
 # checkRequest(get , "http://green.develeap.com:8080/health")
 # checkRequest(get , testapi)
