@@ -23,22 +23,24 @@ dataToEmail = ''
 dateNow = datetime.datetime.now()
 
 subject = "End2End Report: "+ str(dateNow)+'\n'
-body = dataToEmail
+body = ''
 
 
 def startReport():
     with open(logfile, 'a') as the_file:
         the_file.write("End2End Report: "+ str(dateNow)+'\n')
-        dataToEmail = dataToEmail + "End2End Report: "+ str(dateNow)+'\n'
         the_file.write("******************************************"+'\n')
+    dataToEmail = dataToEmail + "End2End Report: "+ str(dateNow)+'\n'
 
 def endReport():
+    dataToEmail = dataToEmail + "End2End Report: "+ "End Report "+'\n'
     with open(logfile, 'a') as the_file:
         the_file.write("End Report "+'\n')
         the_file.write("******************************************"+'\n')
 
 def checkRequest(methoda , urla):
     resp = req.request(method=methoda, url=urla)
+    dataToEmail = dataToEmail + "the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)
     with open(logfile, 'a') as the_file:
         the_file.write("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\n')
     print("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
@@ -50,6 +52,7 @@ def checkRequest(methoda , urla):
 
 def posRequest(urla , data ):
     resp = req.post(urla, data)
+    dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\n'
     with open(logfile, 'a') as the_file:
         the_file.write("the method Post to " +str(urla)+ " got the response " +str(resp)+'\n')
         # print("the method Post to " +str(urla)+ " got the response " +str(resp))
@@ -59,6 +62,7 @@ def posRequest(urla , data ):
 
 def putRequest(urla , data ):
     resp = req.put(urla, data)
+    dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\n'
     with open(logfile, 'a') as the_file:
         the_file.write("the method Put to " +str(urla)+ " got the response " +str(resp)+'\n')
         # print("the method Put to " +str(urla)+ " got the response " +str(resp))

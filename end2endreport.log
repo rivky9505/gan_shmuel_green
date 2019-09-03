@@ -108,3 +108,7 @@ the method Post to http://green.develeap.com:8090/truck/1111111 got the response
 the method Put to http://green.develeap.com:8090/truck/2212 got the response <Response [200]>
 End Report 
 ******************************************
+End2End Report: 2019-09-03 10:49:31.270633
+End2End Report: 2019-09-03 10:50:53.348289
+End2End Report: 2019-09-03 10:51:41.640650
+End2End Report: 2019-09-03 10:53:14.751375
