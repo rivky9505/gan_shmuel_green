@@ -1,17 +1,17 @@
 --
 -- Database: `Weight`
 --
-
+ 
 CREATE DATABASE IF NOT EXISTS `weight`;
-
+ 
 -- --------------------------------------------------------
-
+ 
 --
 -- Table structure for table `containers-registered`
 --
-
+ 
 USE weight;
-
+ 
 
 CREATE TABLE IF NOT EXISTS `containers_registered` (
   `container_id` varchar(15) NOT NULL,
@@ -19,13 +19,13 @@ CREATE TABLE IF NOT EXISTS `containers_registered` (
   `unit` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`container_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
-
+ 
 -- --------------------------------------------------------
-
+ 
 --
 -- Table structure for table `transactions`
 --
-
+ 
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` int(12) NOT NULL AUTO_INCREMENT,
   `datetime` datetime DEFAULT NULL,
@@ -39,15 +39,10 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `produce` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
-
-show tables;
-
-describe containers_registered;
-describe transactions;
-
-
+ 
+ 
 -- Table structure for table 'weight'
-
+ 
 
 CREATE TABLE IF NOT EXISTS `weight` (
   `id` int(12) NOT NULL AUTO_INCREMENT,
@@ -69,12 +64,22 @@ INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc
 
 
 CREATE TABLE IF NOT EXISTS `sessions` (
-  `id` int(12) NOT NULL AUTO_INCREMENT,
-  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `truckid` varchar(50) DEFAULT NULL,
-  `bruto` int(12) DEFAULT NULL,
-  `truckTara` int(12) DEFAULT NULL,
-  `neto` int(12) DEFAULT NULL,
+--GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;
+--FLUSH PRIVILEGES;
+
+
+
+
+CREATE TABLE IF NOT EXISTS 'sessions' (
+
+
+CREATE TABLE IF NOT EXISTS `sessions` (
+  `id` int(12) NOT NULL AUTO_INCREMENT, 
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+  `truckid` varchar(50) DEFAULT NULL, 
+  `bruto` int(12) DEFAULT NULL, 
+  `truckTara` int(12) DEFAULT NULL, 
+  `neto` int(12) DEFAULT NULL, 
 PRIMARY KEY (`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001
 
 
@@ -87,3 +92,13 @@ PRIMARY KEY (`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001
 -- INSERT INTO `test` (`id`, `aa`) VALUES
 -- (1, 'aaaa'),
                                                       
+PRIMARY KEY (`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001
+   PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=10001;
+
+show tables;
+ 
+describe containers_registered;
+describe transactions;
+describe sessions;
+describe weight;
