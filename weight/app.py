@@ -1,4 +1,3 @@
-
 from flask import Flask, request, jsonify, Response, render_template
 import json, pprint
 import mysql.connector

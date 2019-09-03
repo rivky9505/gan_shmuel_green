@@ -4,25 +4,22 @@
  
 CREATE DATABASE IF NOT EXISTS `weight`;
  
- 
 -- --------------------------------------------------------
  
 --
 -- Table structure for table `containers-registered`
 --
  
- 
 USE weight;
  
+
 CREATE TABLE IF NOT EXISTS `containers_registered` (
   `container_id` varchar(15) NOT NULL,
-  `weight` varchar(12) DEFAULT NULL,
-  `unit` varchar(12) DEFAULT NULL,
+  `weight` int(12) DEFAULT NULL,
+  `unit` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`container_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
  
-
-
 -- --------------------------------------------------------
  
 --
@@ -41,15 +38,12 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `neto` int(12) DEFAULT NULL,
   `produce` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-
 ) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
  
-
-INSERT INTO transactions(`id`, `datetime`, `direction`) VALUES ('10', '2011-12-18 13:17:17', 'in');
-
  
 -- Table structure for table 'weight'
  
+
 CREATE TABLE IF NOT EXISTS `weight` (
   `id` int(12) NOT NULL AUTO_INCREMENT,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -64,20 +58,41 @@ CREATE TABLE IF NOT EXISTS `weight` (
 
 
 
+INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('in', 'TRUCKID', 'containers', '10', 'kg', '0', 'tomatoes');
 
-INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('in', 'truckID', 'str10', '10', 'unit', '0', 'tomatoes');
 
+
+
+CREATE TABLE IF NOT EXISTS `sessions` (
+--GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;
+--FLUSH PRIVILEGES;
 
 
 
 
 CREATE TABLE IF NOT EXISTS 'sessions' (
+
+
+CREATE TABLE IF NOT EXISTS `sessions` (
   `id` int(12) NOT NULL AUTO_INCREMENT, 
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, 
   `truckid` varchar(50) DEFAULT NULL, 
   `bruto` int(12) DEFAULT NULL, 
   `truckTara` int(12) DEFAULT NULL, 
   `neto` int(12) DEFAULT NULL, 
+PRIMARY KEY (`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001
+
+
+
+
+--
+-- Dumping data for table `test`
+--
+
+-- INSERT INTO `test` (`id`, `aa`) VALUES
+-- (1, 'aaaa'),
+                                                      
+PRIMARY KEY (`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001
    PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10001;
 
