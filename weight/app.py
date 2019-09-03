@@ -26,7 +26,7 @@ def get_health():
         cur.execute(sqlstr)
         output_json = cur.fetchall()
     except Exception as e:
-        logging.error("ERROR , while trying :", sqlstr)
+        logging.error("ERROR , while trying : %s", sqlstr)
         return jsonify("500 Internal server error")
     finally:
         logging.info("200 OK Weight is healthy")
@@ -37,18 +37,23 @@ def get_health():
 def get_unknown():
     db = getMysqlConnection()
     try:
-        data_query = "SELECT * FROM unknown"
-        logging.info("This is an unknown request massege")
+        data_query = "SELECT * FROM containers_registered"
+        # logging.info("Looking for items with unknown weights")
         cur = db.cursor()
         cur.execute(data_query)
         output_json = cur.fetchall()
+        unknowns = []
+        for row in output_json :
+            if ((not str(row[1]).isdigit()) and not row[1]) :
+                unknowns.append(row[0])
+
     except Exception as e:
-        logging.error("ERROR , while trying :", data_query)
+        logging.error("ERROR , while trying : %s", data_query)
         return jsonify("500 Internal server error")
     finally:
         logging.info("200 OK Weight is healthy")
         db.close()
-    return jsonify(results=output_json)
+    return jsonify({'List_of_unknowns': unknowns })
 
 
 @app.route('/batch-weight', methods=['GET','POST'])
@@ -70,6 +75,52 @@ def post_batch_weight():
     finally:
         db.close()
         return 'done'
+
+
+
+@app.route('/item/<id>', methods=['GET'])
+def get_item_id(id):
+# GET /item/<id>?from=t1&to=t2
+# - id is for an item (truck or container). 404 will be returned if non-existent
+# - t1,t2 - date-time stamps, formatted as yyyymmddhhmmss. server time is assumed.
+# default t1 is "1st of month at 000000". default t2 is "now". 
+# Returns a json:
+# { "id": <str>,
+#   "tara": <int> OR "na", // for a truck this is the "last known tara"
+#   "sessions": [ <id1>,...] 
+# }
+    db = getMysqlConnection()
+    from_t1 = request.form.get('from', default = "1st of month at 000000" , type = str)
+    to_t2 = request.form.get('to', default = "now" , type = str)
+    item_id = id
+
+    try:
+        # Query all entries in containers_registered between times
+        data_query = ("SELECT * FROM containers_registered WHERE Created_at BETWEEN %s AND %s" , from_t1 , to_t2 )
+        cur = db.cursor()
+        cur.execute(data_query)
+        output_json = cur.fetchall()
+#Pending to see database structure to harvest tara and session IDs values 
+        # item_id_json = dict({"id": item_id, 
+        #         "tara": <int> , #OR "na" , for a truck this is the "last known tara"
+        #         "sessions": [ <id1>,...] })
+        # scan the IDs for matches in containers, then in trucks 
+        if item_id in output_json :
+            #add for to run on all items found
+            logging.info(" %s found in containers_registered" , item_id )
+            print(" %s found in containers_registered" , item_id )
+            # append to JSON to return
+
+# trucks querying,
+    except Exception:
+        logging.error("ERROR , while trying : %s", data_query)
+        return jsonify("404 item id not found")
+    finally:
+        logging.info("200 OK Weight is healthy")
+        db.close()
+    return jsonify(results=item_id_json)
+
+
 
 @app.route('/weight', methods=['GET', 'POST'])
 def postweight():
@@ -170,6 +221,7 @@ def session(id):
         return jsonify(output_session)
         db.close()
     return jsonify(results=output_session)
+
 
 
 
