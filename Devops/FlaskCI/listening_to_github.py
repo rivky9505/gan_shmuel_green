@@ -63,6 +63,10 @@ def api_gh_message():
         if branch == "master":
                 print ("its a master")
                 mainFunc()
+        if branch == "weight":
+                print ("its a weight")
+        if branch == "providers_branch":
+                print ("its a provider")
         print(branch)
         return info
 
