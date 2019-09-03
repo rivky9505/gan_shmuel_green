@@ -229,3 +229,136 @@ the method Post to http://green.develeap.com:8090/truck/1111111 got the response
 the method Put to http://green.develeap.com:8090/truck/2212 got the response <Response [405]>
 End Report None
 ******************************************
+End2End Report: 2019-09-03 14:32:54.553708
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/1 got the response <Response [500]>
+the method GET to http://green.develeap.com:8080/session/2 got the response <Response [500]>
+the method GET to http://green.develeap.com:8080/rates got the response <Response [404]>
+the method Post to http://green.develeap.com:8080/weight got the response <Response [500]>
+the method GET to http://green.develeap.com:8090/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8090/rates got the response <Response [200]>
+the method Post to http://green.develeap.com:8090/provider got the response <Response [404]>
+the method Put to http://green.develeap.com:8090/provider/1111111 got the response <Response [200]>
+the method Post to http://green.develeap.com:8090/truck/1111111 got the response <Response [405]>
+the method Put to http://green.develeap.com:8090/truck/2212 got the response <Response [405]>
+End Report None
+******************************************
+End2End Report: 2019-09-03 14:33:55.889248
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/1 got the response <Response [500]>
+the method GET to http://green.develeap.com:8080/session/2 got the response <Response [500]>
+the method GET to http://green.develeap.com:8080/rates got the response <Response [404]>
+the method Post to http://green.develeap.com:8080/weight got the response <Response [500]>
+the method Post to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+the method GET to http://green.develeap.com:8090/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8090/rates got the response <Response [200]>
+the method Post to http://green.develeap.com:8090/provider got the response <Response [404]>
+the method Put to http://green.develeap.com:8090/provider/1111111 got the response <Response [200]>
+the method Post to http://green.develeap.com:8090/truck/1111111 got the response <Response [405]>
+the method Put to http://green.develeap.com:8090/truck/2212 got the response <Response [405]>
+End Report None
+******************************************
+End2End Report: 2019-09-03 14:34:03.032970
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/1 got the response <Response [500]>
+the method GET to http://green.develeap.com:8080/session/2 got the response <Response [500]>
+the method GET to http://green.develeap.com:8080/rates got the response <Response [404]>
+the method Post to http://green.develeap.com:8080/weight got the response <Response [500]>
+the method Post to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+the method GET to http://green.develeap.com:8090/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8090/rates got the response <Response [200]>
+the method Post to http://green.develeap.com:8090/provider got the response <Response [404]>
+the method Put to http://green.develeap.com:8090/provider/1111111 got the response <Response [200]>
+the method Post to http://green.develeap.com:8090/truck/1111111 got the response <Response [405]>
+the method Put to http://green.develeap.com:8090/truck/2212 got the response <Response [405]>
+End Report None
+******************************************
+End2End Report: 2019-09-03 14:35:06.232242
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/1 got the response <Response [500]>
+the method GET to http://green.develeap.com:8080/session/2 got the response <Response [500]>
+the method GET to http://green.develeap.com:8080/rates got the response <Response [404]>
+the method Post to http://green.develeap.com:8080/weight got the response <Response [500]>
+the method Post to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+the method GET to http://green.develeap.com:8090/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8090/rates got the response <Response [200]>
+the method Post to http://green.develeap.com:8090/provider got the response <Response [404]>
+the method Put to http://green.develeap.com:8090/provider/1111111 got the response <Response [200]>
+the method Post to http://green.develeap.com:8090/truck/1111111 got the response <Response [405]>
+the method Put to http://green.develeap.com:8090/truck/2212 got the response <Response [405]>
+End Report None
+******************************************
+End2End Report: 2019-09-03 14:38:54.837557
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/1 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/2 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/rates got the response <Response [404]>
+the method Post to http://green.develeap.com:8080/weight got the response <Response [500]>
+the method Post to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+the method GET to http://green.develeap.com:8090/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8090/rates got the response <Response [200]>
+the method Post to http://green.develeap.com:8090/provider got the response <Response [404]>
+the method Put to http://green.develeap.com:8090/provider/1111111 got the response <Response [200]>
+the method Post to http://green.develeap.com:8090/truck/1111111 got the response <Response [405]>
+the method Put to http://green.develeap.com:8090/truck/2212 got the response <Response [405]>
+End Report None
+******************************************
+End2End Report: 2019-09-03 14:39:01.850190
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/1 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/2 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/rates got the response <Response [404]>
+the method Post to http://green.develeap.com:8080/weight got the response <Response [500]>
+the method Post to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+the method GET to http://green.develeap.com:8090/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8090/rates got the response <Response [200]>
+the method Post to http://green.develeap.com:8090/provider got the response <Response [404]>
+the method Put to http://green.develeap.com:8090/provider/1111111 got the response <Response [200]>
+the method Post to http://green.develeap.com:8090/truck/1111111 got the response <Response [405]>
+the method Put to http://green.develeap.com:8090/truck/2212 got the response <Response [405]>
+End Report None
+******************************************
+End2End Report: 2019-09-03 14:44:44.942247
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/1 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/2 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/rates got the response <Response [404]>
+the method Post to http://green.develeap.com:8080/weight got the response <Response [500]>
+the method Post to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+the method GET to http://green.develeap.com:8090/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8090/rates got the response <Response [200]>
+the method Post to http://green.develeap.com:8090/provider got the response <Response [404]>
+the method Put to http://green.develeap.com:8090/provider/1111111 got the response <Response [200]>
+the method Post to http://green.develeap.com:8090/truck/1111111 got the response <Response [405]>
+the method Put to http://green.develeap.com:8090/truck/2212 got the response <Response [405]>
+End2End Report: 2019-09-03 14:45:04.681231
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/1 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/2 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/rates got the response <Response [404]>
+the method Post to http://green.develeap.com:8080/weight got the response <Response [500]>
+the method Post to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+the method GET to http://green.develeap.com:8090/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8090/rates got the response <Response [200]>
+the method Post to http://green.develeap.com:8090/provider got the response <Response [404]>
+the method Put to http://green.develeap.com:8090/provider/1111111 got the response <Response [200]>
+the method Post to http://green.develeap.com:8090/truck/1111111 got the response <Response [405]>
+the method Put to http://green.develeap.com:8090/truck/2212 got the response <Response [405]>
+End Report None
+******************************************
