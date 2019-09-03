@@ -44,4 +44,4 @@ def mainFunc():
     sleep(2)
     runEnv()
 
-mainFunc()
+#mainFunc()
