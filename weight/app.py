@@ -37,18 +37,23 @@ def get_health():
 def get_unknown():
     db = getMysqlConnection()
     try:
-        data_query = "SELECT * FROM unknown"
-        logging.info("This is an unknown request massege")
+        data_query = "SELECT * FROM containers_registered"
+        # logging.info("Looking for items with unknown weights")
         cur = db.cursor()
         cur.execute(data_query)
         output_json = cur.fetchall()
+        unknowns = []
+        for row in output_json :
+            if ((not str(row[1]).isdigit()) and not row[1]) :
+                unknowns.append(row[0])
+
     except Exception as e:
         logging.error("ERROR , while trying : %s", data_query)
         return jsonify("500 Internal server error")
     finally:
         logging.info("200 OK Weight is healthy")
         db.close()
-    return jsonify(results=output_json)
+    return jsonify({'List_of_unknowns': unknowns })
 
 
 @app.route('/batch-weight', methods=['GET','POST'])
