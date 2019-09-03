@@ -2,7 +2,9 @@
 
 
 git clone git@github.com:greendeveleap/gan_shmuel_green.git
+cd gan_shmuel_green
 git checkout master
+cd ..
 touch "$(pwd)"/endtoend/logs/end2endreport.log
 docker-compose up --build -d
 sleep 5

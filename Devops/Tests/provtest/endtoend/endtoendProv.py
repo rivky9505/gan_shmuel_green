@@ -3,6 +3,7 @@
 import requests as req
 import datetime
 import smtplib
+import os
 
 gmail_user = 'develeapgreen@gmail.com'
 gmail_password = 'Aa!123!456'
@@ -11,14 +12,14 @@ sent_from = gmail_user
 to = ['kobiavshalom@gmail.com' , 'ofirami3@gmail.com','danielharsheffer@gmail.com' ,'hire.saar@gmail.com' ,'danarlowski11@gmail.com' ,'89leon@gmail.com' ,'tsinfob@gmail.com' ,'aannoonniimmyy57@gmail.com']
 
 weightAPI = "http://green.develeap.com:8080"
-provAPI ="http://green.develeap.com:8090"
+provAPI ="http://localhost:8089"
 testapi = "https://api.github.com"
 get = 'GET'
 post = 'POST'
 put = 'PUT'
 delete = 'DELETE'
 testapipost = 'https://httpbin.org/post'
-logfile = 'end2endreport.log'
+logfile =  os.getcwd()+'/endtoend/logs/end2endreport.log'
 # dataToEmail = ""
 dateNow = datetime.datetime.now()
 testResult = True
@@ -38,7 +39,7 @@ def endReport(testResult1):
     dataToEmail = dataToEmail + "End2End Report: "+ "End Report "+ str(testResult1) +'\n'
     with open(logfile, 'a') as the_file:
         the_file.write("End Report "+str(testResult1) +'\n')
-        the_file.write("******************************************"+'\n')
+
 
 def checkRequest(methoda , urla):
     resp = req.request(method=methoda, url=urla)
@@ -105,7 +106,9 @@ def sendMail(dataToEmail):
 
 def checkhealthWeight():
     try: 
-        return checkRequest(get , weightAPI + "/health")
+        global testResult 
+        testResult = checkRequest(get , weightAPI + "/health")
+        return testResult 
     except:
         global dataToEmail
         dataToEmail = dataToEmail + "Weight ApI is down "+'\n'
@@ -156,7 +159,9 @@ def weightRequests():
 
 def checkHealthProv():
     try:
-        return checkRequest(get , provAPI + "/health")
+        global testResult 
+        testResult = checkRequest(get , provAPI + "/health")
+        return testResult
     except:
         global dataToEmail
         dataToEmail = dataToEmail + "Weight ApI is down "+'\n'
