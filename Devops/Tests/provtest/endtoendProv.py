@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from email.mime.text import MIMEText
 import requests as req
 import datetime
 import smtplib
@@ -77,23 +77,28 @@ def putRequest(urla , data ):
     
 #####################################################################################################
 #! Send mail
+#! Send mail
 def sendMail(dataToEmail):
 
     subject = "End2End Report: "+ str(dateNow)
     body = dataToEmail
-    email_text = """\
-    From: %s
-    To: %s
-    Subject: %s
+    msg = MIMEText(body)
+    msg['Subject'] = subject
+    msg['From'] = sent_from
+    msg['To'] = ", ".join(to)
+    # email_text = """\
+    # From: %s
+    # To: %s
+    # Subject: %s
 
-    %s
-    """ % (sent_from, ", ".join(to), subject, body)
+    # %s
+    # """ % (sent_from, ", ".join(to), subject, body)
 
     try:
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         server.ehlo()
         server.login(gmail_user, gmail_password)
-        server.sendmail(sent_from, to, email_text)
+        server.sendmail(sent_from, to, msg.as_string)
         server.close()
 
         print ('Email sent!')
