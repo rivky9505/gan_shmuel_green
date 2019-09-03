@@ -1,0 +1,35 @@
+End2End Report Weight: 2019-09-03 14:28:09.613723
+******************************************
+Weight ApI is down 
+End Report True
+******************************************
+End2End Report Weight: 2019-09-03 14:30:09.621872
+******************************************
+Weight ApI is down 
+End Report True
+******************************************
+End2End Report Weight: 2019-09-03 14:32:27.813410
+******************************************
+Weight ApI is down 
+End Report True
+******************************************
+End2End Report Weight: 2019-09-03 14:33:00.905063
+******************************************
+the method GET to http://localhost:8081/health got the response <Response [200]>
+the method GET to http://localhost:8081/unknown got the response <Response [200]>
+the method GET to http://localhost:8081/session/1 got the response <Response [500]>
+the method GET to http://localhost:8081/session/2 got the response <Response [500]>
+the method GET to http://localhost:8081/rates got the response <Response [404]>
+the method Post to http://localhost:8081/weight got the response <Response [500]>
+End Report None
+******************************************
+End2End Report Weight: 2019-09-03 14:34:02.865333
+******************************************
+the method GET to http://localhost:8081/health got the response <Response [200]>
+the method GET to http://localhost:8081/unknown got the response <Response [200]>
+the method GET to http://localhost:8081/session/1 got the response <Response [500]>
+the method GET to http://localhost:8081/session/2 got the response <Response [500]>
+the method GET to http://localhost:8081/rates got the response <Response [404]>
+the method Post to http://localhost:8081/weight got the response <Response [500]>
+End Report None
+******************************************

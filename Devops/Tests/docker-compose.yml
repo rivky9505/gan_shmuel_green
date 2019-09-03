@@ -31,6 +31,3 @@ services:
       context: ./endtoend
     volumes:
       - /endtoend/logs:/endtoend/log
-
-
-    
