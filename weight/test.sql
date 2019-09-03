@@ -13,19 +13,13 @@ CREATE DATABASE IF NOT EXISTS `weight`;
  
  
 USE weight;
- 
-CREATE TABLE IF NOT EXISTS `unknown` (
-  `container_id` varchar(15) NOT NULL,
-  `weight` int(12) DEFAULT NULL,
-  `unit` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`container_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
 
  
 CREATE TABLE IF NOT EXISTS `containers_registered` (
-  `id` varchar(15) NOT NULL,
-  `kg` int(12) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `container_id` varchar(15) NOT NULL,
+  `weight` varchar(12) DEFAULT NULL,
+  `unit` varchar(12) DEFAULT NULL,
+  PRIMARY KEY (`container_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
  
 
@@ -112,8 +106,7 @@ INSERT INTO Rates (`product_id`, `rate`, `scope`) VALUES ('Navel', '93', 'All'),
 INSERT INTO unknown (container_id , weight ,unit) VALUES ('1c' , '400' , 'NULL');
 INSERT INTO unknown (container_id , weight ,unit) VALUES ('1d' , '800' , 'NULL');
 
- 
-=======
+
 INSERT INTO Trucks (`id`, `provider_id`) VALUES ('134-33-443', 10001), ('124-55-443', 10003),
 ('222-33-111', 10003), ('212-33-441', 10004),('432-98-541', 10001), ('212-99-466', 10002);
 
