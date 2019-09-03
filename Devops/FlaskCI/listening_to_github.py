@@ -46,17 +46,9 @@ def mainFunc():
     sleep(2)
     runEnv()
 
-# @app.route('/')
-# def api():
-#     strd = "Happy birthday"
-#     #mainFunc()
-#     cmd = 'ls'
-#     os.system(cmd)
-#     return str(strd.find("py"))
-
 @app.route('/')
 def api():
-        mainFunc()
+        #mainFunc()
         strd = "Happy birthday"
         return str(strd.find("py"))
 
@@ -70,7 +62,7 @@ def api_gh_message():
         branch = TempBranch[1:TempBranch.find("repo")-4]
         if branch == "master":
                 print ("its a master")
-                #mainFunc()
+                mainFunc()
         print(branch)
         return info
 
