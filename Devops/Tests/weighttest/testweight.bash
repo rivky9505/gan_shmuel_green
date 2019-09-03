@@ -1,13 +1,25 @@
-git checkout weight
+#!/bin/bash
+
+
 git clone git@github.com:greendeveleap/gan_shmuel_green.git
+git checkout master
 touch "$(pwd)"/endtoend/logs/end2endreport.log
 docker-compose up --build -d
 sleep 5
 python3 "$(pwd)"/endtoend/endtoendWeight.py
 sleep 5
 docker-compose down
+status=$(python3 testlog.py)
+echo status = $status
+
+if [ $status -eq 0 ]
+then
+    echo 0
+else
+    echo 1
+fi
+
+
 rm -rf gan_shmuel_green
-#rm endtoend/logs/end2endreport.log
-#script to test log
-#return 0 if all is 200
-#return 1 if not all is 200
+rm "$(pwd)"/endtoend/logs/end2endreport.log
+
