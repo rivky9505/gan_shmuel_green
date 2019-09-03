@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, Response ,send_from_directory
+from flask import render_template
 import json
 import mysql.connector
 from flask_cors import CORS, cross_origin
@@ -6,17 +7,18 @@ import logging
 import csv
 from openpyxl import Workbook
 import xlsxwriter
+import os.path
 
 app = Flask(__name__)
 
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
 
 def getMysqlConnection():
-    return mysql.connector.connect(user='root', host='mysql', port='3306', password='123', database='billdb')
+    return mysql.connector.connect(user='root', host='mysql', port='3306', password='root', database='billdb')
 
 @app.route("/")
 def hello():
-    return "Gan Shmuel"
+    return render_template('ProviderMainPage.html')
 
 @cross_origin() # Allow all origins all methods.
 
@@ -51,15 +53,18 @@ def json_to_excel(ws, data, row=0, col=0):
     ws.write('C1', 'Scope')
     row += 1
     for product_id, rate, scope in data:
-        ws.write(row, col, product_id)
-        ws.write(row, col + 1, rate)
-        ws.write(row, col + 2, scope)
+        ws.write(row, col, str(product_id))
+        ws.write(row, col + 1, str(rate))
+        ws.write(row, col + 2, str(scope))
         row += 1
 
 # GET /rates
 # Will download a copy of the same excel that was uploaded using POST /rates 
 @app.route('/rates', methods=['GET'])
 def get_rates():
+    dir_name = "out"
+    file_name = "output.xlsx"
+    excel_path = "./" + dir_name + "/" + file_name
     db = getMysqlConnection()
     try:
         sqlstr = "SELECT * FROM Rates"
@@ -73,10 +78,13 @@ def get_rates():
     finally:
         db.close()
     data = output_jason
-    wb = xlsxwriter.Workbook("./out/output.xlsx")
+    wb = xlsxwriter.Workbook(excel_path)
     ws = wb.add_worksheet()
     json_to_excel(ws, data)
     wb.close()
+    # send excel file as http response
+    if os.path.exists(excel_path):
+        return send_from_directory(dir_name, filename=file_name, as_attachment=True, attachment_filename="Rates.xlsx", mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     return "Excel Created"
 
 # POST /provider
