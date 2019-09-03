@@ -241,7 +241,7 @@ def updatetruck():
             if int(query_result[0][0]) > 0: # if more than 0, then update the record.
                 querystr = "UPDATE Trucks SET provider_id = '" + provider_id + "' WHERE id = '" + truck_id + "'" 
                 cur.execute(querystr)
-        db.commit()
+                db.commit()
                 result_message = "Updated Truck no: " + truck_id + " for provider: " + provider_name
             else:
                 result_message = "No Truck ID with this id: " + truck_id
