@@ -19,20 +19,21 @@ put = 'PUT'
 delete = 'DELETE'
 testapipost = 'https://httpbin.org/post'
 logfile = 'end2endreport.log'
-dataToEmail = ''
+dataToEmail = ""
 dateNow = datetime.datetime.now()
 
 subject = "End2End Report: "+ str(dateNow)+'\n'
 body = ''
 
 
-def startReport():
+def startReport(dataToEmail):
+    dataToEmail += "End2End Report: "+ str(dateNow)+'\n'
     with open(logfile, 'a') as the_file:
         the_file.write("End2End Report: "+ str(dateNow)+'\n')
         the_file.write("******************************************"+'\n')
-    dataToEmail = dataToEmail + "End2End Report: "+ str(dateNow)+'\n'
+    
 
-def endReport():
+def endReport(dataToEmail):
     dataToEmail = dataToEmail + "End2End Report: "+ "End Report "+'\n'
     with open(logfile, 'a') as the_file:
         the_file.write("End Report "+'\n')
@@ -72,7 +73,7 @@ def putRequest(urla , data ):
     
 #####################################################################################################
 #! Send mail
-def sendMail():
+def sendMail(dataToEmail):
 
     subject = "End2End Report: "+ str(dateNow)+'\n'
     body = dataToEmail
@@ -196,15 +197,15 @@ def provRequests():
 
 #####################################################################################################
 #! Main
-startReport()
+startReport(dataToEmail)
 if checkhealthWeight() == True:
     weightRequests()
 
 if checkHealthProv()  == True:
     provRequests()
 
-endReport()
-sendMail()
+endReport(dataToEmail)
+sendMail(dataToEmail)
 # checkRequest(get , "http://green.develeap.com:8080/health")
 # checkRequest(get , testapi)
 # checkRequest(post , testapipost)
