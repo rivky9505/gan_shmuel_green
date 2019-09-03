@@ -74,7 +74,7 @@ def get_rates():
         logging.info("200 OK SQL completed query: %s", (sqlstr))
         db.close()
     data = output_jason
-    wb = xlsxwriter.Workbook("output_from_Rates_Table.xlsx")
+    wb = xlsxwriter.Workbook("./out/output.xlsx")
     ws = wb.add_worksheet()
     json_to_excel(ws, data)
     wb.close()
