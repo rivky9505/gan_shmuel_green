@@ -145,7 +145,7 @@ def weightRequests():
     toReturn= checkSession(1) and toReturn
     toReturn= checkSession(2) and toReturn
     toReturn= checkGETrates() and toReturn
-    toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato") and toReturn
+    toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato") and postBatchWeight("containers1.csv") and toReturn 
     return  toReturn
 
     
