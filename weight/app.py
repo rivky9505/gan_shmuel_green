@@ -309,7 +309,7 @@ def getweight():
                     else:
                         neto = line[7]
 
-                    retweight = { 'id': line[0], 'direction': line[2], 'bruto': line[5], 'neto': neto, 'produce': line[8], 'containers': str(line[4]).split(',') }
+                    retweight = { 'id': line[0], 'truck': line[3],'direction': line[2], 'bruto': line[5], 'neto': neto, 'produce': line[8], 'containers': str(line[4]).split(',') }
                     weightsList.append(retweight)
     return jsonify({'weights': weightsList})                    
 
