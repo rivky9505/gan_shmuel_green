@@ -46,7 +46,7 @@ def get_unknown():
         output_json = cur.fetchall()
         unknowns = []
         for row in output_json :
-            if ((not str(row[1]).isdigit()) and not row[1]) :
+            if ((row[1]) == 'na') :
                 unknowns.append(row[0])
 
     except Exception as e:
@@ -55,7 +55,7 @@ def get_unknown():
     finally:
         logging.info("200 OK Weight is healthy")
         db.close()
-    return jsonify({'List_of_unknowns': unknowns })
+    return render_template('unknown.html' ,unknowns=unknowns)
 
 
 @app.route('/batch-weight', methods=['GET','POST'])
@@ -92,7 +92,7 @@ def post_batch_weight():
                 return jsonify("500 csv file error")
             finally:
                 db.close()
-            return "uploaded"
+            return render_template('uploaded.html')
         elif (formt[1] == "json"):
             try:
                 data=[]
@@ -115,7 +115,7 @@ def post_batch_weight():
                 return jsonify("500 json file error")
             finally:
                 db.close()
-            return render_template('batch-weight.html')
+            return render_template('uploaded.html')
 
     return render_template('batch-weight.html')
 
