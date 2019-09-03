@@ -3,6 +3,7 @@ import json, pprint
 import mysql.connector
 from flask_cors import CORS, cross_origin
 import logging
+import datetime
 import csv
 app = Flask(__name__)
 
@@ -223,6 +224,46 @@ def session(id):
 
 
 
+# GET /weight?from=t1&to=t2&filter=f
+# - t1,t2 - date-time stamps, formatted as yyyymmddhhmmss. server time is assumed.
+# - f - comma delimited list of directions. default is "in,out,none"
+# default t1 is "today at 000000". default t2 is "now". 
+# returns an array of json objects, one per weighing (batch NOT included):
+# [{ "id": <id>,
+#    "direction": in/out/none,
+#    "bruto": <int>, //in kg
+#    "neto": <int> or "na" // na if some of containers have unknown tara
+#    "produce": <str>,
+#    "containers": [ id1, id2, ...]
+# },...]
+
+@app.route('/weight', methods=['GET'])
+def getweight():
+    if request.method == "GET":
+            db = getMysqlConnection()
+            serverTime = datetime.datetime.now().strftime("%Y%m%d%I%M%S")
+            t1 = request.form.get('from', default = serverTime , type = str)
+            t2 = request.form.get('to', default = "now" , type = str)
+            filter = request.form.get('filter', default = "in,out,none" , type = str)
+            filter = str(filter).split(',')
+
+            lines = "select * from transactions where " + "datetime>='" + str(t1) + "' and datetime<='" + str(t2) + "'"
+            cur = db.cursor()
+            cur.execute(lines)
+            output_transactions = cur.fetchall()
+
+            weightsList = []
+
+            for line in output_transactions :
+                if line[2] in filter :
+                    if any(item in str(line[4]).split(',')  for item in get_unknown()):
+                        neto = None
+                    else:
+                        neto = line[7]
+
+                    retweight = { 'id': line[0], 'direction': line[2], 'bruto': line[5], 'neto': neto, 'produce': line[8], 'containers': str(line[4]).split(',') }
+                    weightsList.append(retweight)
+    return jsonify({'weights': weightsList})                    
 
 
 if __name__ == "__main__":
