@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `weight` (
   `bruto` int(12) DEFAULT NULL,
   `unit` varchar(50) DEFAULT NULL,
   `forc` BOOLEAN NOT NULL DEFAULT 0,
-  `produce` varchar(50) DEFAULT NULL, PRIMARY KEY(`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
+  `produce` varchar(50) DEFAULT NULL, PRIMARY KEY(`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001;
 
 
 
@@ -63,24 +63,16 @@ INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc
 
 
 
-CREATE TABLE IF NOT EXISTS `sessions` (
---GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;
---FLUSH PRIVILEGES;
-
-
-
-
-CREATE TABLE IF NOT EXISTS 'sessions' (
-
 
 CREATE TABLE IF NOT EXISTS `sessions` (
-  `id` int(12) NOT NULL AUTO_INCREMENT, 
-  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-  `truckid` varchar(50) DEFAULT NULL, 
-  `bruto` int(12) DEFAULT NULL, 
-  `truckTara` int(12) DEFAULT NULL, 
-  `neto` int(12) DEFAULT NULL, 
+  `id` int(12) NOT NULL AUTO_INCREMENT,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `truckid` varchar(50) DEFAULT NULL,
+  `bruto` int(12) DEFAULT NULL,
+  `truckTara` int(12) DEFAULT NULL,
+  `neto` int(12) DEFAULT NULL,
 PRIMARY KEY (`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001
+
 
 
 
@@ -91,14 +83,3 @@ PRIMARY KEY (`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001
 
 -- INSERT INTO `test` (`id`, `aa`) VALUES
 -- (1, 'aaaa'),
-                                                      
-PRIMARY KEY (`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001
-   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10001;
-
-show tables;
- 
-describe containers_registered;
-describe transactions;
-describe sessions;
-describe weight;

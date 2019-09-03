@@ -171,6 +171,15 @@ def get_item_id(id):
 
 @app.route('/weight', methods=['GET', 'POST'])
 def postweight():
+    def strip(string):
+        line = "%s"%string
+        if (line != '[' and line != ']'):
+
+            line = line.replace('{', '').replace('}', '').replace('"', '').replace('\n', '').replace("unit", '').replace("id", '').replace(":", '').replace("weight", '').replace(":", '').replace('[', '').replace('(', '').replace("'", '')
+        data = line.split(',')
+        if (len(line) != 0):
+            return (data[0])
+
     db = getMysqlConnection()
     if request.method == "POST":
 
@@ -185,24 +194,24 @@ def postweight():
 
         jsonin = [('in',)]
         jsonout = [("out",)]
-#        true = [('{"1": true}',)
+        true = [(1,)]
+
         pformat_jsonin = pprint.pformat(jsonin)
         pformat_jsonout = pprint.pformat(jsonout)
-#        pformat_true = pprint.pformat(true)
+        pformat_true = pprint.pformat(true)
 
 
 
         details = request.form
         direction = details['direction']
-        truckid = details['truckid']
         containers = details['containers']
+        truckid = details['truckid']
         bruto = details['bruto']
         unit = details['unit']
         forc = details['forc']
         truckTara = details['bruto']
         neto = details['bruto']
         produce = details['produce']
-
 
         cur = db.cursor()
         cur.execute("INSERT INTO weight(direction, truckid, containers, bruto, unit, forc, produce) VALUES (%s, %s, %s, %s, %s, %s, %s)", (direction, truckid, containers, bruto, unit, forc, produce))
@@ -212,13 +221,21 @@ def postweight():
 
         cur.execute(currenttruck)
         output_currenttruck = cur.fetchall()
+        pformat_currenttruck = pprint.pformat(output_currenttruck)
+        strip_truckid = strip(pformat_currenttruck)
 
-        ischeckin = "SELECT JSON_OBJECT(direction='in', truckid='truckid') from weight LIMIT 1;"
+
+        ischeckin = "SELECT direction='in' from weight where truckid='%s' LIMIT 1;"%strip_truckid
         ischeckout = 'SELECT truckid from weight;'
+        checkout_session = "SELECT id from sessions where truckid='%s' LIMIT 1;"%strip_truckid
 
         cur.execute(ischeckin)
         output_ischeckin = cur.fetchall()
         pformat_ischeckin = pprint.pformat(output_ischeckin)
+
+        cur.execute(checkout_session)
+        output_checkout = cur.fetchall()
+        pformat_checkout = pprint.pformat(output_checkout)
 
 
         cur2 = db.cursor()
@@ -230,9 +247,8 @@ def postweight():
         
 
         if pformat_b == pformat_jsonout:
-            if pformat_ischeckin == True:
+            if pformat_ischeckin == pformat_true:
                 return "That's the truck to checkout!"
-#        return pformat_ischeckin
 
 
         if pformat_b == pformat_jsonin and True == True:
