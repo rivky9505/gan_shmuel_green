@@ -5,6 +5,7 @@ from flask_cors import CORS, cross_origin
 import logging
 import csv
 from openpyxl import Workbook
+from openpyxl import load_workbook
 import xlsxwriter
 
 app = Flask(__name__)
@@ -186,35 +187,34 @@ def insert_provider2(provider_name):
         db.close()
         
 #PUT /provider/{id} can be used to update provider name 
-@app.route('/provider/<id>', methods=['PUT'])
-def putprovider(id):
-    try:
-        newname = request.form["newname"]
-        #return newname
-        db = getMysqlConnection()
-        cur = db.cursor()  
-        cur.execute('UPDATE Provider SET name = ' + '"' +str(newname)+ '"' + ' WHERE id =' + id)
-        db.commit()
-        cur.close()
-        db.close()
-        logging.info('[PUT][SUCCESS] provider/<id>') # CHANGE TO PROPER MESSAGE
-        return id
-    except Exception as e:
-        logging.error('[PUT][FAILURE] provider/<id>') # CHANGE TO PROPER MESSAGE
-        return str(e)
+# @app.route('/provider/<id>', methods=['PUT'])
+# def putprovider(id):
+#     try:
+#         newname = request.form["newname"]
+#         #return newname
+#         db = getMysqlConnection()
+#         cur = db.cursor()  
+#         cur.execute('UPDATE Provider SET name = ' + '"' +str(newname)+ '"' + ' WHERE id =' + id)
+#         db.commit()
+#         cur.close()
+#         db.close()
+#         logging.info('[PUT][SUCCESS] provider/<id>') # CHANGE TO PROPER MESSAGE
+#         return id
+#     except Exception as e:
+#         logging.error('[PUT][FAILURE] provider/<id>') # CHANGE TO PROPER MESSAGE
+#         return str(e)
 
-#FOR TESTING
-@app.route('/providerr/<id>', methods=['PUT'])
+
+@app.route('/provider/<id>', methods=['PUT'])
 def putprovider2(id):
     try:
         db = getMysqlConnection()
     except:
         return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
     try:
-        newname = request.get_json()#request.form["newname"]
-        #return str(newname["newname"])
+        newname = request.form["newname"]
         cur = db.cursor()  
-        cur.execute('UPDATE Provider SET name = ' + '"' +str(newname["newname"])+ '"' + ' WHERE id =' + id)
+        cur.execute('UPDATE Provider SET name = ' + '"' +str(newname)+ '"' + ' WHERE id =' + id)
         db.commit()
         cur.close()
         db.close()
@@ -237,13 +237,19 @@ def putprovider2(id):
 @app.route("/rates",methods=["POST"])
 def postrates():
     #filename = "./in/rates.xlsx"
+    
     try:
         details = request.form
         filename = str(details["file"])
+        
         db = getMysqlConnection()
-        wb = load_workbook(filename)
+        #wb = load_workbook(filename)
+        
+        wb = load_workbook('./in/'+filename)
+        
         ws = wb.get_active_sheet()
         cur = db.cursor()
+        
         cur.execute('TRUNCATE TABLE Rates') 
         query = "INSERT INTO Rates (product_id, rate, scope) VALUES (%s, %s, %s)" #INSERT
         row = 2
@@ -259,10 +265,10 @@ def postrates():
         cur.close()
         db.close()
         logging.info('[POST][SUCCESS] /rates ') # CHANGE TO PROPER MESSAGE
-        return "RATES UPLOADED"
+        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK" }) , 200
     except Exception as e:
-        logging.error('[POST][FAILURE] /rates , on query:%s', query ) # CHANGE TO PROPER MESSAGE
-        return e
+        logging.error('[POST][FAILURE] /rates') # CHANGE TO PROPER MESSAGE
+        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
 
 #FOR TESTING
 @app.route("/rates2",methods=["POST"])
@@ -440,7 +446,7 @@ def updatetruck2():
         logging.info('[PUT][SUCCESS] /truck/') # CHANGE TO PROPER MESSAGE
         return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK"  , "result": result_message}) , 200 
     except Exception as e:
-        logging.error('[PUT][FAILURE] /truck/ : QUERY:' + querystr) # CHANGE TO PROPER MESSAGE
+        logging.error('[PUT][FAILURE] /truck/ : QUERY:') # CHANGE TO PROPER MESSAGE
         return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
 
 # GET /truck/<id>?from=t1&to=t2
