@@ -28,10 +28,10 @@ def hello():
 #ERROR CODES 
 #(0) - SUCCESS
 #(-1) - 500 INTERNAL SERVER ERROR
-#(-2) - DATABASE CONNECTION ERROR
-#(-3) - DATABASE BASE QUERY EXECUTION ERROR
+#(-2) - DATABASE CONNECTION ERROR (HTTP error 503 Service Unavailable)
+#(-3) - ERROR EXECUTING QUERY IN DATABASE
 #(-4) - I/O ERROR
-#(-5) - USER ERROR MISSING PARAMETER IN URL QUERY
+#(-5) - USER ERROR MISSING PARAMETER IN URL QUERY (HTTP error 400 Bad Request Error)
 
 
 # GET /health
@@ -44,7 +44,7 @@ def checkhealth():
     try:
         db = getMysqlConnection()
     except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 503
     try:
         query = "SELECT 1"
         cur = db.cursor()
@@ -78,7 +78,7 @@ def get_rates():
     try:
         db = getMysqlConnection()
     except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 503
     try:
         sqlstr = "SELECT * FROM Rates"
         cur = db.cursor()
@@ -88,7 +88,7 @@ def get_rates():
         logging.info("[GET][SUCCESS] rates request - : %s", (sqlstr))
     except Exception :
         logging.error("[GET][FAILURE] rates request , ON QUERY: %s", (sqlstr))
-        return jsonify({ "errorCode" : -3 , "errorDescription" : "ERROR EXECUTING QUERY IN DATABASE" }) , 200
+        return jsonify({ "errorCode" : -3 , "errorDescription" : "ERROR EXECUTING QUERY IN DATABASE" }) , 500
     try:  # Create and save Excel file
         dir_name = "out"
         file_name = "output.xlsx"
@@ -123,7 +123,7 @@ def insert_provider(provider_name):
     try:
         db = getMysqlConnection()
     except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 503
 
     try:
         query_string = "INSERT INTO Provider (name) "
@@ -192,19 +192,19 @@ def putprovider22():
     try:
         db = getMysqlConnection()
     except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 503
     try:
         json = request.get_json()
         id = str(json["id"])
         newname = str(json["newname"])
         #newname = request.form["newname"]
     except:
-        return jsonify({ "errorCode" : -5 , "errorDescription" : "ERROR/WRONG NO PARAMETERS PASSED" }) , 200
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "ERROR/WRONG NO PARAMETERS PASSED" }) , 400
     try:    
         cur = db.cursor()  
         cur.execute('UPDATE Provider SET name = ' + '"' +str(newname)+ '"' + ' WHERE id =' + id)
     except:
-        return jsonify({ "errorCode" : -3 , "errorDescription" : "ERROR DB QUERY EXECUTION" }) , 200
+        return jsonify({ "errorCode" : -3 , "errorDescription" : "ERROR EXECUTING QUERY IN DATABASE" }) , 500
     try:
         db.commit()
         cur.close()
@@ -268,7 +268,7 @@ def postrates():
     try:
         db = getMysqlConnection()
     except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 503
     try:
         filename_tmp = request.get_json()
         filename = str(filename_tmp["file"])
@@ -324,18 +324,18 @@ def inserttruck():
         truck_id = request.args.get('id')
     else:
         logging.error('[POST][FAILURE] /truck : USER ERROR : MISSING PARAMETER IN URL QUERY')
-        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" })
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" }) , 400
 
     if request.args.get('name'):
         provider_name = request.args.get('name')
     else:
         logging.error('[POST][FAILURE] /truck : USER ERROR : MISSING PARAMETER IN URL QUERY')
-        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" })
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" }), 400
     
     try:
         db = getMysqlConnection()
     except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 503
     
     try:
         cur = db.cursor()
@@ -386,18 +386,18 @@ def updatetruck():
         truck_id = request.args.get('id')
     else:
         logging.error('[PUT][FAILURE] /truck/ : USER ERROR : MISSING PARAMETER IN URL QUERY')
-        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" }) , 200
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" }) , 400
 
     if request.args.get('name'):
         provider_name = request.args.get('name')
     else:
         logging.error('[PUT][FAILURE] /truck/ : USER ERROR : MISSING PARAMETER IN URL QUERY')
-        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" }) , 200
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" }) , 400
     
     try:
         db = getMysqlConnection()
     except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 503
     
     try:
         cur = db.cursor()
@@ -477,7 +477,7 @@ def truckinfo2(id):
     try:
         db = getMysqlConnection()
     except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 503
     try:
         #return id
         #return id+str(request.args.get('from')+str(request.args.get('to')))
