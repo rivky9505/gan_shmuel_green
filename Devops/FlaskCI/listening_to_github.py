@@ -69,7 +69,6 @@ def test(sb):
 
 @app.route('/')
 def api():
-        test("weight")
         strd = "Happy birthday"
         return str(strd.find("py"))
 
