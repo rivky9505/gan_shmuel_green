@@ -1,21 +1,21 @@
 #!/bin/bash
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P)"
-echo "$SCRIPTPATH"
+
 cd "$SCRIPTPATH"
 git clone https://github.com/greendeveleap/gan_shmuel_green.git
 cd gan_shmuel_green
-git checkout providers_branch
+git checkout master
 cd ..
 
 #create logfile
 touch "$SCRIPTPATH"/endtoend/logs/end2endreport.log
 
 #dockerize
-#cd "$SCRIPTPATH"
+#cd "$SCRIPTPATH
 docker-compose up --build -d
-sleep 30
-python3 "$SCRIPTPATH"/endtoend/endtoendProv.py
-sleep 3
+sleep 30 #wait for docker to fully go up
+python3 "$SCRIPTPATH"/endtoend/endtoendWeight.py
+sleep 3 
 docker-compose down
 
 #checklog

@@ -1,16 +1,22 @@
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P)"
+
+#create logs folder.
+mkdir "$SCRIPTPATH"/weighttest/endtoend/logs
+mkdir "$SCRIPTPATH"/provtest/endtoend/logs
 #switch controls
 while getopts ":w :p :m" o; do
     case "${o}" in
         m) 
-			bash provtest/testprov.bash
-            bash weighttest/testweight.bash
+            
+			bash "$SCRIPTPATH"/provtest/testprovmaster.bash
+            bash "$SCRIPTPATH"/weighttest/testweightmaster.bash
 			;;
         p)
-            bash provtest/testprov.bash
+            bash "$SCRIPTPATH"/provtest/testprov.bash
             ;;
         w)
             
-            bash weighttest/testweight.bash
+            bash "$SCRIPTPATH"/weighttest/testweight.bash
             ;;
         *)
             echo invalid switch

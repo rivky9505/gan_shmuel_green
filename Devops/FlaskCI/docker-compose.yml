@@ -1,9 +1,0 @@
-version: '2' 
-services:
-  web:
-    build:
-            context: .
-    ports:
-     - "8085:5000"
-    volumes:
-     - .:/code

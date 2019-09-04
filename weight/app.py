@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify, Response, render_template
+
+from flask import Flask, request, jsonify, Response, render_template 
 import json, pprint
 import mysql.connector
 from flask_cors import CORS, cross_origin
-import logging
+import logging, datetime , sys
 import csv
 app = Flask(__name__)
 
@@ -11,7 +12,7 @@ def getMysqlConnection():
 
 @app.route("/")
 def hello():
-    return "Flask inside Docker!!"
+    return render_template('index.html')
 
 
 @cross_origin() # allow all origins all methods.
@@ -36,6 +37,7 @@ def get_health():
 @app.route('/unknown', methods=['GET'])
 def get_unknown():
     db = getMysqlConnection()
+    cur = db.cursor()
     try:
         data_query = "SELECT * FROM containers_registered"
         # logging.info("Looking for items with unknown weights")
@@ -44,7 +46,7 @@ def get_unknown():
         output_json = cur.fetchall()
         unknowns = []
         for row in output_json :
-            if ((not str(row[1]).isdigit()) and not row[1]) :
+            if ((row[1]) == 'na') :
                 unknowns.append(row[0])
 
     except Exception as e:
@@ -53,77 +55,148 @@ def get_unknown():
     finally:
         logging.info("200 OK Weight is healthy")
         db.close()
-    return jsonify({'List_of_unknowns': unknowns })
+    return render_template('unknown.html' ,unknowns=unknowns)
 
 
 @app.route('/batch-weight', methods=['GET','POST'])
 def post_batch_weight():
-    db = getMysqlConnection()
-    try:
-        with open ('containers1.csv', 'r') as f:
-            reader = csv.reader(f)
-            data = next(reader) 
-            query = 'insert into containers_registered values ({0})'
-            query = query.format(','.join('?' * len(data)))
-            cursor = db.cursor()
-            cursor.execute(query, data)
-            for data in reader:
-                cursor.execute(query, data)
-            cursor.commit()
-    except Exception as e:
-        print("Error in SQL:\n", e)
-    finally:
-        db.close()
-        return 'done'
-
-
-
-@app.route('/item/<id>', methods=['GET'])
-def get_item_id(id):
-# GET /item/<id>?from=t1&to=t2
-# - id is for an item (truck or container). 404 will be returned if non-existent
-# - t1,t2 - date-time stamps, formatted as yyyymmddhhmmss. server time is assumed.
-# default t1 is "1st of month at 000000". default t2 is "now". 
-# Returns a json:
-# { "id": <str>,
-#   "tara": <int> OR "na", // for a truck this is the "last known tara"
-#   "sessions": [ <id1>,...] 
-# }
-    db = getMysqlConnection()
-    from_t1 = request.form.get('from', default = "1st of month at 000000" , type = str)
-    to_t2 = request.form.get('to', default = "now" , type = str)
-    item_id = id
-
-    try:
-        # Query all entries in containers_registered between times
-        data_query = ("SELECT * FROM containers_registered WHERE Created_at BETWEEN %s AND %s" , from_t1 , to_t2 )
+    
+    if request.method == 'POST':
+        file_input = request.form['file']
+        formt = file_input.split(".")
+        db = getMysqlConnection()
         cur = db.cursor()
+        cur.execute("TRUNCATE TABLE containers_registered;")
+        kg ="kg"
+        na = "na"
+        if (formt[1] == "csv"):
+            try:
+                data=[]
+                with open('/app/in/%s' % file_input, 'rU') as f:   
+                    reader = csv.reader(f)
+                    i = next(reader)
+                    for line in f:
+                        line = line.replace('\n', '')
+                        if (len(line) != 0):
+                            data = line.split(',')
+                            if ((data[1]) == 'na'):
+                                cur.execute("INSERT INTO containers_registered (container_id, weight,unit) VALUES (%s,%s,%s)", (data[0], na, kg))
+                            else:
+                                if(i[1] == "lbs"):
+                                    data[1] = int(int(data[1])*0.453592)
+                                cur.execute("INSERT INTO containers_registered (container_id, weight,unit) VALUES (%s,%s,%s)", (data[0], data[1], kg))
+                    db.commit()
+                    cur.close()
+            except Exception as e:
+                logging.error("ERROR , while trying batch:")
+                return jsonify("500 csv file error")
+            finally:
+                db.close()
+            return render_template('uploaded.html')
+        elif (formt[1] == "json"):
+            try:
+                data=[]
+                with open('/app/in/%s' % file_input, 'rU') as f: 
+                    next(f)
+                    for line in f:
+                        if( line != '[' and line != ']'):
+                            line = line.replace('{', '').replace('}', '').replace('"', '').replace('\n', '').replace("unit", '').replace("id", '').replace(":", '').replace("weight", '').replace(":", '').replace(" ", '')
+                            data = line.split(',')
+                            if (data[1] == "na"):
+                                cur.execute("INSERT INTO containers_registered (container_id, weight,unit) VALUES (%s,%s,%s)", (data[0], na, kg))
+                            else:
+                                if(data[2] == "lbs"):
+                                    data[1] = int(int(data[1])*0.453592)
+                                cur.execute("INSERT INTO containers_registered (container_id, weight,unit) VALUES (%s,%s,%s)", (data[0], data[1], kg))
+                    db.commit()
+                    cur.close()
+            except Exception as e:
+                logging.error("ERROR , while trying batch-weight")
+                return jsonify("500 json file error")
+            finally:
+                db.close()
+            return render_template('uploaded.html')
+
+    return render_template('batch-weight.html')
+
+
+
+        
+
+
+
+
+@app.route('/item/<string:id_num>', methods=['GET'])
+def get_item_id(id_num):
+    db = getMysqlConnection()
+    cur = db.cursor()
+    #time manage
+    time = datetime.datetime.now().strftime("%Y%m%d%I%M%S")
+    from_t1 = request.args.get('from')
+    if not from_t1:
+        from_t1 = datetime.datetime.now().strftime("%Y%m"+"01000000")
+
+    to_t2 = request.args.get('to')
+    if not to_t2:
+        to_t2 = time
+    truck = 0
+    container = 0   
+
+    #checking id' existence
+    try:
+        id_query = ("SELECT * FROM  containers_registered WHERE container_id=" + "'" + id_num + "'")
+        cur.execute(id_query)
+        row = cur.fetchall()
+        if (len(row) > 0):
+            container = 1
+        if (container == 0):
+            id_query = ("SELECT * FROM  weight WHERE truckid="  + "'" + id_num + "'")
+            cur.execute(id_query)
+            row = cur.fetchall()
+            if (len(row) == 0):
+                logging.error("no id found")
+                return jsonify("404 no id found")
+            truck = 1
+    except Exception:
+        logging.error("ERROR , while trying : get item")
+        return jsonify("nope")
+
+    try:
+        ret_id = []
+        data_query = ("SELECT * FROM  sessions WHERE created_at>="  + from_t1 +" AND created_at<=" + to_t2 + " AND truckid=" + "'" +id_num +"'" + "ORDER BY created_at ASC")
         cur.execute(data_query)
         output_json = cur.fetchall()
-#Pending to see database structure to harvest tara and session IDs values 
-        # item_id_json = dict({"id": item_id, 
-        #         "tara": <int> , #OR "na" , for a truck this is the "last known tara"
-        #         "sessions": [ <id1>,...] })
-        # scan the IDs for matches in containers, then in trucks 
-        if item_id in output_json :
-            #add for to run on all items found
-            logging.info(" %s found in containers_registered" , item_id )
-            print(" %s found in containers_registered" , item_id )
-            # append to JSON to return
-
-# trucks querying,
+        if (len(output_json) > 0):
+            for line in output_json:
+                last_weight = line[4]
+                ret_id.append(line[0])
+            json_data = {'id': id_num , 'tara': last_weight , 'sessions' :ret_id }
+            return jsonify(json_data)
+        else:
+            logging.error("no session found")
+            return jsonify("no session found")
     except Exception:
-        logging.error("ERROR , while trying : %s", data_query)
+        logging.error("ERROR , while trying : get item")
         return jsonify("404 item id not found")
     finally:
         logging.info("200 OK Weight is healthy")
         db.close()
-    return jsonify(results=item_id_json)
+
+    
 
 
 
 @app.route('/weight', methods=['GET', 'POST'])
 def postweight():
+    def strip(string):
+        line = "%s"%string
+        if (line != '[' and line != ']'):
+
+            line = line.replace('{', '').replace('}', '').replace('"', '').replace('\n', '').replace("unit", '').replace("id", '').replace(":", '').replace("weight", '').replace(":", '').replace('[', '').replace('(', '').replace("'", '')
+        data = line.split(',')
+        if (len(line) != 0):
+            return (data[0])
+
     db = getMysqlConnection()
     if request.method == "POST":
 
@@ -138,24 +211,24 @@ def postweight():
 
         jsonin = [('in',)]
         jsonout = [("out",)]
-#        true = [('{"1": true}',)
+        true = [(1,)]
+
         pformat_jsonin = pprint.pformat(jsonin)
         pformat_jsonout = pprint.pformat(jsonout)
-#        pformat_true = pprint.pformat(true)
+        pformat_true = pprint.pformat(true)
 
 
 
         details = request.form
         direction = details['direction']
-        truckid = details['truckid']
         containers = details['containers']
+        truckid = details['truckid']
         bruto = details['bruto']
         unit = details['unit']
         forc = details['forc']
         truckTara = details['bruto']
         neto = details['bruto']
         produce = details['produce']
-
 
         cur = db.cursor()
         cur.execute("INSERT INTO weight(direction, truckid, containers, bruto, unit, forc, produce) VALUES (%s, %s, %s, %s, %s, %s, %s)", (direction, truckid, containers, bruto, unit, forc, produce))
@@ -165,13 +238,21 @@ def postweight():
 
         cur.execute(currenttruck)
         output_currenttruck = cur.fetchall()
+        pformat_currenttruck = pprint.pformat(output_currenttruck)
+        strip_truckid = strip(pformat_currenttruck)
 
-        ischeckin = "SELECT JSON_OBJECT(direction='in', truckid='truckid') from weight LIMIT 1;"
+
+        ischeckin = "SELECT direction='in' from weight where truckid='%s' LIMIT 1;"%strip_truckid
         ischeckout = 'SELECT truckid from weight;'
+        checkout_session = "SELECT id from sessions where truckid='%s' LIMIT 1;"%strip_truckid
 
         cur.execute(ischeckin)
         output_ischeckin = cur.fetchall()
         pformat_ischeckin = pprint.pformat(output_ischeckin)
+
+        cur.execute(checkout_session)
+        output_checkout = cur.fetchall()
+        pformat_checkout = pprint.pformat(output_checkout)
 
 
         cur2 = db.cursor()
@@ -183,13 +264,11 @@ def postweight():
         
 
         if pformat_b == pformat_jsonout:
-            if pformat_ischeckin == True:
+            if pformat_ischeckin == pformat_true:
                 return "That's the truck to checkout!"
-#        return pformat_ischeckin
 
 
         if pformat_b == pformat_jsonin and True == True:
-            cur.execute("""CREATE TABLE IF NOT EXISTS sessions(`id` int(12) NOT NULL AUTO_INCREMENT, `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, `truckid` varchar(50) DEFAULT NULL, `bruto` int(12) DEFAULT NULL, `truckTara` int(12) DEFAULT NULL, `neto` int(12) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001""")
             cur.execute("INSERT INTO sessions(truckid, bruto, truckTara, neto) VALUES (%s, %s, %s, %s)", (truckid, bruto, truckTara, neto))
 
             db.commit()
