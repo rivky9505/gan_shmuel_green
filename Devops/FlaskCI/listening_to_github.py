@@ -53,24 +53,18 @@ def mainFunc():
     sleep(2)
     runEnv()
 def test(sb):
+        cmdChmod = 'chmod +x /home/ubuntu/temp/gan_shmuel_green/Devops/Tests/test.bash'
+        os.system(cmdChmod)
+        sleep(2)
         if sb == "master":
-                cmdChmod = 'chmod +x ../Tests/test.bash'
-                os.system(cmdChmod)
-                sleep(2)
                 res = subprocess.call("../Tests/test.bash %s" % ("-m"), shell=True)
                 print (res)
                 print ("*****END*****")
         if sb == "weight":
-                cmdChmod = 'chmod +x ../Tests/test.bash'
-                os.system(cmdChmod)
-                sleep(2)
                 res = subprocess.call("../Tests/test.bash %s" % ("-w"), shell=True)
                 print (res)
                 print ("*****END*****")
         if sb == "provider":
-                cmdChmod = 'chmod +x ../Tests/test.bash'
-                os.system(cmdChmod)
-                sleep(2)
                 res = subprocess.call("../Tests/test.bash %s" % ("-p"), shell=True)
                 print (res)
                 print ("*****END*****")
