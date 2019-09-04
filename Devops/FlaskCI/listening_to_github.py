@@ -126,7 +126,7 @@ def api_gh_message():
         branch = TempBranch[1:TempBranch.find("repo")-4]
         if branch == "master":
                 print ("its a master")
-                test("master")
+                #test("master")
                 mainFunc()
         if branch == "weight":
                 print ("its a weight")
