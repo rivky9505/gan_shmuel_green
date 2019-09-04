@@ -67,6 +67,7 @@ INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc
 CREATE TABLE IF NOT EXISTS `sessions` (
   `id` int(12) NOT NULL AUTO_INCREMENT,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `direction` varchar(10) DEFAULT NULL,
   `truckid` varchar(50) DEFAULT NULL,
   `bruto` int(12) DEFAULT NULL,
   `truckTara` int(12) DEFAULT NULL,
