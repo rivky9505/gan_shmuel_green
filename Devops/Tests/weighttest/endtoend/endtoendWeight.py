@@ -151,61 +151,6 @@ def weightRequests():
     toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato") and toReturn
     return  toReturn
 
-    
-
-
-#####################################################################################################
-#! Prov Tests
-
-def checkHealthProv():
-    try:
-        return checkRequest(get , provAPI + "/health")
-    except:
-        global dataToEmail
-        dataToEmail = dataToEmail + "Weight ApI is down "+'\r\r\n'
-        with open(logfile, 'a') as the_file:
-            the_file.write("Provider ApI is down"+'\n')
-
-
-def checkGetRatesPROV():
-    return checkRequest(get , provAPI + "/rates")
-
-def checkGetBillPROV(id1 , fromt1 ,tot2):
-    return checkRequest(get , provAPI + "/bill/" + str(id1)+"?from=" + str(fromt1) + "&to=" + str(tot2))
-
-
-
-def checkPostProvider(pName):
-    datatoSend = {'name': pName}
-    posRequest(provAPI+"/provider" , datatoSend)
-
-def checkPostRates(file , product , rate , scope):
-    datatoSend = {'File' : file , 'Product' : product ,'Rate': rate ,'Scope': scope}
-    posRequest(provAPI+"/rates" , datatoSend)
-
-def postTruck(pName , id1):
-    datatoSend = {'provider': pName , 'id':id1}
-    posRequest(provAPI+"/truck/"+str(pName) , datatoSend)
-
-def putTruck(id1):
-    datatoSend = {'id':id1}
-    putRequest(provAPI+"/truck/"+str(id1) , datatoSend)
-
-def putProvider(pName):
-    datatoSend = {'id': pName}
-    putRequest(provAPI+"/provider/"+str(pName) , datatoSend)
-
-# data={'number': 12524, 'type': 'issue', 'action': 'show'}
-
-def provRequests():
-    toReturn = True
-    toReturn= checkGetRatesPROV() and toReturn
-    toReturn= checkPostProvider(1111111) and toReturn
-    toReturn= putProvider(1111111) and toReturn
-    toReturn= postTruck(1111111 , 2212) and toReturn
-    toReturn= putTruck(2212)and toReturn
-    return  toReturn
-
 #####################################################################################################
 #! Main
 startReport()
