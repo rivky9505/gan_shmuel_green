@@ -55,6 +55,8 @@ def checkRequest(methoda , urla , tof):
         print(resp.status_code)
         if 200 <= resp.status_code <= 299:
             return True
+        if resp.status_code == 503:
+            return True
         return False
     else:
         dataToEmail = dataToEmail + "SKIP!!!! the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
