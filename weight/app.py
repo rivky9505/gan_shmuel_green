@@ -1,5 +1,5 @@
 
-from flask import Flask, request, jsonify, Response, render_template
+from flask import Flask, request, jsonify, Response, render_template 
 import json, pprint
 import mysql.connector
 from flask_cors import CORS, cross_origin
@@ -205,7 +205,7 @@ def get_item_id(id_num):
         logging.info("200 OK Weight is healthy")
         db.close()
 
-
+    
 
 
 @app.route('/weight', methods=['POST'])
@@ -272,7 +272,7 @@ def postweight():
 
 # Taking latest truckID and direction
         currentval = 'SELECT direction from weight ORDER BY created_at DESC LIMIT 1;'
-        currenttruck = "SELECT truckid from weight ORDER BY created_at DESC LIMIT 1;"
+        currenttruck = "SELECT truckid from weight ORDER BY created_at DESC LIMIT 1;" 
 
         cur.execute(currenttruck)
         output_currenttruck = cur.fetchall()
@@ -300,6 +300,9 @@ def postweight():
 
         strip_force = 0
 
+        
+        strip_checkin = ""
+
         if pformat_a == pformat_b and strip_checkin == strip_true:
             # If current and previous directions are equal (in after in OR out after out) AND truck had already checked in
             if strip_force == '1':
@@ -314,7 +317,6 @@ def postweight():
 # Open session for direction (in/none) ,truckID, bruto
             cur.execute("INSERT INTO sessions(direction, truckid, bruto) VALUES (%s, %s, %s)", (direction, truckid, bruto))
 
-        
         
         #ischeckin = "SELECT direction='in' from weight where truckid='%s' LIMIT 1;"%strip_truckid
         # ischeckout = 'SELECT truckid from weight;'
@@ -337,7 +339,7 @@ def postweight():
         # output_force = cur.fetchall()
         # pformat_force = pprint.pformat(output_force)
         # strip_force = strip(pformat_force)
-        
+
 
         last_checkinid = "SELECT id from weight where truckid='%s' ORDER BY direction LIMIT 1;"%truckid
 
@@ -360,7 +362,7 @@ def postweight():
         output_bruto = cur.fetchall()
         pformat_bruto = pprint.pformat(output_bruto)
         strip_bruto = strip(pformat_bruto)
-
+        
 
         cur.execute(truckTara_query)
         output_truckTara = cur.fetchall()
@@ -370,7 +372,7 @@ def postweight():
         strip_bruto = int(strip_bruto)
         strip_truckTara = int(strip_truckTara)
         neto = (strip_bruto - strip_truckTara)
-
+      
         containers_on_truck_query = "select containers from weight where truckid= %s" %strip_truckid
         cur.execute(containers_on_truck_query)
         output_containers_on_truck = cur.fetchall()
@@ -466,5 +468,5 @@ def session(id):
         output_session = cur.fetchall()
         db.close()
         return jsonify(output_session)
-        
+
     return jsonify(results=output_session)
