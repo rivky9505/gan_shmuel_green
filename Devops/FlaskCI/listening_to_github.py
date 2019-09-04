@@ -109,6 +109,7 @@ def rollBack():
 
 @app.route('/')
 def api():
+        test("master")
         strd = "Happy birthday"
         return str(strd.find("py"))
 
