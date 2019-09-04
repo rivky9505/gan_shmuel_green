@@ -1,12 +1,10 @@
-from flask import Flask, request, jsonify, Response ,send_from_directory
-from flask import render_template
+from flask import Flask, request, jsonify, Response ,send_from_directory , render_template
 import json
 import mysql.connector
 from flask_cors import CORS, cross_origin
 import logging
 import csv
-from openpyxl import Workbook
-from openpyxl import load_workbook
+from openpyxl import Workbook , load_workbook
 import xlsxwriter
 import os.path
 import requests
@@ -101,7 +99,7 @@ def get_rates():
     wb.close()
     # send excel file as http response
     if os.path.exists(excel_path):
-        return send_from_directory(dir_name, filename=file_name, as_attachment=True, attachment_filename="Rates.xlsx", mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        return send_from_directory(dir_name, filename=file_name, as_attachment=True, attachment_filename="Rates.xlsx", mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") 
     return "Excel Created"
 
 

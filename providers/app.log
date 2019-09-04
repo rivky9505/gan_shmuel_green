@@ -1,2 +1,35 @@
 werkzeug - WARNING -  * Debugger is active!
 werkzeug - INFO -  * Debugger PIN: 139-647-924
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:43:34] "GET / HTTP/1.1" 200 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:43:34] "GET /styles.css HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:43:38] "GET /styles.css HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:43:53] "GET / HTTP/1.1" 200 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:43:53] "GET /styles.css HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:43:53] "GET /favicon.ico HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:02] "GET / HTTP/1.1" 200 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:02] "GET /styles.css HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:02] "GET /favicon.ico HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:02] "GET / HTTP/1.1" 200 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:02] "GET /styles.css HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:02] "GET /favicon.ico HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:03] "GET / HTTP/1.1" 200 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:03] "GET /styles.css HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:03] "GET /favicon.ico HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:03] "GET / HTTP/1.1" 200 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:03] "GET /styles.css HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:03] "GET /favicon.ico HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:03] "GET / HTTP/1.1" 200 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:03] "GET /styles.css HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:03] "GET /favicon.ico HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:03] "GET / HTTP/1.1" 200 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:03] "GET /styles.css HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:03] "GET /favicon.ico HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:34] "GET / HTTP/1.1" 200 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:34] "GET /styles.css HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:34] "GET /favicon.ico HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:58] "GET / HTTP/1.1" 200 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:58] "GET /styles.css HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:59] "GET /favicon.ico HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:59] "GET / HTTP/1.1" 200 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:59] "GET /styles.css HTTP/1.1" 404 -
+werkzeug - INFO - 127.0.0.1 - - [04/Sep/2019 11:44:59] "GET /favicon.ico HTTP/1.1" 404 -
