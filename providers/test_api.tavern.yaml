@@ -267,6 +267,23 @@ stages:
       status_code: 200
       body:
         errorCode: 0  
+---
+test_name: POST PROVIDER API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: POST Provider
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/provider/10001
+      method: POST
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: 0 
+
 
 
 
