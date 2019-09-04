@@ -1,2 +1,2 @@
-werkzeug - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
-werkzeug - INFO -  * Restarting with stat
+werkzeug - WARNING -  * Debugger is active!
+werkzeug - INFO -  * Debugger PIN: 216-216-168

@@ -1,0 +1,28 @@
+[{
+        "id": "21245",
+        "truck": "134-33-443",
+        "direction": "in",
+        "bruto": "834",
+        "neto": "na",
+        "produce": "tomatoes",
+        "containers": ["K-3916", "T-4289", "K-0192", "R-2048"]
+    },
+    {
+        "id": "25245",
+        "truck": "432-98-541",
+        "direction": "out",
+        "bruto": "132",
+        "neto": "124",
+        "produce": "clemantine",
+        "containers": ["K-3033", "T-4929", "K-0952", "R-2058"]
+    },
+    {
+        "id": "93764",
+        "truck": "212-99-466",
+        "direction": "out",
+        "bruto": "532",
+        "neto": "495",
+        "produce": "fruits",
+        "containers": ["K-3033", "T-4929", "K-0952", "R-2058"]
+    }
+]

@@ -1,22 +1,22 @@
 FROM python:latest
 
-COPY . /app
-
 WORKDIR /app
 
 RUN mkdir out
 
-RUN pip install flask
-
-RUN pip install mysql-connector-python
-
-RUN pip install flask-cors
+RUN pip install XlsxWriter
 
 RUN pip install openpyxl
 
-RUN pip install XlsxWriter
+RUN pip install mysql-connector-python
 
-#RUN pip3 install XlsxWriter
+RUN pip install flask
+
+RUN pip install flask-cors
+
+RUN pip install requests
+
+COPY . /app
 
 ENTRYPOINT ["python"]
 
