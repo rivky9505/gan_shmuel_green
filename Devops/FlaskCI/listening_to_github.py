@@ -52,12 +52,24 @@ def test(sb):
                 res = subprocess.call("../Tests/test.bash %s" % ("-m"), shell=True)
                 print (res)
                 print ("*****END*****")
-
-
+        if sb == "weight":
+                cmdChmod = 'chmod +x ../Tests/test.bash'
+                os.system(cmdChmod)
+                sleep(2)
+                res = subprocess.call("../Tests/test.bash %s" % ("-w"), shell=True)
+                print (res)
+                print ("*****END*****")
+        if sb == "provider":
+                cmdChmod = 'chmod +x ../Tests/test.bash'
+                os.system(cmdChmod)
+                sleep(2)
+                res = subprocess.call("../Tests/test.bash %s" % ("-p"), shell=True)
+                print (res)
+                print ("*****END*****")
 
 @app.route('/')
 def api():
-        test("master")
+        test("weight")
         strd = "Happy birthday"
         return str(strd.find("py"))
 
@@ -73,8 +85,10 @@ def api_gh_message():
                 mainFunc()
         if branch == "weight":
                 print ("its a weight")
+                test("weight")
         if branch == "providers_branch":
                 print ("its a provider")
+                test("provider")
         print(branch)
         return info
 
