@@ -246,5 +246,27 @@ stages:
       status_code: 200
       body:
         errorCode: -5  
+---
+test_name: GET TRUCK API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: GET TRUCK CHECK
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/truck/c-11111
+      method: GET
+      params:
+        from: "09950326000000"
+        to: "30000000000000"        
+      
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: 0  
+
 
 
