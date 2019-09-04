@@ -130,10 +130,10 @@ def insert_provider(provider_name):
         query_string += "WHERE NOT EXISTS ("
         query_string += "SELECT name FROM Provider WHERE name = '" + provider_name + "'"
         query_string += ") LIMIT 1;"
-        logging.info("[POST][SUCCESS] provider/%s", (provider_name,))
         cur = db.cursor()  
         cur.execute(query_string)
         db.close()
+        logging.info("[POST][SUCCESS] provider/%s", (provider_name,))
         return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK"  , "result": "MYSQL query completed"}) , 200
     except Exception as e:
         logging.info('[POST][FAILURE] while trying:', str(e))
