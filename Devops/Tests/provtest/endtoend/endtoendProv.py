@@ -70,7 +70,7 @@ def posRequest(urla , data ):
 def putRequest(urla , data ):
     resp = req.put(urla, data)
     global dataToEmail
-    dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
+    dataToEmail = dataToEmail + "the method Put to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
     with open(logfile, 'a') as the_file:
         the_file.write("the method Put to " +str(urla)+ " got the response " +str(resp)+'\n')
         # print("the method Put to " +str(urla)+ " got the response " +str(resp))
@@ -127,9 +127,6 @@ def checkUnknown():
 
 def checkSession(number):
     checkRequest(get , weightAPI + "/session/" + str(number))#check session
-
-def checkGETrates():
-    checkRequest(get , weightAPI + "/rates")
 
 def checkWeightFrom(t1to , t2from , filter):
 #TODO check the way we use to and from and fiter

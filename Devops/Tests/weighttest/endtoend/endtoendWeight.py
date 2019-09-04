@@ -70,7 +70,7 @@ def posRequest(urla , data ):
 def putRequest(urla , data ):
     resp = req.put(urla, data)
     global dataToEmail
-    dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
+    dataToEmail = dataToEmail + "the method Put to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
     with open(logfile, 'a') as the_file:
         the_file.write("the method Put to " +str(urla)+ " got the response " +str(resp)+'\n')
         # print("the method Put to " +str(urla)+ " got the response " +str(resp))
@@ -145,9 +145,10 @@ def postWeight(direction , license1 , containers ,weight ,unit , force , produce
 def weightRequests():
     toReturn = True
     toReturn= checkUnknown() and toReturn
-    toReturn= checkSession(1) and toReturn
-    toReturn= checkSession(2) and toReturn
-    toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato") and postBatchWeight("containers.csv") and toReturn
+    toReturn= checkSession(10001) and toReturn
+    toReturn= checkSession(10002) and toReturn
+    toReturn= postBatchWeight("containers1.csv") and toReturn
+    toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato") and toReturn
     return  toReturn
 
     
