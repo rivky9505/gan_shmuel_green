@@ -7,6 +7,8 @@ import logging, datetime , sys
 import csv
 app = Flask(__name__)
 
+logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
+
 def getMysqlConnection():
     return mysql.connector.connect(user='root', host='mysql', port='3306', password='root', database='weight')
 
@@ -40,20 +42,17 @@ def get_unknown():
     cur = db.cursor()
     try:
         data_query = "SELECT * FROM containers_registered"
-        # logging.info("Looking for items with unknown weights")
-        cur = db.cursor()
         cur.execute(data_query)
         output_json = cur.fetchall()
         unknowns = []
         for row in output_json :
             if ((row[1]) == 'na') :
                 unknowns.append(row[0])
-
     except Exception as e:
-        logging.error("ERROR , while trying : %s", data_query)
+        logging.error('[GET][FAILURE] /health request . QUERY:' + data_query)
         return jsonify("500 Internal server error")
     finally:
-        logging.info("200 OK Weight is healthy")
+        logging.info("[GET][SUCCESS] get item  request - : %s", (data_query))
         db.close()
     return render_template('unknown.html' ,unknowns=unknowns)
 
@@ -158,7 +157,7 @@ def get_item_id(id_num):
                 return jsonify("404 no id found")
             truck = 1
     except Exception:
-        logging.error("ERROR , while trying : get item")
+        logging.error('[GET][FAILURE] /health request . QUERY:' + id_query)
         return jsonify("nope")
 
     try:
@@ -171,12 +170,13 @@ def get_item_id(id_num):
                 last_weight = line[4]
                 ret_id.append(line[0])
             json_data = {'id': id_num , 'tara': last_weight , 'sessions' :ret_id }
+            logging.info("[GET][SUCCESS] get item  request - : %s", (data_query))
             return jsonify(json_data)
         else:
             logging.error("no session found")
             return jsonify("no session found")
     except Exception:
-        logging.error("ERROR , while trying : get item")
+        logging.error('[GET][FAILURE] /health request . QUERY:' + data_query)
         return jsonify("404 item id not found")
     finally:
         logging.info("200 OK Weight is healthy")
