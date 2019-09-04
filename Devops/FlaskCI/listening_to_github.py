@@ -6,21 +6,17 @@ import subprocess
 app = Flask(__name__)
 
 def runEnv():
-    DeleteContainers = 'sudo docker rm $(sudo docker ps -a -q) -f'
-    DeleteImages = 'sudo docker rmi $(sudo docker images -q) -f'
     DCDown = 'sudo docker-compose down'
     DCUp = 'sudo docker-compose up -d --build'
     cmd = 'pwd'
     os.system(cmd)
     sleep(2)
-    os.system(DeleteContainers)
-    sleep(10)
-    os.system(DeleteImages)
-    sleep(10)
     os.system(DCDown)
     sleep(2)
     os.system(DCUp)
 def mainFunc():
+    DeleteContainers = 'sudo docker rm $(sudo docker ps -a -q) -f'
+    DeleteImages = 'sudo docker rmi $(sudo docker images -q) -f'
     os.chdir('/home/ubuntu/prod')
     deleteRollback = 'rm -rf rollback/gan_shmuel_green/'
     copytoRollback = 'cp -r gan_shmuel_green/ rollback/'
@@ -49,6 +45,10 @@ def mainFunc():
     os.system(copyGlobalDCF)
     print ("New DC file added to the repo")
     sleep(2)
+    os.system(DeleteContainers)
+    sleep(10)
+    os.system(DeleteImages)
+    sleep(10)
     runEnv()
     sleep(3)
     os.chdir('/home/ubuntu/prod/gan_shmuel_green/weight')
