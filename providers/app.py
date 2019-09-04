@@ -117,46 +117,28 @@ def get_rates():
 # - name - provider name. must be unique.
 # Returns a unique provider id as json: { "id":<str>}
 
-
-@app.route('/provider/<provider_name>', methods=['GET','POST'])
+@app.route('/provider/<provider_name>', methods=['POST'])
 def insert_provider(provider_name):
-    db = getMysqlConnection()
-    try:
-        data_query = "INSERT INTO Provider (`name`) VALUES  (%s)"
-        data=(provider_name,)
-        logging.info("[POST][SUCCESS] provider/<provider_name>")
-        cur = db.cursor()  
-        cur.execute(data_query,data)
-        output_json = cur.lastrowid
-        output_json = cur.fetchone()
-    except Exception as e:
-        print('[POST][FAILURE] while trying:', str(e))
-    finally:
-        db.close()
-        return jsonify( "id:",(output_json))
-
-
-#FOR TESTING
-@app.route('/provider2/<provider_name>', methods=['GET','POST'])
-def insert_provider2(provider_name):
     try:
         db = getMysqlConnection()
     except:
         return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+
     try:
-        data_query = "INSERT INTO Provider (`name`) VALUES  (%s)"
-        data=(provider_name,)
-        logging.info("[POST][SUCCESS] provider/<provider_name>")
+        query_string = "INSERT INTO Provider (name) "
+        query_string += "SELECT * FROM (SELECT '" + provider_name + "') AS tmp "
+        query_string += "WHERE NOT EXISTS ("
+        query_string += "SELECT name FROM Provider WHERE name = '" + provider_name + "'"
+        query_string += ") LIMIT 1;"
         cur = db.cursor()  
-        cur.execute(data_query,data)
-        output_json = cur.lastrowid
-        output_json = cur.fetchone()
-        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK" , "id:":(output_json) }) , 200
-    except Exception as e:
-        logging.error('[POST][FAILURE] while trying:', str(e))
-        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
-    finally:
+        cur.execute(query_string)
         db.close()
+        logging.info("[POST][SUCCESS] provider/%s", (provider_name,))
+        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK"  , "result": "MYSQL query completed"}) , 200
+    except Exception as e:
+        logging.info('[POST][FAILURE] while trying:', str(e))
+        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500   
+
         
 #PUT /provider/{id} can be used to update provider name 
 # @app.route('/provider/<id>', methods=['PUT'])
