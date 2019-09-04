@@ -153,8 +153,8 @@ def checkPostProvider(pName , tof):
     datatoSend = {'name': pName}
     posRequest(provAPI+"/provider" , datatoSend)
 
-def checkPostRates(file , product , rate , scope , tof):
-    datatoSend = {'File' : file , 'Product' : product ,'Rate': rate ,'Scope': scope}
+def checkPostRates(filename , tof):
+    datatoSend = {'filename' : filename}
     posRequest(provAPI+"/rates" , datatoSend ,tof)
 
 def postTruck(pName , id1 , tof):
@@ -173,8 +173,10 @@ def putProvider(pName , tof):
 
 def provRequests():
     toReturn = True
-    toReturn= checkGetRatesPROV(True) and toReturn
+    toReturn= checkGetRatesPROV(True) and toReturn 
+    toReturn= checkGetBillPROV('10003' , '20150101000000' ,'20200101000000' , False) and toReturn
     toReturn= checkPostProvider(1111111 , True) and toReturn
+    toReturn= checkPostRates('rates.xlsx' , True) and toReturn 
     toReturn= putProvider(1111111 , True) and toReturn
     toReturn= postTruck(1111111 , 2212 , True) and toReturn
     toReturn= putTruck(2212 , True) and toReturn
