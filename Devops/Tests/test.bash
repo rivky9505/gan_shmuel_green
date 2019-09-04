@@ -2,15 +2,15 @@
 while getopts ":w :p :m" o; do
     case "${o}" in
         m) 
-			bash provtest/testprov.bash
-            bash weighttest/testweight.bash
+			bash /home/kobi/Desktop/W3/gan_shmuel/gan_shmuel_green/Devops/Tests/provtest/testprov.bash
+            bash /home/kobi/Desktop/W3/gan_shmuel/gan_shmuel_green/Devops/Tests/weighttest/testweight.bash
 			;;
         p)
-            bash provtest/testprov.bash
+            bash /home/kobi/Desktop/W3/gan_shmuel/gan_shmuel_green/Devops/Tests/provtest/testprov.bash
             ;;
         w)
             
-            bash weighttest/testweight.bash
+            bash /home/kobi/Desktop/W3/gan_shmuel/gan_shmuel_green/Devops/Tests/weighttest/testweight.bash
             ;;
         *)
             echo invalid switch
