@@ -108,6 +108,8 @@ def api():
 
 @app.route('/rollback')
 def roll_back():
+        rollBack()
+        return "roll back done"
 
 @app.route('/github', methods=['POST'])
 def api_gh_message():
