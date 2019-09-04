@@ -15,70 +15,20 @@ stages:
       body:
         errorCode: 0
 ---
-test_name: RATES
+test_name: POST RATES API
 
 # ...and each test has one or more stages (e.g. an HTTP request)
 stages:
-  - name:  rates
+  - name: POST RATES
 
     # Define the request to be made...
     request:
-      url: http://0.0.0.0:5000/rates2
-      method: GET
-
-    # ...and the expected response code and body
-    response:
-      status_code: 200
-      body:
-        errorCode: 0
----
-test_name: PROVIDER
-
-# ...and each test has one or more stages (e.g. an HTTP request)
-stages:
-  - name:  provider
-
-    # Define the request to be made...
-    request:
-      url: http://0.0.0.0:5000/provider2/test_provider
-      method: GET
-
-    # ...and the expected response code and body
-    response:
-      status_code: 200
-      body:
-        errorCode: 0
----
-test_name: WRONG URL
-
-# ...and each test has one or more stages (e.g. an HTTP request)
-stages:
-  - name:  wrong URL
-
-    # Define the request to be made...
-    request:
-      url: http://0.0.0.0:5000/provider2/
-      method: GET
-
-    # ...and the expected response code and body
-    response:
-      status_code: 404
----
-test_name: /provider
-
-# ...and each test has one or more stages (e.g. an HTTP request)
-stages:
-  - name:  providerPUT
-
-    # Define the request to be made...
-    request:
-      url: http://0.0.0.0:5000/providerr/10001
+      url: http://0.0.0.0:5000/rates
+      method: POST
       json:
-        newname: abc1234
-      method: PUT
+        file: "rates.xlsx"
       headers:
-        content-type: application/json  
-      
+        content-type: application/json
 
     # ...and the expected response code and body
     response:
@@ -86,27 +36,135 @@ stages:
       body:
         errorCode: 0
 ---
-test_name: /truck
+test_name: POST RATES API
 
 # ...and each test has one or more stages (e.g. an HTTP request)
 stages:
-  - name:  truck
+  - name: POST RATES WRONG PARAMETERS
 
     # Define the request to be made...
     request:
-      url: http://0.0.0.0:5000/truck2/10001/134-33-445
-      method: GET
-       
-      
+      url: http://0.0.0.0:5000/rates
+      method: POST
+      json:
+        file1: "rates.xlsx"
+      headers:
+        content-type: application/json
+
+    # ...and the expected response code and body
+    response:
+      status_code: 500
+      body:
+        errorCode: -5
+---
+test_name: POST RATES API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: POST RATES WRONG PARAMETERS
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/rates
+      method: POST
+      json:
+        file: "rates2.xlsx"
+      headers:
+        content-type: application/json
+
+    # ...and the expected response code and body
+    response:
+      status_code: 500
+      body:
+        errorCode: -4
+---
+test_name: PUT PROVIDER API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: PUT PROVIDER
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/provider
+      method: PUT
+      json:
+        id: 10001
+        newname: "newname"        
+      headers:
+        content-type: application/json
 
     # ...and the expected response code and body
     response:
       status_code: 200
       body:
         errorCode: 0
+---
+test_name: PUT PROVIDER API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: PUT PROVIDER WRONG PARAMS
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/provider
+      method: PUT
+      json:
+        id: "asd"
+        newname: "newname"        
+      headers:
+        content-type: application/json
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: -3
+---
+test_name: PUT PROVIDER API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: PUT PROVIDER WRONG KEYS
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/provider
+      method: PUT
+      json:
+        id1: "asd"
+        newname: "newname"        
+      headers:
+        content-type: application/json
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: -5
+---
+test_name: PUT PROVIDER API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: DB ERROR
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/provider
+      method: PUT
+      json:
+        id: "asd"
+        newname: "newname"        
+      headers:
+        content-type: application/json
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: -3
 
 
-### TODO ###
-# WRONG INPUT OR DB NOT FOUND
-# PUT TRUCK 
-# BILL WHEN READY
+
