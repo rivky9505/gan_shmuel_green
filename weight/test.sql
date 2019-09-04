@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `containers_registered` (
   `unit` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`container_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
-
+ 
 INSERT INTO containers_registered (`container_id`, `weight`, `unit`) VALUES ('c-11111', 'na', 'kg');
 INSERT INTO containers_registered (`container_id`, `weight`, `unit`) VALUES ('c-22222', 'na', 'kg');
  
@@ -69,12 +69,13 @@ INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc
 
 
 CREATE TABLE IF NOT EXISTS `sessions` (
-  `id` int(12) NOT NULL AUTO_INCREMENT, 
-  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-  `truckid` varchar(50) DEFAULT NULL, 
-  `bruto` int(12) DEFAULT NULL, 
-  `truckTara` int(12) DEFAULT NULL, 
-  `neto` int(12) DEFAULT NULL, 
+  `id` int(12) NOT NULL AUTO_INCREMENT,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `direction` varchar(10) DEFAULT NULL,
+  `truckid` varchar(50) DEFAULT NULL,
+  `bruto` int(12) DEFAULT NULL,
+  `truckTara` int(12) DEFAULT NULL,
+  `neto` int(12) DEFAULT NULL,
 PRIMARY KEY (`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001;
 
 INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20000101000000', 'C-11111', '10');
@@ -85,7 +86,7 @@ INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20000301000
 INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20000101000000', 't-55555', '8');
 
 show tables;
- 
+
 describe containers_registered;
 describe transactions;
 describe sessions;
