@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, Response ,send_from_directory , render_template
+from flask import Flask, request, jsonify, Response ,send_from_directory , render_template ,json
 import json
 import mysql.connector
 from flask_cors import CORS, cross_origin
@@ -327,7 +327,7 @@ def postrates():
 # - provider - known provider id
 # - id - the truck license plate 
 
-@app.route('/truck/<provider_id>/<truck_lisence>', methods=['GET','POST'])
+@app.route('/truck/<provider_id>/<truck_lisence>', methods=['POST'])
 def inserttruck(provider_id, truck_lisence):
     try:
         db = getMysqlConnection()
@@ -390,13 +390,13 @@ def updatetruck():
         truck_id = request.args.get('id')
     else:
         logging.error('[PUT][FAILURE] /truck/ : USER ERROR : MISSING PARAMETER IN URL QUERY')
-        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" })
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" }) , 200
 
     if request.args.get('name'):
         provider_name = request.args.get('name')
     else:
         logging.error('[PUT][FAILURE] /truck/ : USER ERROR : MISSING PARAMETER IN URL QUERY')
-        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" })
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" }) , 200
     
     try:
         db = getMysqlConnection()
@@ -447,26 +447,32 @@ def updatetruck():
 #   "tara": <int>, // last known tara in kg
 #   "sessions": [ <id1>,...] 
 #}
-@app.route('/truck/<id>', methods=["GET"])
+@app.route('/truck/<id>', methods=["GET"]) #?from=t1&to=t2
 def truckinfo(id):
     try:
+        fromm = str(request.args.get('from'))
+        to = str(request.args.get('to'))
+        resp = requests.get('http://green.develeap.com:8080/item/'+ id +' ?from='+ fromm +'&to='+ to +'')
+        json_content = json.dumps(resp.json())
+        return '{ "errorCode" : 0 , "errorDescription" : "status 200 OK" , "data" :' + str(json_content) + ' }' , 200
+         
         #return id
         #return id+str(request.args.get('from')+str(request.args.get('to')))
-        db = getMysqlConnection()
-        cur = db.cursor()  
-        cur.execute('SELECT id , provider_id FROM Trucks WHERE id='+'"' + id + '"')
-        results = cur.fetchall()
-        return str(results)
-        #HERE WE SHOULD MAKE A REQUEST TO WEIGHT API AND GET WITH THE ID BETWEEN DATES BY ID ?
-        db.commit()
-        cur.close()
-        db.close()
-        logging.info('[GET][SUCCESS] /truck/<id>') # CHANGE TO PROPER MESSAGE
-        tempJson = { "id"}
-        return "OK"
+        #db = getMysqlConnection()
+        #cur = db.cursor() 
+        #cur.execute('SELECT id , provider_id FROM Trucks WHERE id='+'"' + id + '"')
+        #results = cur.fetchall()
+        #return str(results)
+        ##HERE WE SHOULD MAKE A REQUEST TO WEIGHT API AND GET WITH THE ID BETWEEN DATES BY ID ?
+        #db.commit()
+        #cur.close()
+        #db.close()
+        #logging.info('[GET][SUCCESS] /truck/<id>') # CHANGE TO PROPER MESSAGE
+        #tempJson = { "id"}
+        #return "OK"
     except Exception as e:
         logging.error('[GET][FAILURE] /truck/<id>') # CHANGE TO PROPER MESSAGE
-        return str(e)
+        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
 
 
 #FOR TESTING
