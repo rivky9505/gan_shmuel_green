@@ -2,7 +2,7 @@
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P)"
 
 cd "$SCRIPTPATH"
-git clone git@github.com:greendeveleap/gan_shmuel_green.git
+git clone https://github.com/greendeveleap/gan_shmuel_green.git
 cd gan_shmuel_green
 git checkout weight
 cd ..
