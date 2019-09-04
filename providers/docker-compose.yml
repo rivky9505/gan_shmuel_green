@@ -6,7 +6,7 @@ services:
     ports:
      - "5000:5000"
     volumes:
-     - .:/code
+     - ./in:/in
   mysql:
     build:
             context: .
@@ -16,6 +16,6 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_ROOT_HOST: 0.0.0.0
       MYSQL_USER: root
-      MYSQL_PASSWORD: 123
+      MYSQL_PASSWORD: root
     ports:
       - "3306:3302" 

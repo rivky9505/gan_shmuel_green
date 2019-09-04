@@ -329,12 +329,12 @@ def getbilling(id):
             t2 = request.args.get('t2')
         result.update({ "from" : t1 })
         result.update({ "to" : t1 })
-
+        
         trucks_list=bill.find_providers_trucks()
         weights_list=bill.get_all_sessions_in_array(t1,t2)
         rates_dictionary=bill.get_rates()
         # sessionCount
-        universalSessionsCount=0
+        GlobalSessionsCount=0
         # products
         products={}
         # truck_in_weights
