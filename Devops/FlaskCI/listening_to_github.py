@@ -1,7 +1,7 @@
 from flask import json, request, Flask
-#from startProd import mainFunc, testFunc
 import os
 from time import sleep
+import subprocess
 
 app = Flask(__name__)
 
@@ -14,7 +14,6 @@ def runEnv():
     os.system(DCDown)
     sleep(2)
     os.system(DCUp)
-
 def mainFunc():
     os.chdir('/home/ubuntu/prod')
     deleteRepo = 'rm -rf gan_shmuel_green/'
@@ -45,13 +44,22 @@ def mainFunc():
     os.system(copyGlobalDCFW)
     sleep(2)
     runEnv()
+def test(sb):
+        if sb == "master":
+                cmdChmod = 'chmod +x ../Tests/test.bash'
+                os.system(cmdChmod)
+                sleep(2)
+                res = subprocess.call("../Tests/test.bash %s" % ("-m"), shell=True)
+                print (res)
+                print ("*****END*****")
+
+
 
 @app.route('/')
 def api():
-        #mainFunc()
+        test("master")
         strd = "Happy birthday"
         return str(strd.find("py"))
-
 
 @app.route('/github', methods=['POST'])
 def api_gh_message():
