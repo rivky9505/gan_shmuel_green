@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, Response ,send_from_directory , render_template
+from flask import Flask, request, jsonify, Response ,send_from_directory , render_template ,json
 import json
 import mysql.connector
 from flask_cors import CORS, cross_origin
@@ -117,46 +117,28 @@ def get_rates():
 # - name - provider name. must be unique.
 # Returns a unique provider id as json: { "id":<str>}
 
-
-@app.route('/provider/<provider_name>', methods=['GET','POST'])
+@app.route('/provider/<provider_name>', methods=['POST'])
 def insert_provider(provider_name):
-    db = getMysqlConnection()
-    try:
-        data_query = "INSERT INTO Provider (`name`) VALUES  (%s)"
-        data=(provider_name,)
-        logging.info("[POST][SUCCESS] provider/<provider_name>")
-        cur = db.cursor()  
-        cur.execute(data_query,data)
-        output_json = cur.lastrowid
-        output_json = cur.fetchone()
-    except Exception as e:
-        print('[POST][FAILURE] while trying:', str(e))
-    finally:
-        db.close()
-        return jsonify( "id:",(output_json))
-
-
-#FOR TESTING
-@app.route('/provider2/<provider_name>', methods=['GET','POST'])
-def insert_provider2(provider_name):
     try:
         db = getMysqlConnection()
     except:
         return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+
     try:
-        data_query = "INSERT INTO Provider (`name`) VALUES  (%s)"
-        data=(provider_name,)
-        logging.info("[POST][SUCCESS] provider/<provider_name>")
+        query_string = "INSERT INTO Provider (name) "
+        query_string += "SELECT * FROM (SELECT '" + provider_name + "') AS tmp "
+        query_string += "WHERE NOT EXISTS ("
+        query_string += "SELECT name FROM Provider WHERE name = '" + provider_name + "'"
+        query_string += ") LIMIT 1;"
         cur = db.cursor()  
-        cur.execute(data_query,data)
-        output_json = cur.lastrowid
-        output_json = cur.fetchone()
-        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK" , "id:":(output_json) }) , 200
-    except Exception as e:
-        logging.error('[POST][FAILURE] while trying:', str(e))
-        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
-    finally:
+        cur.execute(query_string)
         db.close()
+        logging.info("[POST][SUCCESS] provider/%s", (provider_name,))
+        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK"  , "result": "MYSQL query completed"}) , 200
+    except Exception as e:
+        logging.info('[POST][FAILURE] while trying:', str(e))
+        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500   
+
         
 #PUT /provider/{id} can be used to update provider name 
 # @app.route('/provider/<id>', methods=['PUT'])
@@ -327,7 +309,7 @@ def postrates():
 # - provider - known provider id
 # - id - the truck license plate 
 
-@app.route('/truck/<provider_id>/<truck_lisence>', methods=['GET','POST'])
+@app.route('/truck/<provider_id>/<truck_lisence>', methods=['POST'])
 def inserttruck(provider_id, truck_lisence):
     try:
         db = getMysqlConnection()
@@ -379,7 +361,7 @@ def inserttruck2(provider_id, truck_lisence):
 # This request needs two argumnets.
 # Implenting as a query string in url
 # http://localhost:5000/truck/?id=222-33-111&name=new_provider_for_truck
-@app.route('/truck/', methods=["PUT"])
+@app.route('/truck', methods=["PUT"])
 def updatetruck():
     # get values from query string
     result_message = ""
@@ -390,13 +372,13 @@ def updatetruck():
         truck_id = request.args.get('id')
     else:
         logging.error('[PUT][FAILURE] /truck/ : USER ERROR : MISSING PARAMETER IN URL QUERY')
-        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" })
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" }) , 200
 
     if request.args.get('name'):
         provider_name = request.args.get('name')
     else:
         logging.error('[PUT][FAILURE] /truck/ : USER ERROR : MISSING PARAMETER IN URL QUERY')
-        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" })
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" }) , 200
     
     try:
         db = getMysqlConnection()
@@ -447,26 +429,32 @@ def updatetruck():
 #   "tara": <int>, // last known tara in kg
 #   "sessions": [ <id1>,...] 
 #}
-@app.route('/truck/<id>', methods=["GET"])
+@app.route('/truck/<id>', methods=["GET"]) #?from=t1&to=t2
 def truckinfo(id):
     try:
+        fromm = str(request.args.get('from'))
+        to = str(request.args.get('to'))
+        resp = requests.get('http://green.develeap.com:8080/item/'+ id +' ?from='+ fromm +'&to='+ to +'')
+        json_content = json.dumps(resp.json())
+        return '{ "errorCode" : 0 , "errorDescription" : "status 200 OK" , "data" :' + str(json_content) + ' }' , 200
+         
         #return id
         #return id+str(request.args.get('from')+str(request.args.get('to')))
-        db = getMysqlConnection()
-        cur = db.cursor()  
-        cur.execute('SELECT id , provider_id FROM Trucks WHERE id='+'"' + id + '"')
-        results = cur.fetchall()
-        return str(results)
-        #HERE WE SHOULD MAKE A REQUEST TO WEIGHT API AND GET WITH THE ID BETWEEN DATES BY ID ?
-        db.commit()
-        cur.close()
-        db.close()
-        logging.info('[GET][SUCCESS] /truck/<id>') # CHANGE TO PROPER MESSAGE
-        tempJson = { "id"}
-        return "OK"
+        #db = getMysqlConnection()
+        #cur = db.cursor() 
+        #cur.execute('SELECT id , provider_id FROM Trucks WHERE id='+'"' + id + '"')
+        #results = cur.fetchall()
+        #return str(results)
+        ##HERE WE SHOULD MAKE A REQUEST TO WEIGHT API AND GET WITH THE ID BETWEEN DATES BY ID ?
+        #db.commit()
+        #cur.close()
+        #db.close()
+        #logging.info('[GET][SUCCESS] /truck/<id>') # CHANGE TO PROPER MESSAGE
+        #tempJson = { "id"}
+        #return "OK"
     except Exception as e:
         logging.error('[GET][FAILURE] /truck/<id>') # CHANGE TO PROPER MESSAGE
-        return str(e)
+        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
 
 
 #FOR TESTING
