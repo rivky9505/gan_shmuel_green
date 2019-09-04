@@ -1,0 +1,17 @@
+test_name: HEALTH API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: health test
+
+    # Define the request to be made...
+    request:
+      url: http://green.develeap.com:8090/health
+      method: GET
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: 0
+

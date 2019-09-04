@@ -9,14 +9,15 @@ import xlsxwriter
 import os.path
 import requests
 from datetime import datetime
-import bill
-
+import bill 
 app = Flask(__name__)
 
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
 
 def getMysqlConnection():
     return mysql.connector.connect(user='root', host='mysql', port='3306', password='root', database='billdb')
+
+
 @app.route("/")
 def hello():
     return render_template('ProviderMainPage.html')
@@ -27,10 +28,10 @@ def hello():
 #ERROR CODES 
 #(0) - SUCCESS
 #(-1) - 500 INTERNAL SERVER ERROR
-#(-2) - DATABASE CONNECTION ERROR
-#(-3) - DATABASE BASE QUERY EXECUTION ERROR
+#(-2) - DATABASE CONNECTION ERROR (HTTP error 503 Service Unavailable)
+#(-3) - ERROR EXECUTING QUERY IN DATABASE
 #(-4) - I/O ERROR
-#(-5) - USER ERROR MISSING PARAMETER IN URL QUERY
+#(-5) - USER ERROR MISSING PARAMETER IN URL QUERY (HTTP error 400 Bad Request Error)
 
 
 # GET /health
@@ -43,7 +44,7 @@ def checkhealth():
     try:
         db = getMysqlConnection()
     except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 503
     try:
         query = "SELECT 1"
         cur = db.cursor()
@@ -77,7 +78,7 @@ def get_rates():
     try:
         db = getMysqlConnection()
     except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 503
     try:
         sqlstr = "SELECT * FROM Rates"
         cur = db.cursor()
@@ -87,7 +88,7 @@ def get_rates():
         logging.info("[GET][SUCCESS] rates request - : %s", (sqlstr))
     except Exception :
         logging.error("[GET][FAILURE] rates request , ON QUERY: %s", (sqlstr))
-        return jsonify({ "errorCode" : -3 , "errorDescription" : "ERROR EXECUTING QUERY IN DATABASE" }) , 200
+        return jsonify({ "errorCode" : -3 , "errorDescription" : "ERROR EXECUTING QUERY IN DATABASE" }) , 500
     try:  # Create and save Excel file
         dir_name = "out"
         file_name = "output.xlsx"
@@ -122,7 +123,7 @@ def insert_provider(provider_name):
     try:
         db = getMysqlConnection()
     except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 503
 
     try:
         query_string = "INSERT INTO Provider (name) "
@@ -191,19 +192,19 @@ def putprovider22():
     try:
         db = getMysqlConnection()
     except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 503
     try:
         json = request.get_json()
         id = str(json["id"])
         newname = str(json["newname"])
         #newname = request.form["newname"]
     except:
-        return jsonify({ "errorCode" : -5 , "errorDescription" : "ERROR/WRONG NO PARAMETERS PASSED" }) , 200
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "ERROR/WRONG NO PARAMETERS PASSED" }) , 400
     try:    
         cur = db.cursor()  
         cur.execute('UPDATE Provider SET name = ' + '"' +str(newname)+ '"' + ' WHERE id =' + id)
     except:
-        return jsonify({ "errorCode" : -3 , "errorDescription" : "ERROR DB QUERY EXECUTION" }) , 200
+        return jsonify({ "errorCode" : -3 , "errorDescription" : "ERROR EXECUTING QUERY IN DATABASE" }) , 500
     try:
         db.commit()
         cur.close()
@@ -267,7 +268,7 @@ def postrates():
     try:
         db = getMysqlConnection()
     except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 503
     try:
         filename_tmp = request.get_json()
         filename = str(filename_tmp["file"])
@@ -323,18 +324,18 @@ def inserttruck():
         truck_id = request.args.get('id')
     else:
         logging.error('[POST][FAILURE] /truck : USER ERROR : MISSING PARAMETER IN URL QUERY')
-        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" })
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" }) , 400
 
     if request.args.get('name'):
         provider_name = request.args.get('name')
     else:
         logging.error('[POST][FAILURE] /truck : USER ERROR : MISSING PARAMETER IN URL QUERY')
-        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" })
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" }), 400
     
     try:
         db = getMysqlConnection()
     except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 503
     
     try:
         cur = db.cursor()
@@ -385,18 +386,18 @@ def updatetruck():
         truck_id = request.args.get('id')
     else:
         logging.error('[PUT][FAILURE] /truck/ : USER ERROR : MISSING PARAMETER IN URL QUERY')
-        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" }) , 200
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" }) , 400
 
     if request.args.get('name'):
         provider_name = request.args.get('name')
     else:
         logging.error('[PUT][FAILURE] /truck/ : USER ERROR : MISSING PARAMETER IN URL QUERY')
-        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" }) , 200
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" }) , 400
     
     try:
         db = getMysqlConnection()
     except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 503
     
     try:
         cur = db.cursor()
@@ -476,7 +477,7 @@ def truckinfo2(id):
     try:
         db = getMysqlConnection()
     except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 503
     try:
         #return id
         #return id+str(request.args.get('from')+str(request.args.get('to')))
@@ -523,7 +524,7 @@ def getbilling(id):
         # id
         result={"id" : id}
         # name
-        name = bill.get_provider_name(id)
+        name = bill.get_provider_name(id)[0]
         result.update({"name" : name})
         # t1 & t2
         now = datetime.now()
@@ -534,47 +535,68 @@ def getbilling(id):
         if request.args.get('t2')!=None:
             t2 = request.args.get('t2')
         result.update({ "from" : t1 })
-        result.update({ "to" : t1 })
-        
-        trucks_list=bill.find_providers_trucks()
+        result.update({ "to" : t2 })
+        trucks_list=bill.find_providers_trucks(id)
         weights_list=bill.get_all_sessions_in_array(t1,t2)
         rates_dictionary=bill.get_rates()
         # sessionCount
         GlobalSessionsCount=0
         # products
-        products={}
+        products=[]
         # truck_in_weights
-        trucks_in_weights=[]
+        trucks_in_weights = set()
         # foreach truck - look for its sessions/weights
         for truck in trucks_list:
             truck_number = str(truck[0])
             truck_sessions_count=0
-            if truck_number not in trucks_in_weights:
-                trucks_in_weights.append(truck_number)
-            universalSessionsCount += truck_sessions.len()
             for weight in weights_list:
                 if weight["truck"] == truck_number:
                     truck_sessions_count += 1
-                    if weight["produce"] not in products.values():
-                        products_and_neto_weihgt.update({'produce' : weight["produce"] , 'count' : 1 , 'amount' : weight["neto"] , })
-                    else:
-                        val=weight["neto"]+products_and_neto_weihgt[weight["produce"]]
-                        products_and_neto_weihgt.update({'produce' : val })
-                    
+                    GlobalSessionsCount += 1
+                    trucks_in_weights.add(truck_number)
+                    # if product exist in products - update it
+                    flag = False
+                    for obj in products:
+                        if weight["produce"]==obj["product"]:
+                            
+                            flag = True
+                            amount = int(weight["neto"]) + int(obj["amount"])
+                            # return str(obj["amount"])
+                            count = int(obj["count"]) +1
+                            pay = amount * int(obj["rate"])
+                            obj.update({ "amount" : amount , "count" : count ,  "pay" : pay})
+                    if flag == False:
+                        product=dict()
+                        rate = ""
+                        for obj in rates_dictionary:
+                            if obj["product_id"] == weight["produce"]: 
+                                if obj["scope"] == id:
+                                    rate = obj["rate"]
+                                    break
+                                elif obj["scope"] == "All" :
+                                    rate = obj["rate"]
+                        # pay
+                        pay = int(weight["neto"]) * rate
+                        product = { "product" : weight["produce"] , "count" : 1 , "amount" : weight["neto"] , "rate" :  rate , "pay" : pay  }
+                        products.append(product)
 
+        # set total
+        total=0
+        for obj in products:
+            total += int(obj["pay"])
+        result.update({ "truckCount" : len(trucks_in_weights) , "sessionCount" : GlobalSessionsCount , "products" : products , "total" : total })
+        
 
-                        
-
-                        
-                
+        return jsonify(result)        
         db.commit()
         cur.close()
         db.close()
         logging.info('[GET][SUCCESS] /bill/<id>?from=<t1>&to=<t2>') # CHANGE TO PROPER MESSAGE
-        
     except Exception as e:
         logging.error('[GET][FAILURE] /bill/<id>?from=<t1>&to=<t2>') # CHANGE TO PROPER MESSAGE
         return str(e)
+
+
 
 @app.route('/getlogs', methods=["GET"])
 def getlogs():
@@ -584,6 +606,7 @@ def getlogs():
     except Exception as e:
         logging.error('file not found')
         return str(e)
+
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')

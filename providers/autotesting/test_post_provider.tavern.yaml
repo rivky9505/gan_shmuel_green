@@ -1,0 +1,18 @@
+test_name: POST PROVIDER API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: POST Provider
+
+    # Define the request to be made...
+    request:
+      url: http://green.develeap.com:8090/provider/10001
+      method: POST
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: 0 
+
+
+

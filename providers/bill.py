@@ -23,10 +23,10 @@ def get_all_sessions_in_array(t1,t2):
     # return str(resp)
     return ( json.load(open("weight.json","r")) )
 
-def find_providers_trucks():
+def find_providers_trucks(id):
     db = app.getMysqlConnection()
     cur = db.cursor() 
-    query= "SELECT id FROM Trucks WHERE provider_id="+str(id)
+    query= "SELECT id FROM Trucks WHERE provider_id = " + str(id)
     cur.execute(query)
     return cur.fetchall() 
 

@@ -1,0 +1,88 @@
+test_name: PUT PROVIDER API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: PUT PROVIDER
+
+    # Define the request to be made...
+    request:
+      url: http://green.develeap.com:8090/provider
+      method: PUT
+      json:
+        id: 10001
+        newname: "newname"        
+      headers:
+        content-type: application/json
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: 0
+---
+test_name: PUT PROVIDER API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: PUT PROVIDER WRONG PARAMS
+
+    # Define the request to be made...
+    request:
+      url: http://green.develeap.com:8090/provider
+      method: PUT
+      json:
+        id: "asd"
+        newname: "newname"        
+      headers:
+        content-type: application/json
+
+    # ...and the expected response code and body
+    response:
+      status_code: 400
+      body:
+        errorCode: -5
+---
+test_name: PUT PROVIDER API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: PUT PROVIDER WRONG KEYS
+
+    # Define the request to be made...
+    request:
+      url: http://green.develeap.com:8090/provider
+      method: PUT
+      json:
+        id1: "asd"
+        newname: "newname"        
+      headers:
+        content-type: application/json
+
+    # ...and the expected response code and body
+    response:
+      status_code: 400
+      body:
+        errorCode: -5
+---
+test_name: PUT PROVIDER API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: DB EXECUTING ERROR
+
+    # Define the request to be made...
+    request:
+      url: http://green.develeap.com:8090/provider
+      method: PUT
+      json:
+        id: "asd"
+        newname: "newname"        
+      headers:
+        content-type: application/json
+
+    # ...and the expected response code and body
+    response:
+      status_code: 500
+      body:
+        errorCode: -3
+
