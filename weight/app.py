@@ -248,6 +248,9 @@ def postweight():
         output_json2 = cur.fetchall()
         b = output_json2
         pformat_b = pprint.pformat(b)
+        
+        strip_checkin = ""
+
         if pformat_a == pformat_b and strip_checkin == strip_true:
             if strip_force == '1':
                 cur.execute("UPDATE weight SET bruto = '%s' WHERE truckid = '%s';" %(bruto, strip_truckid))
@@ -259,8 +262,7 @@ def postweight():
 
             cur.execute("INSERT INTO sessions(direction, truckid, bruto) VALUES (%s, %s, %s)", (direction, truckid, bruto))
 
-        
-        strip_checkin = ""        
+                
         ischeckin = "SELECT direction='in' from weight where truckid='%s' LIMIT 1;"%strip_truckid
         ischeckout = 'SELECT truckid from weight;'
         checkout_session = "SELECT id from sessions where truckid='%s' ORDER BY created_at DESC LIMIT 1;"%strip_truckid
