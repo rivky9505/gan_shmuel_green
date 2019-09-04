@@ -204,7 +204,7 @@ def putprovider2(id):
 
 
 @app.route('/provider3', methods=['PUT'])
-def putprovider22(id):
+def putprovider22():
     try:
         db = getMysqlConnection()
     except:
