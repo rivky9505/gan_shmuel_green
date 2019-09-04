@@ -1,6 +1,6 @@
 #!/bin/bash
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P)"
-
+echo "$SCRIPTPATH"
 cd "$SCRIPTPATH"
 git clone git@github.com:greendeveleap/gan_shmuel_green.git
 cd gan_shmuel_green
