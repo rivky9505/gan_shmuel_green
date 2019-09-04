@@ -87,7 +87,7 @@ def get_rates():
         logging.info("[GET][SUCCESS] rates request - : %s", (sqlstr))
     except Exception :
         logging.error("[GET][FAILURE] rates request , ON QUERY: %s", (sqlstr))
-        return jsonify("ERROR , while trying: %s", (sqlstr))
+        return jsonify({ "errorCode" : -3 , "errorDescription" : "ERROR EXECUTING QUERY IN DATABASE" }) , 200
     try:  # Create and save Excel file
         dir_name = "out"
         file_name = "output.xlsx"
