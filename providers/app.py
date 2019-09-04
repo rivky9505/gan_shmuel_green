@@ -75,9 +75,6 @@ def json_to_excel(ws, data, row=0, col=0):
 @app.route('/rates', methods=['GET'])
 def get_rates():
     try:
-        dir_name = "out"
-        file_name = "output.xlsx"
-        excel_path = "./" + dir_name + "/" + file_name
         db = getMysqlConnection()
     except:
         return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
@@ -86,50 +83,34 @@ def get_rates():
         cur = db.cursor()
         cur.execute(sqlstr)
         output_jason = cur.fetchall()
+        db.close()
         logging.info("[GET][SUCCESS] rates request - : %s", (sqlstr))
     except Exception :
         logging.error("[GET][FAILURE] rates request , ON QUERY: %s", (sqlstr))
         return jsonify("ERROR , while trying: %s", (sqlstr))
-    finally:
-        db.close()
-    data = output_jason
-    wb = xlsxwriter.Workbook(excel_path)
-    ws = wb.add_worksheet()
-    json_to_excel(ws, data)
-    wb.close()
-    # send excel file as http response
-    if os.path.exists(excel_path):
-        return send_from_directory(dir_name, filename=file_name, as_attachment=True, attachment_filename="Rates.xlsx", mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") 
-    return "Excel Created"
-
-
-#FOR TESTING
-@app.route('/rates2', methods=['GET'])
-def get_rates2():
-    try:
-        db = getMysqlConnection()
-    except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200 
-    try:
-        query = "SELECT * FROM Rates"
-        cur = db.cursor()
-        cur.execute(query)
-        output_jason = cur.fetchall()
-        logging.info("[GET][SUCCESS] rates request - : %s", (query))
-        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK : Excel Created" }) , 200 
-    except Exception :
-        logging.error("[GET][FAILURE] rates request , ON QUERY: %s", (query))
-        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
-    finally:
-        db.close()
-    try:
+    try:  # Create and save Excel file
+        dir_name = "out"
+        file_name = "output.xlsx"
+        excel_path = "./" + dir_name + "/" + file_name
         data = output_jason
-        wb = xlsxwriter.Workbook("output_from_Rates_Table.xlsx")
+        wb = xlsxwriter.Workbook(excel_path)
         ws = wb.add_worksheet()
         json_to_excel(ws, data)
         wb.close()
+        logging.info("[GET][SUCCESS] rates request : Excel file created in: %s", (excel_path))
     except:
+        logging.error("[GET][FAILURE] rates request : Excel file NOT created in: %s", (excel_path))
         return jsonify({ "errorCode" : -4 , "errorDescription" : "I/O ERROR : writing Excel file" }) , 500
+    try: # send excel file as http response
+        if os.path.exists(excel_path):
+            logging.info("[GET][SUCCESS] rates request : Excel file from: %s was sent for download", (excel_path))
+            return send_from_directory(dir_name, filename=file_name, as_attachment=True, attachment_filename="Rates.xlsx", mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    except:
+        logging.error("[GET][FAILURE] rates request : Excel file from: %s was NOT sent for download", (excel_path))
+        return jsonify({ "errorCode" : -1 , "errorDescription" : "status 404 Not Found : Excel file not found" }) , 500
+
+
+        
 
 # POST /provider
 # Creates a new provider record:
