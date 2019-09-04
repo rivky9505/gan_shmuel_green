@@ -29,9 +29,9 @@ testResult = True
 
 def startReport():
     global dataToEmail 
-    dataToEmail = "End2End Report Weight: "+ str(dateNow)+'\r\r\n'
-    with open(logfile, 'a+') as the_file:
-        the_file.write("End2End Report Weight: "+ str(dateNow)+'\n')
+    dataToEmail = "End2End Report Provider: "+ str(dateNow)+'\r\r\n'
+    with open(logfile, 'a') as the_file:
+        the_file.write("End2End Report Provider: "+ str(dateNow)+'\n')
         the_file.write("******************************************"+'\n')
     
 
@@ -43,40 +43,59 @@ def endReport(testResult1):
         the_file.write("End Report "+str(testResult1) +'\n')
 
 
-def checkRequest(methoda , urla):
+def checkRequest(methoda , urla , tof):
     resp = req.request(method=methoda, url=urla)
     global dataToEmail
-    dataToEmail = dataToEmail + "the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
-    with open(logfile, 'a') as the_file:
-        the_file.write("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\n')
-    print("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
-    # print(resp.content)
-    print(resp.status_code)
-    if 200 <= resp.status_code <= 299:
-        return True
-    return False
+    if tof == True:
+        dataToEmail = dataToEmail + "the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
+        with open(logfile, 'a') as the_file:
+            the_file.write("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\n')
+        print("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
+        # print(resp.content)
+        print(resp.status_code)
+        if 200 <= resp.status_code <= 299:
+            return True
+        return False
+    else:
+        dataToEmail = dataToEmail + "SKIP!!!! the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
+        with open(logfile, 'a') as the_file:
+            the_file.write("SKIP!!!! the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\n')
+            return True
 
-def posRequest(urla , data ):
+def posRequest(urla , data , tof):
     resp = req.post(urla, data)
-    global dataToEmail
-    dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
-    with open(logfile, 'a') as the_file:
-        the_file.write("the method Post to " +str(urla)+ " got the response " +str(resp)+'\n')
-        # print("the method Post to " +str(urla)+ " got the response " +str(resp))
-    if 200 <= resp.status_code <= 299:
-        return True
-    return False
+    global dataToEmail   
+    if tof == True:
+        dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
+        with open(logfile, 'a') as the_file:
+            the_file.write("the method Post to " +str(urla)+ " got the response " +str(resp)+'\n')
+            # print("the method Post to " +str(urla)+ " got the response " +str(resp))
+        if 200 <= resp.status_code <= 299:
+            return True
+        return False
+    else:
+        dataToEmail = dataToEmail + "SKIP!!!! the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
+        with open(logfile, 'a') as the_file:
+            the_file.write("SKIP!!!! the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\n')
+            return True
 
-def putRequest(urla , data ):
+def putRequest(urla , data, tof ):
     resp = req.put(urla, data)
     global dataToEmail
-    dataToEmail = dataToEmail + "the method Put to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
-    with open(logfile, 'a') as the_file:
-        the_file.write("the method Put to " +str(urla)+ " got the response " +str(resp)+'\n')
-        # print("the method Put to " +str(urla)+ " got the response " +str(resp))
-    if 200 <= resp.status_code <= 299:
-        return True
-    return False
+    if tof == True:
+        dataToEmail = dataToEmail + "the method Put to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
+        with open(logfile, 'a') as the_file:
+            the_file.write("the method Put to " +str(urla)+ " got the response " +str(resp)+'\n')
+            # print("the method Put to " +str(urla)+ " got the response " +str(resp))
+        if 200 <= resp.status_code <= 299:
+            return True
+        return False
+     else:
+        dataToEmail = dataToEmail + "SKIP!!!! the method Put to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
+        with open(logfile, 'a') as the_file:
+            the_file.write("SKIP!!!! the method Put to " +str(urla)+ " got the response " +str(resp)+'\n')
+            return True
+    
     
 #####################################################################################################
 #! Send mail
@@ -109,47 +128,50 @@ def sendMail(dataToEmail):
 
 def checkhealthWeight():
     try: 
-        return checkRequest(get , weightAPI + "/health")
+        return checkRequest(get , weightAPI + "/health" , True)
     except:
         global dataToEmail
         dataToEmail = dataToEmail + "Weight ApI is down "+'\r\r\n'
         with open(logfile, 'a') as the_file:
             the_file.write("Weight ApI is down "+'\n')
 
-def checkUnknown():
-    checkRequest(get , weightAPI + "/unknown")#check unknown list
+def checkUnknown(tof):
+    checkRequest(get , weightAPI + "/unknown" ,tof)#check unknown list
 
-def checkSession(number):
-    checkRequest(get , weightAPI + "/session/" + str(number))#check session
+def checkSession(number , tof):
+    checkRequest(get , weightAPI + "/session/" + str(number) ,tof)#check session
 
 
 
-def checkWeightFrom(t1to , t2from , filter):
+def checkWeightFrom(t1to , t2from , filter ,tof):
 #TODO check the way we use to and from and fiter
-    checkRequest(get , weightAPI + "/weight?from="+str(t1to)+"&to="+str(t2from)+"&filter="+str(filter))
+    checkRequest(get , weightAPI + "/weight?from="+str(t1to)+"&to="+str(t2from)+"&filter="+str(filter),tof)
 
-def checkItemFrom(itemID,fromt1 , fromt2):
-    checkRequest(get , weightAPI + "/item/"+str(itemID)+"?from="+str(fromt1)+"&to="+str(fromt2)+"&filter="+str(filter))
+def checkItemFrom(itemID,fromt1 , fromt2 ,tof):
+    checkRequest(get , weightAPI + "/item/"+str(itemID)+"?from="+str(fromt1)+"&to="+str(fromt2)+"&filter="+str(filter),tof)
 
 
-def postBatchWeight(filename):
+def postBatchWeight(filename ,tof):
     datatoSend = {'file' : filename}
-    posRequest(weightAPI + "/batch-weight" , datatoSend)
+    posRequest(weightAPI + "/batch-weight" , datatoSend ,tof)
 
-def postWeight(direction , license1 , containers ,weight ,unit , force , produce):
+def postWeight(direction , license1 , containers ,weight ,unit , force , produce ,tof):
     # datatoSend = {'direction' : str(direction) , 'truck' : str(license1) , 'containers' : str(containers) ,'weight': str(weight) ,'unit': str(unit) , 'force' : str(force) , 'produce' : str(produce)}
     datatoSend = {'direction' : (direction) , 'truck' : (license1) , 'containers' : (containers) ,'weight': (weight) ,'unit': (unit) , 'force' : (force) , 'produce' : (produce)}
-    posRequest(weightAPI + "/weight" , datatoSend)
+    posRequest(weightAPI + "/weight" , datatoSend ,tof)
 
 
 def weightRequests():
     toReturn = True
-    toReturn= checkUnknown() and toReturn
-    toReturn= checkSession(10001) and toReturn
-    toReturn= checkSession(10002) and toReturn
-    toReturn= postBatchWeight("containers1.csv") and toReturn
-    toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato") and toReturn
+    toReturn= checkUnknown(True) and toReturn
+    toReturn= checkSession(1 , True) and toReturn
+    toReturn= checkSession(2 , True) and toReturn
+    toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato" , True) and  toReturn
+     toReturn=postBatchWeight("container1.csv") and toReturn
     return  toReturn
+
+    
+
 
 #####################################################################################################
 #! Main

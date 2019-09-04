@@ -43,40 +43,58 @@ def endReport(testResult1):
         the_file.write("End Report "+str(testResult1) +'\n')
 
 
-def checkRequest(methoda , urla):
+def checkRequest(methoda , urla , tof):
     resp = req.request(method=methoda, url=urla)
     global dataToEmail
-    dataToEmail = dataToEmail + "the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
-    with open(logfile, 'a') as the_file:
-        the_file.write("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\n')
-    print("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
-    # print(resp.content)
-    print(resp.status_code)
-    if 200 <= resp.status_code <= 299:
-        return True
-    return False
+    if tof == True:
+        dataToEmail = dataToEmail + "the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
+        with open(logfile, 'a') as the_file:
+            the_file.write("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\n')
+        print("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
+        # print(resp.content)
+        print(resp.status_code)
+        if 200 <= resp.status_code <= 299:
+            return True
+        return False
+    else:
+        dataToEmail = dataToEmail + "SKIP!!!! the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
+        with open(logfile, 'a') as the_file:
+            the_file.write("SKIP!!!! the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\n')
+            return True
 
-def posRequest(urla , data ):
+def posRequest(urla , data , tof):
     resp = req.post(urla, data)
-    global dataToEmail
-    dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
-    with open(logfile, 'a') as the_file:
-        the_file.write("the method Post to " +str(urla)+ " got the response " +str(resp)+'\n')
-        # print("the method Post to " +str(urla)+ " got the response " +str(resp))
-    if 200 <= resp.status_code <= 299:
-        return True
-    return False
+    global dataToEmail   
+    if tof == True:
+        dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
+        with open(logfile, 'a') as the_file:
+            the_file.write("the method Post to " +str(urla)+ " got the response " +str(resp)+'\n')
+            # print("the method Post to " +str(urla)+ " got the response " +str(resp))
+        if 200 <= resp.status_code <= 299:
+            return True
+        return False
+    else:
+        dataToEmail = dataToEmail + "SKIP!!!! the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
+        with open(logfile, 'a') as the_file:
+            the_file.write("SKIP!!!! the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\n')
+            return True
 
-def putRequest(urla , data ):
+def putRequest(urla , data, tof ):
     resp = req.put(urla, data)
     global dataToEmail
-    dataToEmail = dataToEmail + "the method Put to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
-    with open(logfile, 'a') as the_file:
-        the_file.write("the method Put to " +str(urla)+ " got the response " +str(resp)+'\n')
-        # print("the method Put to " +str(urla)+ " got the response " +str(resp))
-    if 200 <= resp.status_code <= 299:
-        return True
-    return False
+    if tof == True:
+        dataToEmail = dataToEmail + "the method Put to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
+        with open(logfile, 'a') as the_file:
+            the_file.write("the method Put to " +str(urla)+ " got the response " +str(resp)+'\n')
+            # print("the method Put to " +str(urla)+ " got the response " +str(resp))
+        if 200 <= resp.status_code <= 299:
+            return True
+        return False
+     else:
+        dataToEmail = dataToEmail + "SKIP!!!! the method Put to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
+        with open(logfile, 'a') as the_file:
+            the_file.write("SKIP!!!! the method Put to " +str(urla)+ " got the response " +str(resp)+'\n')
+            return True
     
 #####################################################################################################
 #! Send mail
@@ -109,62 +127,12 @@ def sendMail(dataToEmail):
         print ('Something went wrong...')
 
 #####################################################################################################
-#! Weight tests
-
-def checkhealthWeight():
-    try: 
-        global testResult 
-        testResult = checkRequest(get , weightAPI + "/health")
-        return testResult 
-    except:
-        global dataToEmail
-        dataToEmail = dataToEmail + "Weight ApI is down "+'\r\r\n'
-        with open(logfile, 'a') as the_file:
-            the_file.write("Weight ApI is down "+'\n')
-
-def checkUnknown():
-    checkRequest(get , weightAPI + "/unknown")#check unknown list
-
-def checkSession(number):
-    checkRequest(get , weightAPI + "/session/" + str(number))#check session
-
-def checkWeightFrom(t1to , t2from , filter):
-#TODO check the way we use to and from and fiter
-    checkRequest(get , weightAPI + "/weight?from="+str(t1to)+"&to="+str(t2from)+"&filter="+str(filter))
-
-def checkItemFrom(itemID,fromt1 , fromt2):
-    checkRequest(get , weightAPI + "/item/"+str(itemID)+"?from="+str(fromt1)+"&to="+str(fromt2)+"&filter="+str(filter))
-
-
-def postBatchWeight(filename):
-    datatoSend = {'file' : filename}
-    posRequest(weightAPI + "/batch-weight" , datatoSend)
-
-def postWeight(direction , license1 , containers ,weight ,unit , force , produce):
-    # datatoSend = {'direction' : str(direction) , 'truck' : str(license1) , 'containers' : str(containers) ,'weight': str(weight) ,'unit': str(unit) , 'force' : str(force) , 'produce' : str(produce)}
-    datatoSend = {'direction' : (direction) , 'truck' : (license1) , 'containers' : (containers) ,'weight': (weight) ,'unit': (unit) , 'force' : (force) , 'produce' : (produce)}
-    posRequest(weightAPI + "/weight" , datatoSend)
-
-
-def weightRequests():
-    toReturn = True
-    toReturn= checkUnknown() and toReturn
-    toReturn= checkSession(1) and toReturn
-    toReturn= checkSession(2) and toReturn
-    toReturn= checkGETrates() and toReturn
-    toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato") and toReturn
-    return  toReturn
-
-    
-
-
-#####################################################################################################
 #! Prov Tests
 
 def checkHealthProv():
     try:
         global testResult 
-        testResult = checkRequest(get , provAPI + "/health")
+        testResult = checkRequest(get , provAPI + "/health" , True)
         return testResult
     except:
         global dataToEmail
@@ -173,43 +141,43 @@ def checkHealthProv():
             the_file.write("Provider ApI is down"+'\n')
 
 
-def checkGetRatesPROV():
-    return checkRequest(get , provAPI + "/rates")
+def checkGetRatesPROV(tof):
+    return checkRequest(get , provAPI + "/rates" ,tof)
 
-def checkGetBillPROV(id1 , fromt1 ,tot2):
-    return checkRequest(get , provAPI + "/bill/" + str(id1)+"?from=" + str(fromt1) + "&to=" + str(tot2))
+def checkGetBillPROV(id1 , fromt1 ,tot2 , tof):
+    return checkRequest(get , provAPI + "/bill/" + str(id1)+"?from=" + str(fromt1) + "&to=" + str(tot2) , tof)
 
 
 
-def checkPostProvider(pName):
+def checkPostProvider(pName , tof):
     datatoSend = {'name': pName}
     posRequest(provAPI+"/provider" , datatoSend)
 
-def checkPostRates(file , product , rate , scope):
+def checkPostRates(file , product , rate , scope , tof):
     datatoSend = {'File' : file , 'Product' : product ,'Rate': rate ,'Scope': scope}
-    posRequest(provAPI+"/rates" , datatoSend)
+    posRequest(provAPI+"/rates" , datatoSend ,tof)
 
-def postTruck(pName , id1):
+def postTruck(pName , id1 , tof):
     datatoSend = {'provider': pName , 'id':id1}
-    posRequest(provAPI+"/truck/"+str(pName) , datatoSend)
+    posRequest(provAPI+"/truck/"+str(pName) , datatoSend , tof)
 
-def putTruck(id1):
+def putTruck(id1 , tof):
     datatoSend = {'id':id1}
-    putRequest(provAPI+"/truck/"+str(id1) , datatoSend)
+    putRequest(provAPI+"/truck/"+str(id1) , datatoSend , tof)
 
-def putProvider(pName):
+def putProvider(pName , tof):
     datatoSend = {'id': pName}
-    putRequest(provAPI+"/provider/"+str(pName) , datatoSend)
+    putRequest(provAPI+"/provider/"+str(pName) , datatoSend ,tof)
 
 # data={'number': 12524, 'type': 'issue', 'action': 'show'}
 
 def provRequests():
     toReturn = True
-    toReturn= checkGetRatesPROV() and toReturn
-    toReturn= checkPostProvider(1111111) and toReturn
-    toReturn= putProvider(1111111) and toReturn
-    toReturn= postTruck(1111111 , 2212) and toReturn
-    toReturn= putTruck(2212)and toReturn
+    toReturn= checkGetRatesPROV(True) and toReturn
+    toReturn= checkPostProvider(1111111 , True) and toReturn
+    toReturn= putProvider(1111111 , True) and toReturn
+    toReturn= postTruck(1111111 , 2212 , True) and toReturn
+    toReturn= putTruck(2212 , True) and toReturn
     return  toReturn
 
 #####################################################################################################
