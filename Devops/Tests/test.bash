@@ -1,16 +1,17 @@
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P)"
 #switch controls
 while getopts ":w :p :m" o; do
     case "${o}" in
         m) 
-			bash /home/kobi/Desktop/W3/gan_shmuel/gan_shmuel_green/Devops/Tests/provtest/testprov.bash
-            bash /home/kobi/Desktop/W3/gan_shmuel/gan_shmuel_green/Devops/Tests/weighttest/testweight.bash
+			bash "$SCRIPTPATH"/provtest/testprovmaster.bash
+            bash "$SCRIPTPATH"/weighttest/testweightmaster.bash
 			;;
         p)
-            bash /home/kobi/Desktop/W3/gan_shmuel/gan_shmuel_green/Devops/Tests/provtest/testprov.bash
+            bash "$SCRIPTPATH"/provtest/testprov.bash
             ;;
         w)
             
-            bash /home/kobi/Desktop/W3/gan_shmuel/gan_shmuel_green/Devops/Tests/weighttest/testweight.bash
+            bash "$SCRIPTPATH"/weighttest/testweight.bash
             ;;
         *)
             echo invalid switch
