@@ -18,7 +18,7 @@ app = Flask(__name__)
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
 
 def getMysqlConnection():
-    return mysql.connector.connect(user='root', host='mysql', port='3306', password='123', database='billdb')
+    return mysql.connector.connect(user='root', host='mysql', port='3306', password='root', database='billdb')
 
 @app.route("/")
 def hello():
