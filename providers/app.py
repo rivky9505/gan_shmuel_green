@@ -524,7 +524,14 @@ def getbilling(id):
         # id
         result={"id" : id}
         # name
-        name = bill.get_provider_name(id)[0]
+        name1 = bill.get_provider_name(id)
+        if name1 == -2:
+            return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        elif name1 == -3:
+            return jsonify({ "errorCode" : -3 , "errorDescription" : "ERROR EXECUTING QUERY IN DATABASE" }) , 200
+        elif name1 == None:
+            return jsonify({ "errorCode" : -1 , "errorDescription" : "provider id not in database" }) , 500 
+        name= bill.get_provider_name(id)[0]
         result.update({"name" : name})
         # t1 & t2
         now = datetime.now()
@@ -537,8 +544,18 @@ def getbilling(id):
         result.update({ "from" : t1 })
         result.update({ "to" : t2 })
         trucks_list=bill.find_providers_trucks(id)
+        if trucks_list == -2:
+            return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        elif trucks_list == -3:
+            return jsonify({ "errorCode" : -3 , "errorDescription" : "ERROR EXECUTING QUERY IN DATABASE" }) , 200   
         weights_list=bill.get_all_sessions_in_array(t1,t2)
+    #    tests for api 
         rates_dictionary=bill.get_rates()
+        if rates_dictionary == -2:
+            return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+        elif rates_dictionary == -3:
+            return jsonify({ "errorCode" : -3 , "errorDescription" : "ERROR EXECUTING QUERY IN DATABASE" }) , 200   
+        
         # sessionCount
         GlobalSessionsCount=0
         # products
@@ -558,42 +575,41 @@ def getbilling(id):
                     flag = False
                     for obj in products:
                         if weight["produce"]==obj["product"]:
-                            
                             flag = True
                             amount = int(weight["neto"]) + int(obj["amount"])
-                            # return str(obj["amount"])
                             count = int(obj["count"]) +1
                             pay = amount * int(obj["rate"])
                             obj.update({ "amount" : amount , "count" : count ,  "pay" : pay})
+                            logging.info('[GET][SUSSECC] /bill/<id> : product dictinary updated for'+ weight["produce"])
                     if flag == False:
                         product=dict()
-                        rate = ""
+                        rate = 0
                         for obj in rates_dictionary:
                             if obj["product_id"] == weight["produce"]: 
                                 if obj["scope"] == id:
-                                    rate = obj["rate"]
+                                    rate = int(obj["rate"]) 
                                     break
                                 elif obj["scope"] == "All" :
-                                    rate = obj["rate"]
+                                    rate = int(obj["rate"]) 
                         # pay
-                        pay = int(weight["neto"]) * rate
-                        product = { "product" : weight["produce"] , "count" : 1 , "amount" : weight["neto"] , "rate" :  rate , "pay" : pay  }
+                        pay = int(weight["neto"]) * int(rate)
+                        product = { "product" : weight["produce"] , "count" : 1 , "amount" : int(weight["neto"]) , "rate" :  int(rate) , "pay" : int(pay)  }
+                        logging.info('[GET][SUSSECC] /bill/<id> : product dictinary created for'+ weight["produce"])
                         products.append(product)
-
+        # return jsonify(products)
         # set total
         total=0
         for obj in products:
             total += int(obj["pay"])
         result.update({ "truckCount" : len(trucks_in_weights) , "sessionCount" : GlobalSessionsCount , "products" : products , "total" : total })
+        logging.info('[GET][SUSSECC] /bill/<id> : result dictinary updated with all data')
+   
         
-
-        return jsonify(result)        
-        db.commit()
-        cur.close()
-        db.close()
-        logging.info('[GET][SUCCESS] /bill/<id>?from=<t1>&to=<t2>') # CHANGE TO PROPER MESSAGE
+        logging.info('[GET][SUCCESS] /bill/<id> : return result as JSON')
+        return jsonify(result) , 200 
     except Exception as e:
-        logging.error('[GET][FAILURE] /bill/<id>?from=<t1>&to=<t2>') # CHANGE TO PROPER MESSAGE
+        logging.error('[GET][FAILURE] /bill/<id> : '+ str(e))
+        # return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500 
         return str(e)
 
 
