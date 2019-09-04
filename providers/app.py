@@ -33,6 +33,7 @@ def hello():
 #(-2) - DATABASE CONNECTION ERROR
 #(-3) - DATABASE BASE QUERY EXECUTION ERROR
 #(-4) - I/O ERROR
+#(-5) - USER ERROR MISSING PARAMETER IN URL QUERY
 
 
 # GET /health
@@ -355,63 +356,37 @@ def inserttruck2(provider_id, truck_lisence):
     except Exception as e:
         logging.error('[POST][FAILURE] /truck/<provider_id>/<truck_lisence>') # CHANGE TO PROPER MESSAGE
         return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
+
+
 # PUT /truck/{id} can be used to update provider id
 # This request needs two argumnets.
 # Implenting as a query string in url
 # http://localhost:5000/truck/?id=222-33-111&name=new_provider_for_truck
 @app.route('/truck/', methods=["PUT"])
 def updatetruck():
+    # get values from query string
     result_message = ""
     result_count_string = ""
-    try:
-        # get values from query string
+    truck_id = ""
+    provider_name = ""
+    if request.args.get('id') != None:
         truck_id = request.args.get('id')
+    else:
+        logging.error('[PUT][FAILURE] /truck/ : USER ERROR : MISSING PARAMETER IN URL QUERY')
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" })
+
+    if request.args.get('name'):
         provider_name = request.args.get('name')
-
-        db = getMysqlConnection()
-        cur = db.cursor()
-        # get id of provider (owner of the truck id)
-        querystr = "SELECT id FROM Provider WHERE name = '" + provider_name + "'"
-        cur.execute(querystr)
-        query_result = cur.fetchall()
-        result_count_string = "   Result count: " + str(cur.rowcount)
-        if cur.rowcount > 0: # test if there is at least one record
-            provider_id = str(query_result[0][0])
-            # count how many records have the desired truck id
-            querystr = "SELECT COUNT(IF(id='" + truck_id + "',1, NULL)) 'id' FROM Trucks"
-            cur.execute(querystr)
-            query_result = cur.fetchall()
-            if int(query_result[0][0]) > 0: # if more than 0, then update the record.
-                querystr = "UPDATE Trucks SET provider_id = '" + provider_id + "' WHERE id = '" + truck_id + "'" 
-                cur.execute(querystr)
-                db.commit()
-                result_message = "Updated Truck no: " + truck_id + " for provider: " + provider_name
-            else:
-                result_message = "No Truck ID with this id: " + truck_id
-        else:
-            result_message = "No provider with this name: " + provider_name
-        cur.close()
-        db.close()
-        logging.info('[PUT][SUCCESS] /truck/') # CHANGE TO PROPER MESSAGE
-        return result_message
-    except Exception as e:
-        logging.error('[PUT][FAILURE] /truck/ : QUERY:' + querystr) # CHANGE TO PROPER MESSAGE
-        return str(e)
-
-#FOR TESTING
-@app.route('/truck2/', methods=["PUT"])
-def updatetruck2():
-    result_message = ""
-    result_count_string = ""
+    else:
+        logging.error('[PUT][FAILURE] /truck/ : USER ERROR : MISSING PARAMETER IN URL QUERY')
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" })
+    
     try:
         db = getMysqlConnection()
     except:
         return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+    
     try:
-        # get values from query string
-        truck_id = request.args.get('id')
-        provider_name = request.args.get('name')
-
         cur = db.cursor()
         # get id of provider (owner of the truck id)
         querystr = "SELECT id FROM Provider WHERE name = '" + provider_name + "'"
@@ -428,18 +403,23 @@ def updatetruck2():
                 querystr = "UPDATE Trucks SET provider_id = '" + provider_id + "' WHERE id = '" + truck_id + "'" 
                 cur.execute(querystr)
                 db.commit()
-                result_message = "Updated Truck no: " + truck_id + " for provider: " + provider_name
+                cur.close()
+                db.close()
+                result_message = "[PUT][SUCCESS] /truck/ : Updated Truck no: " + truck_id + " for provider: " + provider_name
+                logging.info(result_message)
+                return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK"  , "result": result_message}) , 200 
             else:
                 result_message = "No Truck ID with this id: " + truck_id
+                logging.info(result_message)
+                return jsonify({ "errorCode" : -5 , "errorDescription" : "status 200 OK"  , "result": result_message}) , 200 
         else:
             result_message = "No provider with this name: " + provider_name
-        cur.close()
-        db.close()
-        logging.info('[PUT][SUCCESS] /truck/') # CHANGE TO PROPER MESSAGE
-        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK"  , "result": result_message}) , 200 
+            logging.info(result_message)
+            return jsonify({ "errorCode" : -5 , "errorDescription" : "status 200 OK"  , "result": result_message}) , 200 
     except Exception as e:
-        logging.error('[PUT][FAILURE] /truck/ : QUERY:') # CHANGE TO PROPER MESSAGE
+        logging.error('[PUT][FAILURE] /truck/ : QUERY:' + querystr)
         return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
+
 
 # GET /truck/<id>?from=t1&to=t2
 # - id is the truck license. 404 will be returned if non-existent
