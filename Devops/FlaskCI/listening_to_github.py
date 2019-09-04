@@ -57,15 +57,15 @@ def test(sb):
         os.system(cmdChmod)
         sleep(2)
         if sb == "master":
-                res = subprocess.call("../Tests/test.bash %s" % ("-m"), shell=True)
+                res = subprocess.call("/home/ubuntu/temp/gan_shmuel_green/Devops/Tests/test.bash %s" % ("-m"), shell=True)
                 print (res)
                 print ("*****END*****")
         if sb == "weight":
-                res = subprocess.call("../Tests/test.bash %s" % ("-w"), shell=True)
+                res = subprocess.call("/home/ubuntu/temp/gan_shmuel_green/Devops/Tests/test.bash %s" % ("-w"), shell=True)
                 print (res)
                 print ("*****END*****")
         if sb == "provider":
-                res = subprocess.call("../Tests/test.bash %s" % ("-p"), shell=True)
+                res = subprocess.call("/home/ubuntu/temp/gan_shmuel_green/Devops/Tests/test.bash %s" % ("-p"), shell=True)
                 print (res)
                 print ("*****END*****")
 
