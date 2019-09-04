@@ -69,10 +69,45 @@ def test(sb):
                 print (res)
                 print ("*****END*****")
 
+def rollBack():
+        os.chdir('/home/ubuntu/prod')
+        copyfromprodtotemp = 'cp -r gan_shmuel_green/ tempforrb/'
+        deleteRepoFromProd = 'rm -rf gan_shmuel_green/'
+        copyfromrbtoprod = 'cp -r rollback/gan_shmuel_green/ gan_shmuel_green/'
+        deleteRollback = 'rm -rf rollback/gan_shmuel_green/'
+        copyfromtemptorb = 'cp -r tempforrb/gan_shmuel_green/ rollback/'
+        deletefromtemp = 'rm -rf tempforrb/gan_shmuel_green/'
+        os.system(copyfromprodtotemp)
+        print("copying from prod to temp")
+        sleep(3)
+        os.system(deleteRepoFromProd)
+        print("delete from prod")
+        sleep(3)
+        os.system(copyfromrbtoprod)
+        print("Copy from rollback to prod")
+        sleep(3)
+        os.system(deleteRollback)
+        print("Delete from rollback")
+        sleep(3)
+        os.system(copyfromtemptorb)
+        print("copy from temp to rollback")
+        sleep(3)
+        os.system(deletefromtemp)
+        print("delete from temp")
+        sleep(3)
+        os.chdir('/home/ubuntu/prod/gan_shmuel_green/providers')
+        runEnv()
+        sleep(5)
+        os.chdir('/home/ubuntu/prod/gan_shmuel_green/weight')
+        runEnv()
+
 @app.route('/')
 def api():
         strd = "Happy birthday"
         return str(strd.find("py"))
+
+@app.route('/rollback')
+def roll_back():
 
 @app.route('/github', methods=['POST'])
 def api_gh_message():
