@@ -1,0 +1,497 @@
+[
+    {
+      "id": "S-8937",
+      "weight": 573,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-3238",
+      "weight": 562,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-3100",
+      "weight": 512,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-3457",
+      "weight": 544,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-8191",
+      "weight": 684,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-4071",
+      "weight": 600,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-7929",
+      "weight": 606,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-4962",
+      "weight": 540,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-7801",
+      "weight": 613,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-9440",
+      "weight": 530,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-4212",
+      "weight": 509,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-2073",
+      "weight": 629,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-4464",
+      "weight": 678,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-6733",
+      "weight": 644,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-2011",
+      "weight": 621,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-4875",
+      "weight": 654,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-3281",
+      "weight": 618,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-2685",
+      "weight": 692,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-4184",
+      "weight": 553,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-9669",
+      "weight": 684,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-8151",
+      "weight": 655,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-2349",
+      "weight": 605,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-3571",
+      "weight": 547,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-8404",
+      "weight": 698,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-1882",
+      "weight": 644,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-1315",
+      "weight": 560,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-7423",
+      "weight": 625,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-9413",
+      "weight": 541,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-2339",
+      "weight": 549,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-5869",
+      "weight": 640,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-7455",
+      "weight": 633,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-7930",
+      "weight": 685,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-7751",
+      "weight": 561,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-5370",
+      "weight": 594,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-2049",
+      "weight": 590,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-4493",
+      "weight": 690,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-5916",
+      "weight": 529,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-1186",
+      "weight": 592,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-1682",
+      "weight": 690,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-1781",
+      "weight": 573,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-3455",
+      "weight": 588,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-5142",
+      "weight": 553,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-4715",
+      "weight": 570,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-4058",
+      "weight": 674,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-1138",
+      "weight": 644,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-3383",
+      "weight": 545,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-1957",
+      "weight": 652,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-2591",
+      "weight": 534,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-2980",
+      "weight": 593,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-2086",
+      "weight": 676,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-6818",
+      "weight": 649,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-5160",
+      "weight": 639,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-3394",
+      "weight": 692,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-9545",
+      "weight": 583,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-8250",
+      "weight": 643,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-5051",
+      "weight": 628,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-8184",
+      "weight": 521,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-2681",
+      "weight": 534,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-5365",
+      "weight": 675,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-8693",
+      "weight": 660,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-9487",
+      "weight": 534,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-4865",
+      "weight": 645,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-6546",
+      "weight": 668,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-3580",
+      "weight": 620,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-4184",
+      "weight": 618,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-7470",
+      "weight": 524,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-5268",
+      "weight": 584,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-4688",
+      "weight": 625,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-7962",
+      "weight": 671,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-1755",
+      "weight": 526,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-3678",
+      "weight": 634,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-2095",
+      "weight": 518,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-2717",
+      "weight": 699,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-5659",
+      "weight": 573,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-9148",
+      "weight": 692,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-3000",
+      "weight": 700,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-5006",
+      "weight": 699,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-4247",
+      "weight": 503,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-7014",
+      "weight": 555,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-7839",
+      "weight": 639,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-5913",
+      "weight": 535,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-5624",
+      "weight": 657,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-9360",
+      "weight": 565,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-8393",
+      "weight": 515,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-3698",
+      "weight": 563,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-3017",
+      "weight": 660,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-5463",
+      "weight": 692,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-8014",
+      "weight": 645,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-4032",
+      "weight": 654,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-5209",
+      "weight": 690,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-1035",
+      "weight": 516,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-8957",
+      "weight": 584,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-4593",
+      "weight": 625,
+      "unit": "lbs"
+    },
+    {
+      "id": "R-9390",
+      "weight": 572,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-2826",
+      "weight": 692,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-2664",
+      "weight": 658,
+      "unit": "lbs"
+    },
+    {
+      "id": "Q-1783",
+      "weight": 614,
+      "unit": "lbs"
+    },
+    {
+      "id": "S-4719",
+      "weight": 672,
+      "unit": "lbs"
+    },
+    {
+      "id": "T-1990",
+      "weight": 519,
+      "unit": "lbs"
+    }
+  ]

@@ -1,9 +1,9 @@
 
-from flask import Flask, request, jsonify, Response, render_template
+from flask import Flask, request, jsonify, Response, render_template 
 import json, pprint
 import mysql.connector
 from flask_cors import CORS, cross_origin
-import logging
+import logging, datetime , sys
 import csv
 app = Flask(__name__)
 
@@ -100,7 +100,7 @@ def post_batch_weight():
                     next(f)
                     for line in f:
                         if( line != '[' and line != ']'):
-                            line = line.replace('{', '').replace('}', '').replace('"', '').replace('\n', '').replace("unit", '').replace("id", '').replace(":", '').replace("weight", '').replace(":", '')
+                            line = line.replace('{', '').replace('}', '').replace('"', '').replace('\n', '').replace("unit", '').replace("id", '').replace(":", '').replace("weight", '').replace(":", '').replace(" ", '')
                             data = line.split(',')
                             if (data[1] == "na"):
                                 cur.execute("INSERT INTO containers_registered (container_id, weight,unit) VALUES (%s,%s,%s)", (data[0], na, kg))
@@ -126,48 +126,63 @@ def post_batch_weight():
 
 
 
-@app.route('/item/<id>', methods=['GET'])
-def get_item_id(id):
-# GET /item/<id>?from=t1&to=t2
-# - id is for an item (truck or container). 404 will be returned if non-existent
-# - t1,t2 - date-time stamps, formatted as yyyymmddhhmmss. server time is assumed.
-# default t1 is "1st of month at 000000". default t2 is "now". 
-# Returns a json:
-# { "id": <str>,
-#   "tara": <int> OR "na", // for a truck this is the "last known tara"
-#   "sessions": [ <id1>,...] 
-# }
+@app.route('/item/<string:id_num>', methods=['GET'])
+def get_item_id(id_num):
     db = getMysqlConnection()
-    from_t1 = request.form.get('from', default = "1st of month at 000000" , type = str)
-    to_t2 = request.form.get('to', default = "now" , type = str)
-    item_id = id
-    
+    cur = db.cursor()
+    #time manage
+    time = datetime.datetime.now().strftime("%Y%m%d%I%M%S")
+    from_t1 = request.args.get('from')
+    if not from_t1:
+        from_t1 = datetime.datetime.now().strftime("%Y%m"+"01000000")
+
+    to_t2 = request.args.get('to')
+    if not to_t2:
+        to_t2 = time
+    truck = 0
+    container = 0   
+
+    #checking id' existence
+    try:
+        id_query = ("SELECT * FROM  containers_registered WHERE container_id=" + "'" + id_num + "'")
+        cur.execute(id_query)
+        row = cur.fetchall()
+        if (len(row) > 0):
+            container = 1
+        if (container == 0):
+            id_query = ("SELECT * FROM  weight WHERE truckid="  + "'" + id_num + "'")
+            cur.execute(id_query)
+            row = cur.fetchall()
+            if (len(row) == 0):
+                logging.error("no id found")
+                return jsonify("404 no id found")
+            truck = 1
+    except Exception:
+        logging.error("ERROR , while trying : get item")
+        return jsonify("nope")
 
     try:
-        # Query all entries in containers_registered between times
-        data_query = ("SELECT * FROM containers_registered WHERE Created_at BETWEEN %s AND %s" , from_t1 , to_t2 )
-        cur = db.cursor()
+        ret_id = []
+        data_query = ("SELECT * FROM  sessions WHERE created_at>="  + from_t1 +" AND created_at<=" + to_t2 + " AND truckid=" + "'" +id_num +"'" + "ORDER BY created_at ASC")
         cur.execute(data_query)
         output_json = cur.fetchall()
-#Pending to see database structure to harvest tara and session IDs values 
-        # item_id_json = dict({"id": item_id, 
-        #         "tara": <int> , #OR "na" , for a truck this is the "last known tara"
-        #         "sessions": [ <id1>,...] })
-        # scan the IDs for matches in containers, then in trucks 
-        if item_id in output_json :
-            #add for to run on all items found
-            logging.info(" %s found in containers_registered" , item_id )
-            print(" %s found in containers_registered" , item_id )
-            # append to JSON to return
-
-# trucks querying,
+        if (len(output_json) > 0):
+            for line in output_json:
+                last_weight = line[4]
+                ret_id.append(line[0])
+            json_data = {'id': id_num , 'tara': last_weight , 'sessions' :ret_id }
+            return jsonify(json_data)
+        else:
+            logging.error("no session found")
+            return jsonify("no session found")
     except Exception:
-        logging.error("ERROR , while trying : %s", data_query)
+        logging.error("ERROR , while trying : get item")
         return jsonify("404 item id not found")
     finally:
         logging.info("200 OK Weight is healthy")
         db.close()
-    return jsonify(results=item_id_json)
+
+    
 
 
 
