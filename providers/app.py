@@ -176,51 +176,52 @@ def insert_provider2(provider_name):
 #         return str(e)
 
 
-@app.route('/provider/<id>', methods=['PUT'])
-def putprovider2(id):
-    try:
-        db = getMysqlConnection()
-    except:
-        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+# @app.route('/provider/<id>', methods=['PUT'])
+# def putprovider2(id):
+#     try:
+#         db = getMysqlConnection()
+#     except:
+#         return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
     
-    try:
-        newname = request.form["newname"]
-    except:
-        return jsonify({ "errorCode" : -5 , "errorDescription" : "ERROR NO PARAMETERS PASSED" }) , 200
+#     try:
+#         newname = request.form["newname"]
+#     except:
+#         return jsonify({ "errorCode" : -5 , "errorDescription" : "ERROR NO PARAMETERS PASSED" }) , 200
         
-    try:
-        cur = db.cursor()  
-        cur.execute('UPDATE Provider SET name = ' + '"' +str(newname)+ '"' + ' WHERE id =' + id)
-        db.commit()
-        cur.close()
-        db.close()
-        logging.info('[PUT][SUCCESS] provider/<id>') 
-        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK" }) , 200
-    except Exception as e:
-        logging.error('[PUT][FAILURE] provider/<id>') 
-        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
+#     try:
+#         cur = db.cursor()  
+#         cur.execute('UPDATE Provider SET name = ' + '"' +str(newname)+ '"' + ' WHERE id =' + id)
+#         db.commit()
+#         cur.close()
+#         db.close()
+#         logging.info('[PUT][SUCCESS] provider/<id>') 
+#         return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK" }) , 200
+#     except Exception as e:
+#         logging.error('[PUT][FAILURE] provider/<id>') 
+#         return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
 
 
 
 
-@app.route('/provider3', methods=['PUT'])
+@app.route('/provider', methods=['PUT'])
 def putprovider22():
     try:
         db = getMysqlConnection()
     except:
         return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
-    
     try:
         json = request.get_json()
         id = str(json["id"])
         newname = str(json["newname"])
         #newname = request.form["newname"]
     except:
-        return jsonify({ "errorCode" : -5 , "errorDescription" : "ERROR NO PARAMETERS PASSED" }) , 200
-        
-    try:
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "ERROR/WRONG NO PARAMETERS PASSED" }) , 200
+    try:    
         cur = db.cursor()  
         cur.execute('UPDATE Provider SET name = ' + '"' +str(newname)+ '"' + ' WHERE id =' + id)
+    except:
+        return jsonify({ "errorCode" : -3 , "errorDescription" : "ERROR DB QUERY EXECUTION" }) , 200
+    try:
         db.commit()
         cur.close()
         db.close()
