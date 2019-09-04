@@ -1,4 +1,4 @@
-test_name: /health
+test_name: HEALTH API
 
 # ...and each test has one or more stages (e.g. an HTTP request)
 stages:
@@ -15,7 +15,7 @@ stages:
       body:
         errorCode: 0
 ---
-test_name: /rates
+test_name: RATES
 
 # ...and each test has one or more stages (e.g. an HTTP request)
 stages:
@@ -32,7 +32,7 @@ stages:
       body:
         errorCode: 0
 ---
-test_name: /provider
+test_name: PROVIDER
 
 # ...and each test has one or more stages (e.g. an HTTP request)
 stages:
@@ -49,7 +49,7 @@ stages:
       body:
         errorCode: 0
 ---
-test_name: /provider
+test_name: WRONG URL
 
 # ...and each test has one or more stages (e.g. an HTTP request)
 stages:
