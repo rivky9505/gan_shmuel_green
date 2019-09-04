@@ -188,6 +188,9 @@ startReport()
 
 if checkHealthProv()  == True:
     testResult = provRequests()
+else: 
+    testResult = None
+    
 endReport(testResult)
 # print (dataToEmail)
 sendMail(dataToEmail)
