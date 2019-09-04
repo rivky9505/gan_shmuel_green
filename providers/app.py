@@ -379,7 +379,7 @@ def inserttruck2(provider_id, truck_lisence):
 # This request needs two argumnets.
 # Implenting as a query string in url
 # http://localhost:5000/truck/?id=222-33-111&name=new_provider_for_truck
-@app.route('/truck/', methods=["PUT"])
+@app.route('/truck', methods=["PUT"])
 def updatetruck():
     # get values from query string
     result_message = ""
