@@ -144,7 +144,6 @@ def checkSession(number , tof):
 
 
 def checkWeightFrom(t1to , t2from , filter ,tof):
-#TODO check the way we use to and from and fiter
     checkRequest(get , weightAPI + "/weight?from="+str(t1to)+"&to="+str(t2from)+"&filter="+str(filter),tof)
 
 def checkItemFrom(itemID,fromt1 , fromt2 ,tof):
@@ -164,10 +163,12 @@ def postWeight(direction , license1 , containers ,weight ,unit , force , produce
 def weightRequests():
     toReturn = True
     toReturn= checkUnknown(True) and toReturn
-    toReturn= checkSession(1 , True) and toReturn
-    toReturn= checkSession(2 , True) and toReturn
+    toReturn= checkSession(10001 , False) and toReturn
+    toReturn= checkSession(10002 , False) and toReturn
+    toReturn= checkWeightFrom('100011111111' , '201901111111' , 'in' ,False)  and toReturn
+    toReturn= checkItemFrom('T-55555','100011111111' , '201901111111'  ,True)  and toReturn
     toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato" , True) and  toReturn
-     toReturn=postBatchWeight("container1.csv") and toReturn
+    toReturn=postBatchWeight("containers1.csv" , True) and toReturn
     return  toReturn
 
     
