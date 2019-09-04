@@ -206,9 +206,9 @@ def putProvider(pName):
 def provRequests():
     toReturn = True
     toReturn= checkGetRatesPROV() and toReturn
-    toReturn= checkPostProvider(1111111) and toReturn
+    #toReturn= checkPostProvider(1111111) and toReturn
     toReturn= putProvider(1111111) and toReturn
-    toReturn= postTruck(1111111 , 2212) and toReturn
+    #toReturn= postTruck(1111111 , 2212) and toReturn
     toReturn= putTruck(2212)and toReturn
     return  toReturn
 

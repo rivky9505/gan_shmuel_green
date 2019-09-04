@@ -16,11 +16,19 @@ def runEnv():
     os.system(DCUp)
 def mainFunc():
     os.chdir('/home/ubuntu/prod')
+    deleteRollback = 'rm -rf rollback/gan_shmuel_green/'
+    copytoRollback = 'cp -r gan_shmuel_green/ rollback/'
     deleteRepo = 'rm -rf gan_shmuel_green/'
     gitcloneCMD = 'git clone https://github.com/greendeveleap/gan_shmuel_green.git'
     rmDCfile = 'rm docker-compose.yml'
     copyGlobalDCF = 'cp /home/ubuntu/src/dockerComposeFiles/dcFIles/PP/docker-compose.yml /home/ubuntu/prod/gan_shmuel_green/providers/docker-compose.yml'
     copyGlobalDCFW = 'cp /home/ubuntu/src/dockerComposeFiles/dcFIles/WP/docker-compose.yml /home/ubuntu/prod/gan_shmuel_green/weight/docker-compose.yml'
+    os.system(deleteRollback)
+    print("Delete rollback version")
+    sleep(3)
+    os.system(copytoRollback)
+    print("Copying new rollback image")
+    sleep(3)
     os.system(deleteRepo)
     print("Repo deleted from prod dir")
     sleep(3)
