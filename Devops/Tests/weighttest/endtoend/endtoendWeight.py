@@ -41,7 +41,7 @@ def endReport(testResult1):
     dataToEmail = dataToEmail + "End2End Report: "+ "End Report "+ str(testResult1) +'\n'
     with open(logfile, 'a') as the_file:
         the_file.write("End Report "+str(testResult1) +'\n')
-        the_file.write("******************************************"+'\n')
+
 
 def checkRequest(methoda , urla):
     resp = req.request(method=methoda, url=urla)

@@ -2,10 +2,12 @@
 
 
 git clone git@github.com:greendeveleap/gan_shmuel_green.git
-git checkout master
+cd gan_shmuel_green
+git checkout weight
+cd ..
 touch "$(pwd)"/endtoend/logs/end2endreport.log
 docker-compose up --build -d
-sleep 5
+sleep 30
 python3 "$(pwd)"/endtoend/endtoendWeight.py
 sleep 5
 docker-compose down
@@ -22,4 +24,5 @@ fi
 
 rm -rf gan_shmuel_green
 rm "$(pwd)"/endtoend/logs/end2endreport.log
+docker rmi $(docker images -q) --force
 
