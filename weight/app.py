@@ -200,7 +200,7 @@ def postweight():
     db = getMysqlConnection()
     if request.method == "POST":
 
-        lastval = 'select direction from weight ORDER By Created_at DESC LIMIT 1;'
+        lastval = 'select direction from weight ORDER By created_at DESC LIMIT 1;'
         cur = db.cursor()
         cur.execute(lastval)
         output_json = cur.fetchall()
@@ -212,11 +212,14 @@ def postweight():
         jsonin = [('in',)]
         jsonout = [("out",)]
         true = [(1,)]
+        none = [('none',)]
+        pformat_none = pprint.pformat(none)
+
 
         pformat_jsonin = pprint.pformat(jsonin)
         pformat_jsonout = pprint.pformat(jsonout)
         pformat_true = pprint.pformat(true)
-
+        strip_true = strip(pformat_true)
 
 
         details = request.form
@@ -227,62 +230,116 @@ def postweight():
         unit = details['unit']
         forc = details['forc']
         truckTara = details['bruto']
-        neto = details['bruto']
         produce = details['produce']
 
         cur = db.cursor()
-        cur.execute("INSERT INTO weight(direction, truckid, containers, bruto, unit, forc, produce) VALUES (%s, %s, %s, %s, %s, %s, %s)", (direction, truckid, containers, bruto, unit, forc, produce))
+        cur.execute("INSERT INTO weight(direction, truckid, containers, bruto, unit, forc) VALUES (%s, %s, %s, %s, %s, %s)", (direction, truckid, containers, bruto, unit, forc))
 
-        currentval = 'select direction from weight ORDER By Created_at DESC LIMIT 1;'
-        currenttruck = "SELECT truckid from weight ORDER BY created_at DESC LIMIT 1;"
+        currentval = 'SELECT direction from weight ORDER BY created_at DESC LIMIT 1;'
+        currenttruck = "SELECT truckid from weight ORDER BY created_at DESC LIMIT 1;" 
 
         cur.execute(currenttruck)
         output_currenttruck = cur.fetchall()
         pformat_currenttruck = pprint.pformat(output_currenttruck)
         strip_truckid = strip(pformat_currenttruck)
 
+        cur2 = db.cursor()
+        cur2.execute(currentval)
+        output_json2 = cur.fetchall()
+        b = output_json2
+        pformat_b = pprint.pformat(b)
+        if pformat_a == pformat_b and strip_checkin == strip_true:
+            if strip_force == '1':
+                cur.execute("UPDATE weight SET bruto = '%s' WHERE truckid = '%s';" %(bruto, strip_truckid))
+                return "Is forced and updated bruto value %s"%strip_force
+            return "Error! You already checked-in, use the 'Force = 1' option to overwrite entry..."
+        if pformat_b == pformat_jsonin or pformat_b == pformat_none: 
+            if pformat_b == pformat_none and strip_checkin == strip_true:
+                return "Error! Entering None after already being checked-in isn't going to work..."
 
+            cur.execute("INSERT INTO sessions(direction, truckid, bruto) VALUES (%s, %s, %s)", (direction, truckid, bruto))
+
+        
+        
         ischeckin = "SELECT direction='in' from weight where truckid='%s' LIMIT 1;"%strip_truckid
         ischeckout = 'SELECT truckid from weight;'
-        checkout_session = "SELECT id from sessions where truckid='%s' LIMIT 1;"%strip_truckid
+        checkout_session = "SELECT id from sessions where truckid='%s' ORDER BY created_at DESC LIMIT 1;"%strip_truckid
+        isforce = "SELECT forc from weight where truckid='%s' ORDER BY created_at DESC LIMIT 1;"%strip_truckid  ### Added ORDER BY, if not working - DELETE
 
         cur.execute(ischeckin)
         output_ischeckin = cur.fetchall()
         pformat_ischeckin = pprint.pformat(output_ischeckin)
+        strip_checkin = strip(pformat_ischeckin)
 
         cur.execute(checkout_session)
         output_checkout = cur.fetchall()
         pformat_checkout = pprint.pformat(output_checkout)
+        strip_checkoutid = strip(pformat_checkout)
 
 
-        cur2 = db.cursor()
-        cur2.execute(currentval)
-        output_json2 = cur.fetchall()
+        cur.execute(isforce)
+        output_force = cur.fetchall()
+        pformat_force = pprint.pformat(output_force)
+        strip_force = strip(pformat_force)
 
-        b = output_json2
-        pformat_b = pprint.pformat(b)
+
+        last_checkinid = "SELECT id from weight where truckid='%s' ORDER BY direction LIMIT 1;"%truckid
+
+        cur.execute(last_checkinid)
+        output_lastcheckinid = cur.fetchall()
+        pformat_lastcheckinid = pprint.pformat(output_lastcheckinid)
+        strip_lastcheckinid = strip(pformat_lastcheckinid)
+
+
+        last_checkoutid = "SELECT id FROM weight WHERE direction = 'out' ORDER BY created_at DESC LIMIT 1;"
+        cur.execute(last_checkoutid)
+        output_lastcheckoutid = cur.fetchall()
+        pformat_lastcheckoutid = pprint.pformat(output_lastcheckoutid)
+        strip_lastcheckoutid = strip(pformat_lastcheckoutid)
+
+        truckTara_query = "SELECT bruto FROM weight WHERE direction = 'out' ORDER BY created_at DESC LIMIT 1;"
+        bruto_query = "SELECT bruto from weight WHERE id = '%s';"%strip_lastcheckinid
+
+        cur.execute(bruto_query)
+        output_bruto = cur.fetchall()
+        pformat_bruto = pprint.pformat(output_bruto)
+        strip_bruto = strip(pformat_bruto)
         
+
+        cur.execute(truckTara_query)
+        output_truckTara = cur.fetchall()
+        pformat_truckTara = pprint.pformat(output_truckTara)
+        strip_truckTara = strip(pformat_truckTara)
+
+        strip_bruto = int(strip_bruto)
+        strip_truckTara = int(strip_truckTara)
+        neto = (strip_bruto - strip_truckTara)
+      
+        successin = "SELECT JSON_OBJECT('id', id, 'created', created_at, 'truckid', truckid, 'Bruto', bruto) from sessions ORDER BY created_at DESC LIMIT 1;"
+        cur.execute(successin)
+        output_successin = cur.fetchall()
+        pformat_successin = pprint.pformat(output_successin)
 
         if pformat_b == pformat_jsonout:
             if pformat_ischeckin == pformat_true:
-                return "That's the truck to checkout!"
+                cur.execute("INSERT INTO sessions(direction, truckid, bruto, truckTara, neto) VALUES (%s, %s, %s, %s, %s)", (direction, truckid, strip_bruto, truckTara, neto))
+                successout = "SELECT JSON_OBJECT('id', id, 'created', created_at, 'truckid', truckid, 'Bruto', bruto, 'truckTara', %s, 'Neto', neto) from sessions ORDER BY created_at DESC LIMIT 1;"%strip_truckTara
+                cur.execute(successout)
+                output_successout = cur.fetchall()
+
+                pformat_successout = pprint.pformat(output_successout)
+                return "Seccessfully checked-out with last entrance session ID: %s and output: %s" % (strip_checkoutid, pformat_successout) ## Thats the truck to checkout
+            else:
+                ## Checkout without check-in, raise error!
+                return "Error! Trying to checkout without any check-in..."
 
 
-        if pformat_b == pformat_jsonin and True == True:
-            cur.execute("INSERT INTO sessions(truckid, bruto, truckTara, neto) VALUES (%s, %s, %s, %s)", (truckid, bruto, truckTara, neto))
 
-            db.commit()
-
-
-        if pformat_a == pformat_b:
-            return "GREAT"
-        return "Not equal!"
-
+        return "Successfully added entry: %s"%pformat_successin
 
         conn = getMysqlConnection()
         conn.commit()
         cur.close()
-        return 'Success'
     return render_template('weight.html')
 
 @app.route('/session/<id>', methods=['GET'])
