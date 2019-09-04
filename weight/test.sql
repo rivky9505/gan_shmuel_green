@@ -56,12 +56,13 @@ CREATE TABLE IF NOT EXISTS `weight` (
   `bruto` int(12) DEFAULT NULL,
   `unit` varchar(50) DEFAULT NULL,
   `forc` BOOLEAN NOT NULL DEFAULT 0,
-  `produce` varchar(50) DEFAULT NULL, PRIMARY KEY(`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001 ;
+  `produce` varchar(50) DEFAULT NULL, PRIMARY KEY(`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001;
 
 
 
 
 INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('in', 'T-55555', 'containers', '10', 'kg', '0', 'tomatoes');
+INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('in', 'TRUCKID', 'containers', '10', 'kg', '0', 'tomatoes');
 
 
 
@@ -89,3 +90,5 @@ describe containers_registered;
 describe transactions;
 describe sessions;
 describe weight;
+
+
