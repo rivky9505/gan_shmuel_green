@@ -307,60 +307,73 @@ def postrates():
 # POST /truck
 # registers a truck in the system
 # - provider - known provider id
-# - id - the truck license plate 
+# - id - the truck license plate
+# This request needs two argumnets.
+# Implenting as a query string in url
+# http://localhost:5000/truck?id=222-33-111&name=new_provider_for_truck
 
-@app.route('/truck/<provider_id>/<truck_lisence>', methods=['GET','POST'])
-def inserttruck(provider_id, truck_lisence):
-    try:
-        db = getMysqlConnection()
-        cur = db.cursor()  
-        cur.execute('')
-        cur = connection.cursor()  
-        cur.execute('')
-        data_query2="SELECT id FROM Provider WHERE id="+str(provider_id)
-        cur = db.cursor()
-        cur.execute(data_query2)
-        if cur.fetchone() != None:
-            data_query = "INSERT  INTO Trucks (`id`,`provider_id`) VALUES  (%s,%s)"
-            data=(truck_lisence,provider_id)
-            cur.execute(data_query,data)
-        db.commit()
-        cur.close()
-        db.close()
-        return jsonify("OK")
-    except Exception as e:
-        logging.error('[POST][FAILURE] /truck/<provider_id>/<truck_lisence>' + data_query) # CHANGE TO PROPER MESSAGE
-        return str(e)
+@app.route('/truck', methods=['POST'])
+def inserttruck():
+    # get values from query string
+    result_message = ""
+    result_count_string = ""
+    truck_id = ""
+    provider_name = ""
+    if request.args.get('id') != None:
+        truck_id = request.args.get('id')
+    else:
+        logging.error('[POST][FAILURE] /truck : USER ERROR : MISSING PARAMETER IN URL QUERY')
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" })
+
+    if request.args.get('name'):
+        provider_name = request.args.get('name')
+    else:
+        logging.error('[POST][FAILURE] /truck : USER ERROR : MISSING PARAMETER IN URL QUERY')
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" })
     
-
-#FOR TESTING
-@app.route('/truck2/<provider_id>/<truck_lisence>', methods=['GET','POST'])
-def inserttruck2(provider_id, truck_lisence):
     try:
         db = getMysqlConnection()
     except:
         return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+    
     try:
-        cur = db.cursor()  
-        data_query2="SELECT id FROM Provider WHERE id="+str(provider_id)
-        cur.execute(data_query2)
-        if cur.fetchone() != None:
-            data_query = "INSERT  INTO Trucks (`id`,`provider_id`) VALUES  (%s,%s)"
-            data=(truck_lisence,provider_id)
-            cur.execute(data_query,data)
-        db.commit()
-        cur.close()
-        db.close()
-        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK" }) , 200
+        cur = db.cursor()
+        # get id of provider (owner of the truck id)
+        querystr = "SELECT id FROM Provider WHERE name = '" + provider_name + "'"
+        cur.execute(querystr)
+        query_result = cur.fetchall()
+        result_count_string = "   Result count: " + str(cur.rowcount)
+        if cur.rowcount > 0: # test if there is at least one record
+            provider_id = str(query_result[0][0])
+            # count how many records have the desired truck id
+            querystr = "SELECT COUNT(IF(id='" + truck_id + "',1, NULL)) 'id' FROM Trucks"
+            cur.execute(querystr)
+            query_result = cur.fetchall()
+            if int(query_result[0][0]) > 0: # if more than 0, then don't create the new record.
+                result_message = "[POST][FAILURE] /truck : Truck no: " + truck_id + " already exists! Cant create new truck record with the same id."
+                logging.info(result_message)
+                return jsonify({ "errorCode" : -5 , "errorDescription" : "status 200 OK"  , "result": result_message}) , 200 
+            else: # Truck is doesn't exsists -> create new record in table
+                querystr = "INSERT  INTO Trucks (`id`,`provider_id`) VALUES  ('" + truck_id + "', " + provider_id + ")"
+                cur.execute(querystr)
+                cur.close()
+                db.close()
+                result_message = "[POST][SUCCESS] /truck : Updated Truck no: " + truck_id + " for provider: " + provider_name
+                logging.info(result_message)
+                return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK"  , "result": result_message}) , 200 
+        else: # No id of provider (owner of the truck id)
+            result_message = "No provider with this name: " + provider_name
+            logging.info(result_message)
+            return jsonify({ "errorCode" : -5 , "errorDescription" : "status 200 OK"  , "result": result_message}) , 200 
     except Exception as e:
-        logging.error('[POST][FAILURE] /truck/<provider_id>/<truck_lisence>') # CHANGE TO PROPER MESSAGE
-        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
-
+        logging.error('[POST][FAILURE] /truck : QUERY:' + querystr  +" == " + str(e))
+        #return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
+        return str(e) + "\n" + querystr
 
 # PUT /truck/{id} can be used to update provider id
 # This request needs two argumnets.
 # Implenting as a query string in url
-# http://localhost:5000/truck/?id=222-33-111&name=new_provider_for_truck
+# http://localhost:5000/truck?id=222-33-111&name=new_provider_for_truck
 @app.route('/truck', methods=["PUT"])
 def updatetruck():
     # get values from query string
@@ -371,13 +384,13 @@ def updatetruck():
     if request.args.get('id') != None:
         truck_id = request.args.get('id')
     else:
-        logging.error('[PUT][FAILURE] /truck/ : USER ERROR : MISSING PARAMETER IN URL QUERY')
+        logging.error('[PUT][FAILURE] /truck : USER ERROR : MISSING PARAMETER IN URL QUERY')
         return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" })
 
     if request.args.get('name'):
         provider_name = request.args.get('name')
     else:
-        logging.error('[PUT][FAILURE] /truck/ : USER ERROR : MISSING PARAMETER IN URL QUERY')
+        logging.error('[PUT][FAILURE] /truck : USER ERROR : MISSING PARAMETER IN URL QUERY')
         return jsonify({ "errorCode" : -5 , "errorDescription" : "USER ERROR MISSING PARAMETER IN URL QUERY" })
     
     try:
@@ -411,7 +424,7 @@ def updatetruck():
                 result_message = "No Truck ID with this id: " + truck_id
                 logging.info(result_message)
                 return jsonify({ "errorCode" : -5 , "errorDescription" : "status 200 OK"  , "result": result_message}) , 200 
-        else:
+        else: # No id of provider (owner of the truck id)
             result_message = "No provider with this name: " + provider_name
             logging.info(result_message)
             return jsonify({ "errorCode" : -5 , "errorDescription" : "status 200 OK"  , "result": result_message}) , 200 
