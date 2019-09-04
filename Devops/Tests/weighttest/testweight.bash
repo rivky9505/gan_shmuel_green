@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+cd weighttest
 git clone git@github.com:greendeveleap/gan_shmuel_green.git
 cd gan_shmuel_green
 git checkout weight

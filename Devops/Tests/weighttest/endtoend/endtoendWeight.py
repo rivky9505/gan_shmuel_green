@@ -120,8 +120,7 @@ def checkUnknown():
 def checkSession(number):
     checkRequest(get , weightAPI + "/session/" + str(number))#check session
 
-def checkGETrates():
-    checkRequest(get , weightAPI + "/rates")
+
 
 def checkWeightFrom(t1to , t2from , filter):
 #TODO check the way we use to and from and fiter
@@ -146,7 +145,6 @@ def weightRequests():
     toReturn= checkUnknown() and toReturn
     toReturn= checkSession(1) and toReturn
     toReturn= checkSession(2) and toReturn
-    toReturn= checkGETrates() and toReturn
     toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato") and postBatchWeight("containers.csv") and toReturn
     return  toReturn
 
