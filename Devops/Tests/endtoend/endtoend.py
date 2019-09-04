@@ -31,12 +31,13 @@ def startReport():
         the_file.write("End2End Report: "+ str(dateNow)+'\n')
         the_file.write("******************************************"+'\n')
 
-def endReport(testResult1):
+def endReport():
+    global testResult
     global dataToEmail 
     # print ("data to email before " + dataToEmail)
-    dataToEmail = dataToEmail + "End2End Report: "+ "End Report "+ str(testResult1) +'\n'
+    dataToEmail = dataToEmail + "End2End Report: "+ "End Report "+ str(testResult) +'\n'
     with open(logfile, 'a') as the_file:
-        the_file.write("End Report "+str(testResult1) +'\n')
+        the_file.write("End Report "+str(testResult) +'\n')
         the_file.write("******************************************"+'\n')
 
 def checkRequest(methoda , urla):
@@ -59,7 +60,7 @@ def posRequest(urla , data ):
     dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\n'
     with open(logfile, 'a') as the_file:
         the_file.write("the method Post to " +str(urla)+ " got the response " +str(resp)+'\n')
-        # print("the method Post to " +str(urla)+ " got the response " +str(resp))
+        print("the method Post to " +str(urla)+ " got the response " +str(resp))
     dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\n'
     if 200 <= resp.status_code <= 299:
         return True
@@ -147,7 +148,8 @@ def weightRequests():
     toReturn= checkSession(1) and toReturn
     toReturn= checkSession(2) and toReturn
     toReturn= checkGETrates() and toReturn
-    toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato") and postBatchWeight("containers1.csv") and toReturn 
+    toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato") and toReturn
+    toReturn= postBatchWeight("containers1.csv") and toReturn 
     return  toReturn
 
     
@@ -213,7 +215,7 @@ if checkhealthWeight() == True:
 
 if checkHealthProv()  == True:
     testResult = provRequests()
-endReport(testResult)
+endReport()
 # print (dataToEmail)
 sendMail(dataToEmail)
 # checkRequest(get , "http://green.develeap.com:8080/health")

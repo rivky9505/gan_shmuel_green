@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from email.mime.text import MIMEText
 import requests as req
 import datetime
 import smtplib
@@ -28,7 +29,7 @@ testResult = True
 
 def startReport():
     global dataToEmail 
-    dataToEmail = "End2End Report Weight: "+ str(dateNow)+'\n'
+    dataToEmail = "End2End Report Weight: "+ str(dateNow)+'\r\r\n'
     with open(logfile, 'a+') as the_file:
         the_file.write("End2End Report Weight: "+ str(dateNow)+'\n')
         the_file.write("******************************************"+'\n')
@@ -37,15 +38,15 @@ def startReport():
 def endReport(testResult1):
     global dataToEmail 
     # print ("data to email before " + dataToEmail)
-    dataToEmail = dataToEmail + "End2End Report: "+ "End Report "+ str(testResult1) +'\n'
+    dataToEmail = dataToEmail + "End2End Report: "+ "End Report "+ str(testResult1) +'\r\r\n'
     with open(logfile, 'a') as the_file:
         the_file.write("End Report "+str(testResult1) +'\n')
-        the_file.write("******************************************"+'\n')
+
 
 def checkRequest(methoda , urla):
     resp = req.request(method=methoda, url=urla)
     global dataToEmail
-    dataToEmail = dataToEmail + "the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)
+    dataToEmail = dataToEmail + "the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
     with open(logfile, 'a') as the_file:
         the_file.write("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\n')
     print("the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp))
@@ -58,7 +59,7 @@ def checkRequest(methoda , urla):
 def posRequest(urla , data ):
     resp = req.post(urla, data)
     global dataToEmail
-    dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\n'
+    dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
     with open(logfile, 'a') as the_file:
         the_file.write("the method Post to " +str(urla)+ " got the response " +str(resp)+'\n')
         # print("the method Post to " +str(urla)+ " got the response " +str(resp))
@@ -69,7 +70,7 @@ def posRequest(urla , data ):
 def putRequest(urla , data ):
     resp = req.put(urla, data)
     global dataToEmail
-    dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\n'
+    dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
     with open(logfile, 'a') as the_file:
         the_file.write("the method Put to " +str(urla)+ " got the response " +str(resp)+'\n')
         # print("the method Put to " +str(urla)+ " got the response " +str(resp))
@@ -83,6 +84,7 @@ def sendMail(dataToEmail):
 
     subject = "End2End Report: "+ str(dateNow)
     body = dataToEmail
+
     email_text = """\
     From: %s
     To: %s
@@ -110,7 +112,7 @@ def checkhealthWeight():
         return checkRequest(get , weightAPI + "/health")
     except:
         global dataToEmail
-        dataToEmail = dataToEmail + "Weight ApI is down "+'\n'
+        dataToEmail = dataToEmail + "Weight ApI is down "+'\r\r\n'
         with open(logfile, 'a') as the_file:
             the_file.write("Weight ApI is down "+'\n')
 
@@ -120,8 +122,7 @@ def checkUnknown():
 def checkSession(number):
     checkRequest(get , weightAPI + "/session/" + str(number))#check session
 
-def checkGETrates():
-    checkRequest(get , weightAPI + "/rates")
+
 
 def checkWeightFrom(t1to , t2from , filter):
 #TODO check the way we use to and from and fiter
@@ -146,7 +147,6 @@ def weightRequests():
     toReturn= checkUnknown() and toReturn
     toReturn= checkSession(1) and toReturn
     toReturn= checkSession(2) and toReturn
-    toReturn= checkGETrates() and toReturn
     toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato") and postBatchWeight("containers.csv") and toReturn
     return  toReturn
 
@@ -161,7 +161,7 @@ def checkHealthProv():
         return checkRequest(get , provAPI + "/health")
     except:
         global dataToEmail
-        dataToEmail = dataToEmail + "Weight ApI is down "+'\n'
+        dataToEmail = dataToEmail + "Weight ApI is down "+'\r\r\n'
         with open(logfile, 'a') as the_file:
             the_file.write("Provider ApI is down"+'\n')
 
