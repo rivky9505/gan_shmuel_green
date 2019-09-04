@@ -90,7 +90,7 @@ def putRequest(urla , data, tof ):
         if 200 <= resp.status_code <= 299:
             return True
         return False
-     else:
+    else:
         dataToEmail = dataToEmail + "SKIP!!!! the method Put to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
         with open(logfile, 'a') as the_file:
             the_file.write("SKIP!!!! the method Put to " +str(urla)+ " got the response " +str(resp)+'\n')
