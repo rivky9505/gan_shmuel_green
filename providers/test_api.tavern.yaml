@@ -77,3 +77,24 @@ stages:
       status_code: 500
       body:
         errorCode: -4
+---
+test_name: PUT PROVIDER API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: POST RATES WRONG PARAMETERS
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/provider
+      method: PUT
+      json:
+        file: "rates2.xlsx"
+      headers:
+        content-type: application/json
+
+    # ...and the expected response code and body
+    response:
+      status_code: 500
+      body:
+        errorCode: -4

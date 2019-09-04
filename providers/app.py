@@ -14,15 +14,14 @@ import bill
 app = Flask(__name__)
 
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
-#
+
 def getMysqlConnection():
     return mysql.connector.connect(user='root', host='mysql', port='3306', password='root', database='billdb')
-
 @app.route("/")
 def hello():
     return render_template('ProviderMainPage.html')
 
-@cross_origin() # Allow all origins all methods.
+@cross_origin()
 
 
 #ERROR CODES 
@@ -116,24 +115,6 @@ def get_rates():
 # Creates a new provider record:
 # - name - provider name. must be unique.
 # Returns a unique provider id as json: { "id":<str>}
-@cross_origin() # allow all origins all methods.
-
-@app.route('/selectAll', methods=['GET'])
-def selectAll():
-    db = getMysqlConnection()
-    try:
-        data_query = "SELECT * from Provider"
-        logging.info("This is an select all request massege")
-        cur = db.cursor()
-        cur.execute(data_query)
-        
-    except Exception as e:
-        return("Error in SQL:\n", e)
-    finally:
-        output_json = cur.fetchall()
-        db.close()
-        return jsonify(results=output_json)
-        # return "Hello"
 
 
 @app.route('/provider/<provider_name>', methods=['GET','POST'])
@@ -201,8 +182,43 @@ def putprovider2(id):
         db = getMysqlConnection()
     except:
         return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+    
     try:
         newname = request.form["newname"]
+    except:
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "ERROR NO PARAMETERS PASSED" }) , 200
+        
+    try:
+        cur = db.cursor()  
+        cur.execute('UPDATE Provider SET name = ' + '"' +str(newname)+ '"' + ' WHERE id =' + id)
+        db.commit()
+        cur.close()
+        db.close()
+        logging.info('[PUT][SUCCESS] provider/<id>') 
+        return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK" }) , 200
+    except Exception as e:
+        logging.error('[PUT][FAILURE] provider/<id>') 
+        return jsonify({ "errorCode" : -1 , "errorDescription" : "500 Internal server error" }) , 500
+
+
+
+
+@app.route('/provider3', methods=['PUT'])
+def putprovider22(id):
+    try:
+        db = getMysqlConnection()
+    except:
+        return jsonify({ "errorCode" : -2 , "errorDescription" : "ERROR ESTABLISHING A DATABASE CONNECTION" }) , 200
+    
+    try:
+        json = request.get_json()
+        id = str(json["id"])
+        newname = str(json["newname"])
+        #newname = request.form["newname"]
+    except:
+        return jsonify({ "errorCode" : -5 , "errorDescription" : "ERROR NO PARAMETERS PASSED" }) , 200
+        
+    try:
         cur = db.cursor()  
         cur.execute('UPDATE Provider SET name = ' + '"' +str(newname)+ '"' + ' WHERE id =' + id)
         db.commit()
