@@ -9,6 +9,8 @@ from openpyxl import Workbook
 from openpyxl import load_workbook
 import xlsxwriter
 import os.path
+import requests
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -535,17 +537,61 @@ def truckinfo2(id):
 #   ],
 #   "total": <int> // agorot
 # }
-@app.route('/bill/<id>?from=<t1>&to=<t2>', methods=["GET"])
+@app.route('/bill/<id>', methods=["GET"])
 def getbilling(id):
     try:
-        db = getMysqlConnection()
-        cur = db.cursor()  
-        cur.execute('')
+        # id
+        result={"id" : id}
+        # name
+        name = bill.get_provider_name(id)
+        result.update({"name" : name})
+        # t1 & t2
+        now = datetime.now()
+        t1 = now.strftime("%Y%m01000000")
+        t2 = now.strftime("%Y%m%d%H%M%S")
+        if request.args.get('t1')!=None:
+            t1 = request.args.get('t1')
+        if request.args.get('t2')!=None:
+            t2 = request.args.get('t2')
+        result.update({ "from" : t1 })
+        result.update({ "to" : t1 })
+        
+        trucks_list=bill.find_providers_trucks()
+        weights_list=bill.get_all_sessions_in_array(t1,t2)
+        rates_dictionary=bill.get_rates()
+        # sessionCount
+        GlobalSessionsCount=0
+        # products
+        products={}
+        # truck_in_weights
+        trucks_in_weights=[]
+        # foreach truck - look for its sessions/weights
+        for truck in trucks_list:
+            truck_number = str(truck[0])
+            truck_sessions_count=0
+            if truck_number not in trucks_in_weights:
+                trucks_in_weights.append(truck_number)
+            universalSessionsCount += truck_sessions.len()
+            for weight in weights_list:
+                if weight["truck"] == truck_number:
+                    truck_sessions_count += 1
+                    if weight["produce"] not in products.values():
+                        products_and_neto_weihgt.update({'produce' : weight["produce"] , 'count' : 1 , 'amount' : weight["neto"] , })
+                    else:
+                        val=weight["neto"]+products_and_neto_weihgt[weight["produce"]]
+                        products_and_neto_weihgt.update({'produce' : val })
+                    
+
+
+                        
+
+                        
+                
         db.commit()
         cur.close()
         db.close()
         logging.info('[GET][SUCCESS] /bill/<id>?from=<t1>&to=<t2>') # CHANGE TO PROPER MESSAGE
-        return "OK"
+        
     except Exception as e:
         logging.error('[GET][FAILURE] /bill/<id>?from=<t1>&to=<t2>') # CHANGE TO PROPER MESSAGE
         return str(e)
