@@ -6,8 +6,8 @@ import subprocess
 app = Flask(__name__)
 
 def runEnv():
-    DeleteContainers = 'sudo docker rm $(sudo docker ps -a -q)'
-    DeleteImages = 'sudo docker rmi $(sudo docker images -q)'
+    DeleteContainers = 'sudo docker rm $(sudo docker ps -a -q) -f'
+    DeleteImages = 'sudo docker rmi $(sudo docker images -q) -f'
     DCDown = 'sudo docker-compose down'
     DCUp = 'sudo docker-compose up -d --build'
     cmd = 'pwd'
