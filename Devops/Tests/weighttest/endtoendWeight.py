@@ -11,15 +11,16 @@ gmail_password = 'Aa!123!456'
 sent_from = gmail_user
 to = ['kobiavshalom@gmail.com' , 'ofirami3@gmail.com','danielharsheffer@gmail.com' ,'hire.saar@gmail.com' ,'danarlowski11@gmail.com' ,'89leon@gmail.com' ,'tsinfob@gmail.com' ,'aannoonniimmyy57@gmail.com']
 
-weightAPI = "http://green.develeap.com:8080"
-provAPI ="http://localhost:8089"
+#weightAPI = "http://green.develeap.com:8080"
+weightAPI = "http://localhost:8081"
+provAPI ="http://green.develeap.com:8090"
 testapi = "https://api.github.com"
 get = 'GET'
 post = 'POST'
 put = 'PUT'
 delete = 'DELETE'
 testapipost = 'https://httpbin.org/post'
-logfile =  os.getcwd()+'/endtoend/logs/end2endreport.log'
+logfile = os.getcwd()+'/endtoend/logs/end2endreport.log'
 # dataToEmail = ""
 dateNow = datetime.datetime.now()
 testResult = True
@@ -27,9 +28,9 @@ testResult = True
 
 def startReport():
     global dataToEmail 
-    dataToEmail = "End2End Report Provider: "+ str(dateNow)+'\n'
-    with open(logfile, 'a') as the_file:
-        the_file.write("End2End Report Provider: "+ str(dateNow)+'\n')
+    dataToEmail = "End2End Report Weight: "+ str(dateNow)+'\n'
+    with open(logfile, 'a+') as the_file:
+        the_file.write("End2End Report Weight: "+ str(dateNow)+'\n')
         the_file.write("******************************************"+'\n')
     
 
@@ -39,7 +40,7 @@ def endReport(testResult1):
     dataToEmail = dataToEmail + "End2End Report: "+ "End Report "+ str(testResult1) +'\n'
     with open(logfile, 'a') as the_file:
         the_file.write("End Report "+str(testResult1) +'\n')
-
+        the_file.write("******************************************"+'\n')
 
 def checkRequest(methoda , urla):
     resp = req.request(method=methoda, url=urla)
@@ -78,7 +79,6 @@ def putRequest(urla , data ):
     
 #####################################################################################################
 #! Send mail
-#! Send mail
 def sendMail(dataToEmail):
 
     subject = "End2End Report: "+ str(dateNow)
@@ -111,9 +111,7 @@ def sendMail(dataToEmail):
 
 def checkhealthWeight():
     try: 
-        global testResult 
-        testResult = checkRequest(get , weightAPI + "/health")
-        return testResult 
+        return checkRequest(get , weightAPI + "/health")
     except:
         global dataToEmail
         dataToEmail = dataToEmail + "Weight ApI is down "+'\n'
@@ -153,7 +151,7 @@ def weightRequests():
     toReturn= checkSession(1) and toReturn
     toReturn= checkSession(2) and toReturn
     toReturn= checkGETrates() and toReturn
-    toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato") and toReturn
+    toReturn= postWeight('in' , 'na' , 55 ,50 ,'kg' , True , "tomato") and postBatchWeight("containers.csv") and toReturn
     return  toReturn
 
     
@@ -164,9 +162,7 @@ def weightRequests():
 
 def checkHealthProv():
     try:
-        global testResult 
-        testResult = checkRequest(get , provAPI + "/health")
-        return testResult
+        return checkRequest(get , provAPI + "/health")
     except:
         global dataToEmail
         dataToEmail = dataToEmail + "Weight ApI is down "+'\n'
@@ -216,9 +212,10 @@ def provRequests():
 #####################################################################################################
 #! Main
 startReport()
+if checkhealthWeight() == True:
+    testResult = weightRequests()
 
-if checkHealthProv()  == True:
-    testResult = provRequests()
+
 endReport(testResult)
 # print (dataToEmail)
 sendMail(dataToEmail)
