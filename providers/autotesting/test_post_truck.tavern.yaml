@@ -1,0 +1,59 @@
+# test_name: POST TRUCK API
+
+# # ...and each test has one or more stages (e.g. an HTTP request)
+# stages:
+#   - name: POST TRUCK 
+
+#     # Define the request to be made...
+#     request:
+#       url: http://green.develeap.com:8090/truck
+#       method: POST
+#       params:
+#         id: "222-33-118" #NEED TO BE CHANGED EVERY TIME
+#         name: "Provider 1"
+#     # ...and the expected response code and body
+#     response:
+#       status_code: 200
+#       body:
+#         errorCode: 0 
+# ---
+test_name: POST TRUCK API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: POST TRUCK WRONG PARAMS
+
+    # Define the request to be made...
+    request:
+      url: http://green.develeap.com:8090/truck
+      method: POST
+      params:
+        id1: 218
+        name1: "Provider 1"
+    # ...and the expected response code and body
+    response:
+      status_code: 400
+      body:
+        errorCode: -5 
+
+---
+test_name: POST TRUCK API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: POST TRUCK WRONG PARAMS
+
+    # Define the request to be made...
+    request:
+      url: http://green.develeap.com:8090/truck
+      method: POST
+      params:
+        id1: 218
+        name1: "Provider 1"
+    # ...and the expected response code and body
+    response:
+      status_code: 400
+      body:
+        errorCode: -5 
+
+
