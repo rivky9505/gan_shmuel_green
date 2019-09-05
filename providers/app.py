@@ -172,7 +172,7 @@ def inserttruck():
                 cur.execute(querystr)
                 cur.close()
                 db.close()
-                result_message = "[POST][SUCCESS] /truck : Updated Truck no: " + truck_id + " for provider: " + provider_name
+                result_message = "[POST][SUCCESS] /truck : Added new truck no: " + truck_id + " for provider: " + provider_name
                 logging.info(result_message)
                 return jsonify({ "errorCode" : 0 , "errorDescription" : "status 200 OK"  , "result": result_message}) , 200 
         else: # No id of provider (owner of the truck id)
