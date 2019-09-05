@@ -287,7 +287,7 @@ def postweight():
         pformat_b = pprint.pformat(b)
         # pformat_a is the previous direction
         # pformat_b is the current direction
-        
+
         ischeckin = "SELECT direction='in' from weight where truckid='%s' LIMIT 1;"%strip_truckid
         # ischeckout = 'SELECT truckid from weight;'
         checkout_session = "SELECT id from sessions where truckid='%s' ORDER BY created_at DESC LIMIT 1;"%strip_truckid
@@ -318,7 +318,7 @@ def postweight():
 # Open session for direction (in/none) ,truckID, bruto
             cur.execute("INSERT INTO sessions(direction, truckid, bruto) VALUES (%s, %s, %s)", (direction, truckid, bruto))
 
-                
+        
         #ischeckin = "SELECT direction='in' from weight where truckid='%s' LIMIT 1;"%strip_truckid
         # ischeckout = 'SELECT truckid from weight;'
         #checkout_session = "SELECT id from sessions where truckid='%s' ORDER BY created_at DESC LIMIT 1;"%strip_truckid
@@ -373,12 +373,12 @@ def postweight():
         strip_bruto = int(strip_bruto)
         strip_truckTara = int(strip_truckTara)
         neto = (strip_bruto - strip_truckTara)
-
+      
         containers_on_truck_query = "select containers from weight where truckid= %s" %strip_truckid
         cur.execute(containers_on_truck_query)
         output_containers_on_truck = cur.fetchall()
-        if neto != output_containers_on_truck :
-            return "ERROR neto != output_containers_on_truck "
+        # if neto != output_containers_on_truck :
+        #     return "ERROR neto != output_containers_on_truck "
       
         successin = "SELECT JSON_OBJECT('id', id, 'created', created_at, 'truckid', truckid, 'Bruto', bruto) from sessions ORDER BY created_at DESC LIMIT 1;"
         cur.execute(successin)
@@ -490,11 +490,11 @@ def session(id):
 @app.route('/session/<string:session_id>', methods=['GET'])
 def session(session_id):
     db = getMysqlConnection()
-        cur = db.cursor()
+    cur = db.cursor()
     id_query = ("SELECT * FROM  sessions WHERE id=" + "'" + session_id + "'")
     cur.execute(id_query)
-        output_session = cur.fetchall()
-        db.close()
+    output_session = cur.fetchall()
+    db.close()
     return jsonify(output_session)
 
 
