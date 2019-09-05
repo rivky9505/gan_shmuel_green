@@ -17,8 +17,7 @@ stages:
     # ...and the expected response code and body
     response:
       status_code: 200
-      body:
-        errorCode: 0    
+        
 ---
 test_name: PUT TRUCK API
 
