@@ -165,6 +165,182 @@ stages:
       status_code: 200
       body:
         errorCode: -3
+---
+test_name: GET RATES API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: GET RATES
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/rates
+      method: GET
+     
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+---
+test_name: PUT TRUCK API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: PUT TRUCK
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/truck
+      method: PUT
+      params:
+        id: "222-33-111"
+        name: "Provider 1"        
+      headers:
+        content-type: application/text
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: 0    
+---
+test_name: PUT TRUCK API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: MISSING PARAMETERS
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/truck
+      method: PUT
+      params:
+        name: "Provider 1"        
+      headers:
+        content-type: application/text
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: -5  
+---
+test_name: PUT TRUCK API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: MISSING PARAMETERS
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/truck
+      method: PUT
+      params:
+        id: "222-33-111"
+        name: "Provider"        
+      headers:
+        content-type: application/text
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: -5  
+---
+test_name: GET TRUCK API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: GET TRUCK CHECK
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/truck/c-11111
+      method: GET
+      params:
+        from: "09950326000000"
+        to: "30000000000000"        
+      
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: 0  
+---
+test_name: POST PROVIDER API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: POST Provider
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/provider/10001
+      method: POST
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: 0 
+---
+# test_name: POST TRUCK API
+
+# # ...and each test has one or more stages (e.g. an HTTP request)
+# stages:
+#   - name: POST TRUCK 
+
+#     # Define the request to be made...
+#     request:
+#       url: http://0.0.0.0:5000/truck
+#       method: POST
+#       params:
+#         id: "222-33-118" #NEED TO BE CHANGED EVERY TIME
+#         name: "Provider 1"
+#     # ...and the expected response code and body
+#     response:
+#       status_code: 200
+#       body:
+#         errorCode: 0 
+# ---
+test_name: POST TRUCK API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: POST TRUCK WRONG PARAMS
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/truck
+      method: POST
+      params:
+        id1: 218
+        name1: "Provider 1"
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: -5 
+
+---
+test_name: POST TRUCK API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: POST TRUCK WRONG PARAMS
+
+    # Define the request to be made...
+    request:
+      url: http://0.0.0.0:5000/truck
+      method: POST
+      params:
+        id1: 218
+        name1: "Provider 1"
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: -5 
 
 
 

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>KOBI</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <style>
+        .btn-success{
+            width: 300px;
+            height: 100px;
+          margin-left: 40px;
+        } 
+        </style>
+</head>
+<body>
+    <center>
+        <div class="jumbotron">
+            <h2>DevOps (Green Team)</h2> 
+        </div>                
+        <div class="container">
+            <h1></h1>
+        </div>
+        <br>
+        <table width=90%>
+            <tr>
+                <td width=25%>
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row no-gutters">
+                            <div class="col-md-4">
+                                <img src="data:image/jpeg;base64,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" class="card-img" alt="...">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">GitHub Repository</h5>
+                                    <p class="card-text">Create a GitHub Repository. Limit access to the repo via SSH. Manage the repository and restrict access to the master branch by implementing pull requests and code review.</p>
+                                    <p class="card-text"><small class="text-muted">Day 1</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row no-gutters">
+                            <div class="col-md-4">
+                                <img src="https://flowdocs.built.io/assets/blt77efe3a848b3957a/aws-128.png" class="card-img" alt="...">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">Configure AWS Server</h5>
+                                    <p class="card-text">Taking care of applications infrastracture. Dockerize, Ports etc.</p>
+                                    <p class="card-text"><small class="text-muted">Day 1</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row no-gutters">
+                            <div class="col-md-4">
+                                <img src="https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/128x128/plain/cloud_upload.png" class="card-img" alt="...">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">Manual Deploy To Production</h5>
+                                    <p class="card-text">Manual deploy tested verion to production.</p>
+                                    <p class="card-text"><small class="text-muted">Day 1</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card mb-3" style="max-width: 540px;">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    <img src="https://cdn3.iconfinder.com/data/icons/filled-outline-2/64/solution-check-integration-gear-128.png" class="card-img" alt="...">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">CI Server</h5>
+                                        <p class="card-text">Create a custom CI Server that will automate the integration proccess from build to production.</p>
+                                        <p class="card-text"><small class="text-muted">Day 2</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><br>
+                        <div class="card mb-3" style="max-width: 540px;">
+                                <div class="row no-gutters">
+                                    <div class="col-md-4">
+                                        <img src="https://image.flaticon.com/icons/png/128/2043/2043163.png" class="card-img" alt="...">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title">E2E Testing</h5>
+                                            <p class="card-text">Writing bunch of tests. Sending diffrenet requests with diffrenet params to test the stability and functionality of the APIs.</p>
+                                            <p class="card-text"><small class="text-muted">Day 2-4</small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                </td>
+                <td width=25%>
+                        <div class="card mb-3" style="max-width: 540px;">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    <img src="https://cdn2.iconfinder.com/data/icons/industry-filled-outline-3/340/technology_industry_welding_machine_industrial_manufacturing_factory_production-128.png" class="card-img" alt="...">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Production Envioroment on AWS</h5>
+                                        <p class="card-text">Adding branch seperation using GitHUb Webhooks. Modify docker-compse files to fit the production configuration. Fire up the latest working version of the application to the production.</p>
+                                        <p class="card-text"><small class="text-muted">Day 2</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><br>
+                        <div class="card mb-3" style="max-width: 540px;">
+                                <div class="row no-gutters">
+                                    <div class="col-md-4">
+                                        <img src="https://cdn2.iconfinder.com/data/icons/nuclear-element-filledoutlune/64/lab-flask-flasks-test_tubes-laboratory-chemical-education-test-chemistry-science-128.png" class="card-img" alt="...">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Test Envioroment</h5>
+                                            <p class="card-text">Create a testing enviorment on server and add the E2E testing functionality to the enviorment.</p>
+                                            <p class="card-text"><small class="text-muted">Day 2-4</small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><br>
+                            <div class="card mb-3" style="max-width: 540px;">
+                                    <div class="row no-gutters">
+                                        <div class="col-md-4">
+                                            <img src="https://cdn2.iconfinder.com/data/icons/data-network-collection-1/64/Data-data_integration-data_management-integration-128.png" class="card-img" alt="...">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Implement RollBack</h5>
+                                                <p class="card-text">Adding RollBack function to the CI Server which allows to reverting back to the last working production version and vice versa.</p>
+                                                <p class="card-text"><small class="text-muted">Day 4</small></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="card mb-3" style="max-width: 540px;">
+                                    <div class="row no-gutters">
+                                        <div class="col-md-4">
+                                            <img src="https://cdn4.iconfinder.com/data/icons/flat-pro-database-set-1/32/cloud-server-128.png" class="card-img" alt="...">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Integrate To CI Server</h5>
+                                                <p class="card-text">Adding all E2E tests and test enviorment into the live CI Server.</p>
+                                                <p class="card-text"><small class="text-muted">Day 4</small></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="card mb-3" style="max-width: 540px;">
+                                    <div class="row no-gutters">
+                                        <div class="col-md-4">
+                                            <img src="https://cdn4.iconfinder.com/data/icons/materia-flat-arrows-symbols-vol-6/24/018_282_ok_done_check_finished-128.png" class="card-img" alt="...">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Adding UI and Finishing the DevOps job!</h5>
+                                                <p class="card-text"> </p>
+                                                <p class="card-text"><small class="text-muted">Day 5</small></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                </td>
+                <td width=25%>
+                    <center>
+                    <a href="http://green.develeap.com:8085/rollback" class="btn btn-success btn-lg active" role="button" aria-pressed="true">RollBack</a>
+                    <br>
+                    <br>
+                    <h3>DevOps Team:</h3>
+                    <br>
+                    <h4>Kobi</h4>
+                    <h4>Roi</h4>
+                    <h4>Dan</h4>
+                </center>
+                </td>
+            </tr>
+        </table>
+    </center>
+</body>
+</html>

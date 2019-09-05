@@ -19,12 +19,12 @@ sleep 3
 docker-compose down
 
 #checklog
-status=$(python3 testlog.py)
+status=$(sudo python3 testlog.py)
 
 #remove log+repo+docker images
 rm -rf gan_shmuel_green
 rm "$SCRIPTPATH"/endtoend/logs/end2endreport.log
-docker rmi $(docker images -q) --force
+docker rmi $(sudo docker images -q) --force
 
 #print 0 if all tests pass else 1
 if [ $status -eq 0 ]

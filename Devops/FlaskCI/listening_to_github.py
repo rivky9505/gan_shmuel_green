@@ -3,7 +3,7 @@ import os
 from time import sleep
 import subprocess
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='./Templates/')
 
 def runEnv():
     DCDown = 'sudo docker-compose down'
@@ -15,6 +15,8 @@ def runEnv():
     sleep(2)
     os.system(DCUp)
 def mainFunc():
+    DeleteContainers = 'sudo docker rm $(sudo docker ps -a -q) -f'
+    DeleteImages = 'sudo docker rmi $(sudo docker images -q) -f'
     os.chdir('/home/ubuntu/prod')
     deleteRollback = 'rm -rf rollback/gan_shmuel_green/'
     copytoRollback = 'cp -r gan_shmuel_green/ rollback/'
@@ -43,6 +45,10 @@ def mainFunc():
     os.system(copyGlobalDCF)
     print ("New DC file added to the repo")
     sleep(2)
+    os.system(DeleteContainers)
+    sleep(10)
+    os.system(DeleteImages)
+    sleep(10)
     runEnv()
     sleep(3)
     os.chdir('/home/ubuntu/prod/gan_shmuel_green/weight')
@@ -59,10 +65,13 @@ def test(sb):
         if sb == "master":
                 res = subprocess.call("/home/ubuntu/temp/gan_shmuel_green/Devops/Tests/test.bash %s" % ("-m"), shell=True)
                 print (res)
+                if res == 0: 
+                        mainFunc()
                 print ("*****END*****")
         if sb == "weight":
                 res = subprocess.call("/home/ubuntu/temp/gan_shmuel_green/Devops/Tests/test.bash %s" % ("-w"), shell=True)
                 print (res)
+                if res == 0:
                 print ("*****END*****")
         if sb == "provider":
                 res = subprocess.call("/home/ubuntu/temp/gan_shmuel_green/Devops/Tests/test.bash %s" % ("-p"), shell=True)
@@ -102,9 +111,8 @@ def rollBack():
         runEnv()
 
 @app.route('/')
-def api():
-        strd = "Happy birthday"
-        return str(strd.find("py"))
+def root():
+        return app.send_static_file('index.html')
 
 @app.route('/rollback')
 def roll_back():
@@ -121,7 +129,7 @@ def api_gh_message():
         if branch == "master":
                 print ("its a master")
                 test("master")
-                mainFunc()
+                #mainFunc()
         if branch == "weight":
                 print ("its a weight")
                 test("weight")

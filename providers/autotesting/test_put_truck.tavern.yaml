@@ -1,0 +1,64 @@
+test_name: PUT TRUCK API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: PUT TRUCK
+
+    # Define the request to be made...
+    request:
+      url: http://green.develeap.com:8090/truck
+      method: PUT
+      params:
+        id: "222-33-111"
+        name: "Provider 1"        
+      headers:
+        content-type: application/text
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+        
+---
+test_name: PUT TRUCK API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: MISSING PARAMETERS
+
+    # Define the request to be made...
+    request:
+      url: http://green.develeap.com:8090/truck
+      method: PUT
+      params:
+        name: "Provider 1"        
+      headers:
+        content-type: application/text
+
+    # ...and the expected response code and body
+    response:
+      status_code: 400
+      body:
+        errorCode: -5  
+---
+test_name: PUT TRUCK API
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: MISSING PARAMETERS
+
+    # Define the request to be made...
+    request:
+      url: http://green.develeap.com:8090/truck
+      method: PUT
+      params:
+        id: "222-33-111"
+        name: "Providersss"        
+      headers:
+        content-type: application/text
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body:
+        errorCode: -5  
+
