@@ -190,7 +190,7 @@ startReport()
 
 if checkHealthProv()  == True:
     testResult = provRequests()
-else: 
+else:
     testResult = None
     
 endReport(testResult)
