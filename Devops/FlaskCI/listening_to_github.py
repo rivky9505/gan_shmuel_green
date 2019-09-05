@@ -69,7 +69,6 @@ def test(sb):
         if sb == "weight":
                 res = subprocess.call("/home/ubuntu/temp/gan_shmuel_green/Devops/Tests/test.bash %s" % ("-w"), shell=True)
                 print(res)
-                if res == 0:
                 print("*****END*****")
         if sb == "provider":
                 res = subprocess.call("/home/ubuntu/temp/gan_shmuel_green/Devops/Tests/test.bash %s" % ("-p"), shell=True)
