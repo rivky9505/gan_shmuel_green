@@ -264,6 +264,7 @@ def postweight():
         forc = request.args.get('forc')
         truckTara = request.args.get('bruto')
         produce = request.args.get('produce')
+        return "1"
 
 
         cur = db.cursor()
@@ -449,24 +450,21 @@ def getweight():
 
                     retweight = { 'id': line[0], 'truck': line[3],'direction': line[2], 'bruto': line[5], 'neto': neto, 'produce': line[8], 'containers': str(line[4]).split(',') }
                     weightsList.append(retweight)
-    return jsonify({'weights': weightsList})                    
+    return jsonify({'weights': weightsList})  
+
+
+@app.route('/session/<string:session_id>', methods=['GET'])
+def session(session_id):
+    db = getMysqlConnection()
+    cur = db.cursor()
+    id_query = ("SELECT * FROM  sessions WHERE id=" + "'" + session_id + "'")
+    cur.execute(id_query)
+    output_session = cur.fetchall()
+    db.close()
+    return jsonify(output_session)
+
+
 
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
-
-@app.route('/session/<id>', methods=['GET'])
-def session(id):
-    db = getMysqlConnection()
-    if request.method == 'GET':
-
-        getsession = "SELECT JSON_ARRAYAGG(JSON_OBJECT('id', id, 'created', created_at, 'truckid', truckid, 'Bruto', bruto, 'truckTara', truckTara, 'Neto', neto)) from sessions where id='%s'" %id
-
-
-        cur = db.cursor()
-        cur.execute(getsession)
-        output_session = cur.fetchall()
-        db.close()
-        return jsonify(output_session)
-
-    return jsonify(results=output_session)
