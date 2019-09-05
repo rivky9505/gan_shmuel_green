@@ -264,7 +264,7 @@ def postweight():
  #       forc = request.args.get('forc')
 #        truckTara = request.args.get('bruto')
 #        produce = request.args.get('produce')
-       
+
 
 
         cur = db.cursor()
@@ -299,13 +299,13 @@ def postweight():
         output_ischeckin = cur.fetchall()
         pformat_ischeckin = pprint.pformat(output_ischeckin)
         strip_checkin = strip(pformat_ischeckin)
-        
+
         cur.execute(checkout_session)
         output_checkout = cur.fetchall()
         pformat_checkout = pprint.pformat(output_checkout)
         strip_checkoutid = strip(pformat_checkout)
 
-
+        
         cur.execute(isforce)
         output_force = cur.fetchall()
         pformat_force = pprint.pformat(output_force)
@@ -449,8 +449,8 @@ def postweight():
         containers_on_truck_query = "select containers from weight where truckid= %s" %strip_truckid
         cur.execute(containers_on_truck_query)
         output_containers_on_truck = cur.fetchall()
-        if neto != output_containers_on_truck :
-            return "ERROR neto != output_containers_on_truck "
+        # if neto != output_containers_on_truck :
+        #     return "ERROR neto != output_containers_on_truck "
       
         successin = "SELECT JSON_OBJECT('id', id, 'created', created_at, 'truckid', truckid, 'Bruto', bruto) from sessions ORDER BY created_at DESC LIMIT 1;"
         cur.execute(successin)
@@ -533,40 +533,40 @@ if __name__ == "__main__":
 @app.route('/session/<id>', methods=['GET'])
 def session(id):
     db = getMysqlConnection()
-    serverTime = datetime.datetime.now().strftime("%Y%m%d%I%M%S")
-    t1 = request.form.get('from', default = serverTime , type = str)
-    t2 = request.form.get('to', default = "now" , type = str)
-    filter = request.form.get('filter', default = "in,out,none" , type = str)
-    filter = str(filter).split(',')
+            serverTime = datetime.datetime.now().strftime("%Y%m%d%I%M%S")
+            t1 = request.form.get('from', default = serverTime , type = str)
+            t2 = request.form.get('to', default = "now" , type = str)
+            filter = request.form.get('filter', default = "in,out,none" , type = str)
+            filter = str(filter).split(',')
         # data_query = ("SELECT * FROM  sessions WHERE created_at>="  + from_t1 +" AND created_at<=" + to_t2 + " AND truckid=" + "'" +id_num +"'" + "ORDER BY created_at ASC")
 
-    lines = "select * from weight where " + "created_at>='" + t1 + "' and created_at<='" + t2 + "'"
-    cur = db.cursor()
-    cur.execute(lines)
-    output_transactions = cur.fetchall()
+            lines = "select * from weight where " + "created_at>='" + t1 + "' and created_at<='" + t2 + "'"
+            cur = db.cursor()
+            cur.execute(lines)
+            output_transactions = cur.fetchall()
 
-    weightsList = []
+            weightsList = []
 
-    for line in output_transactions :
-        if line[2] in filter :
-            if any(item in str(line[4]).split(',')  for item in get_unknown()):
-                neto = None
-            else:
-                neto = line[7]
+            for line in output_transactions :
+                if line[2] in filter :
+                    if any(item in str(line[4]).split(',')  for item in get_unknown()):
+                        neto = None
+                    else:
+                        neto = line[7]
 
-            retweight = { 'id': line[0], 'truck': line[3],'direction': line[2], 'bruto': line[5], 'neto': neto, 'produce': line[8], 'containers': str(line[4]).split(',') }
-            weightsList.append(retweight)
+                    retweight = { 'id': line[0], 'truck': line[3],'direction': line[2], 'bruto': line[5], 'neto': neto, 'produce': line[8], 'containers': str(line[4]).split(',') }
+                    weightsList.append(retweight)
     return jsonify({'weights': weightsList})  
 
 
 @app.route('/session/<string:session_id>', methods=['GET'])
 def session(session_id):
     db = getMysqlConnection()
-    cur = db.cursor()
+        cur = db.cursor()
     id_query = ("SELECT * FROM  sessions WHERE id=" + "'" + session_id + "'")
     cur.execute(id_query)
-    output_session = cur.fetchall()
-    db.close()
+        output_session = cur.fetchall()
+        db.close()
     return jsonify(output_session)
 
 
