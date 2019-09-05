@@ -290,3 +290,15 @@ the method Put to http://green.develeap.com:8090/provider got the response <Resp
 the method Post to http://green.develeap.com:8090/truck?id=2212&name=1111111 got the response <Response [200]>
 the method Put to http://green.develeap.com:8090/truck?id=222-33-111&name=Provider 1 got the response <Response [200]>
 End Report True
+End2End Report Provider: 2019-09-05 11:32:01.271536
+******************************************
+Weight ApI is down 
+End Report None
+End2End Report Provider: 2019-09-05 11:34:00.734347
+******************************************
+Provider ApI is down
+End Report None
+End2End Report Provider: 2019-09-05 11:34:27.458485
+******************************************
+Provider ApI is down
+End Report None

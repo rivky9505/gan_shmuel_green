@@ -12,15 +12,15 @@ sent_from = gmail_user
 to = ['kobiavshalom@gmail.com' , 'ofiramit3@gmail.com','danielharsheffer@gmail.com' ,'hire.saar@gmail.com' ,'danarlowski11@gmail.com' ,'89leon@gmail.com' ,'tsinfob@gmail.com' ,'aannoonniimmyy57@gmail.com']
 
 weightAPI = "http://green.develeap.com:8080"
-provAPI ="http://green.develeap.com:8090"
+provAPI ="http://localhost:8089"
 testapi = "https://api.github.com"
 get = 'GET'
 post = 'POST'
 put = 'PUT'
 delete = 'DELETE'
 testapipost = 'https://httpbin.org/post'
-# logfile =  os.getcwd()+'/endtoend/logs/end2endreport.log'
-logfile = 'end2endreport.log'
+logfile =  os.getcwd()+'/endtoend/logs/end2endreport.log'
+# logfile = 'end2endreport.log'
 
 # dataToEmail = ""
 dateNow = datetime.datetime.now()

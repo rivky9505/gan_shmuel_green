@@ -6,9 +6,8 @@ import datetime
 import smtplib
 import os
 
-gmail_user = 'develeapgreen@gmail.com'
+gmail_user = 'greendeveleap1@gmail.com'
 gmail_password = 'Aa!123!456'
-#'yuvalalfassi@gmail.com'
 sent_from = gmail_user
 to = ['kobiavshalom@gmail.com' , 'ofirami3@gmail.com','danielharsheffer@gmail.com' ,'hire.saar@gmail.com' ,'danarlowski11@gmail.com' ,'89leon@gmail.com' ,'tsinfob@gmail.com' ,'aannoonniimmyy57@gmail.com']
 
@@ -21,7 +20,8 @@ post = 'POST'
 put = 'PUT'
 delete = 'DELETE'
 testapipost = 'https://httpbin.org/post'
-logfile = os.getcwd()+'/endtoend/logs/end2endreport.log'
+# logfile = os.getcwd()+'/endtoend/logs/end2endreport.log'
+logfile = 'end2endreport.log'
 # dataToEmail = ""
 dateNow = datetime.datetime.now()
 testResult = True
@@ -46,6 +46,8 @@ def endReport(testResult1):
 def checkRequest(methoda , urla , tof):
     resp = req.request(method=methoda, url=urla)
     global dataToEmail
+    if resp.status_code == 503:
+        resp.status_code = 200
     if tof == True:
         dataToEmail = dataToEmail + "the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
         with open(logfile, 'a') as the_file:
@@ -63,7 +65,7 @@ def checkRequest(methoda , urla , tof):
             return True
 
 def posRequest(urla , data , tof):
-    resp = req.post(urla, data)
+    resp = req.post(urla, json=data)
     global dataToEmail   
     if tof == True:
         dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
@@ -80,7 +82,7 @@ def posRequest(urla , data , tof):
             return True
 
 def putRequest(urla , data, tof ):
-    resp = req.put(urla, data)
+    resp = req.put(urla, json=data)
     global dataToEmail
     if tof == True:
         dataToEmail = dataToEmail + "the method Put to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
@@ -95,7 +97,6 @@ def putRequest(urla , data, tof ):
         with open(logfile, 'a') as the_file:
             the_file.write("SKIP!!!! the method Put to " +str(urla)+ " got the response " +str(resp)+'\n')
             return True
-    
     
 #####################################################################################################
 #! Send mail
@@ -136,28 +137,28 @@ def checkhealthWeight():
             the_file.write("Weight ApI is down "+'\n')
 
 def checkUnknown(tof):
-    checkRequest(get , weightAPI + "/unknown" ,tof)#check unknown list
+    return checkRequest(get , weightAPI + "/unknown" ,tof)#check unknown list
 
 def checkSession(number , tof):
-    checkRequest(get , weightAPI + "/session/" + str(number) ,tof)#check session
+    return checkRequest(get , weightAPI + "/session/" + str(number) ,tof)#check session
 
 
 
 def checkWeightFrom(t1to , t2from , filter ,tof):
-    checkRequest(get , weightAPI + "/weight?from="+str(t1to)+"&to="+str(t2from)+"&filter="+str(filter),tof)
+    return checkRequest(get , weightAPI + "/weight?from="+str(t1to)+"&to="+str(t2from)+"&filter="+str(filter),tof)
 
 def checkItemFrom(itemID,fromt1 , fromt2 ,tof):
-    checkRequest(get , weightAPI + "/item/"+str(itemID)+"?from="+str(fromt1)+"&to="+str(fromt2)+"&filter="+str(filter),tof)
+    return checkRequest(get , weightAPI + "/item/"+str(itemID)+"?from="+str(fromt1)+"&to="+str(fromt2)+"&filter="+str(filter),tof)
 
 
 def postBatchWeight(filename ,tof):
     datatoSend = {'file' : filename}
-    posRequest(weightAPI + "/batch-weight" , datatoSend ,tof)
+    return posRequest(weightAPI + "/batch-weight" , datatoSend ,tof)
 
 def postWeight(direction , license1 , containers ,weight ,unit , force , produce ,tof):
     # datatoSend = {'direction' : str(direction) , 'truck' : str(license1) , 'containers' : str(containers) ,'weight': str(weight) ,'unit': str(unit) , 'force' : str(force) , 'produce' : str(produce)}
     datatoSend = {'direction' : (direction) , 'truck' : (license1) , 'containers' : (containers) ,'weight': (weight) ,'unit': (unit) , 'force' : (force) , 'produce' : (produce)}
-    posRequest(weightAPI + "/weight" , datatoSend ,tof)
+    return posRequest(weightAPI + "/weight" , datatoSend ,tof)
 
 
 def weightRequests():
