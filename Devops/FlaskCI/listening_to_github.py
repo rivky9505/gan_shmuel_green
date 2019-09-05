@@ -3,7 +3,7 @@ import os
 from time import sleep
 import subprocess
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='./Templates/')
 
 def runEnv():
     DCDown = 'sudo docker-compose down'
@@ -108,10 +108,8 @@ def rollBack():
         runEnv()
 
 @app.route('/')
-def api():
-        test("master")
-        strd = "Happy birthday"
-        return str(strd.find("py"))
+def root():
+        return app.send_static_file('index.html')
 
 @app.route('/rollback')
 def roll_back():
