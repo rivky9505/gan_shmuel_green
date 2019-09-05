@@ -1,2 +1,9 @@
 werkzeug - WARNING -  * Debugger is active!
-werkzeug - INFO -  * Debugger PIN: 324-079-963
+werkzeug - INFO -  * Debugger PIN: 953-120-973
+werkzeug - INFO - 192.168.192.1 - - [05/Sep/2019 09:54:37] "GET /weight HTTP/1.1" 200 -
+werkzeug - INFO - 192.168.192.1 - - [05/Sep/2019 09:54:44] "POST /weight HTTP/1.1" 200 -
+werkzeug - INFO - 192.168.192.1 - - [05/Sep/2019 09:54:48] "GET /weight HTTP/1.1" 200 -
+werkzeug - INFO - 192.168.192.1 - - [05/Sep/2019 09:54:54] "POST /weight HTTP/1.1" 200 -
+werkzeug - INFO - 192.168.192.1 - - [05/Sep/2019 09:54:56] "GET /weight HTTP/1.1" 200 -
+werkzeug - INFO - 192.168.192.1 - - [05/Sep/2019 09:55:01] "POST /weight HTTP/1.1" 200 -
+werkzeug - INFO - 192.168.192.1 - - [05/Sep/2019 09:55:02] "GET /weight HTTP/1.1" 200 -
