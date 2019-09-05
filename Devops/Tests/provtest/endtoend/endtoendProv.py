@@ -5,7 +5,7 @@ import datetime
 import smtplib
 import os
 
-gmail_user = 'greendeveleap1@gmail.com'
+gmail_user = 'greendeveleap2@gmail.com'
 gmail_password = 'Aa!123!456'
 #'yuvalalfassi@gmail.com'
 sent_from = gmail_user

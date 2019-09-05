@@ -6,7 +6,7 @@ import datetime
 import smtplib
 import os
 
-gmail_user = 'greendeveleap1@gmail.com'
+gmail_user = 'greendeveleap2@gmail.com'
 gmail_password = 'Aa!123!456'
 sent_from = gmail_user
 to = ['kobiavshalom@gmail.com' , 'ofirami3@gmail.com','danielharsheffer@gmail.com' ,'hire.saar@gmail.com' ,'danarlowski11@gmail.com' ,'89leon@gmail.com' ,'tsinfob@gmail.com' ,'aannoonniimmyy57@gmail.com']
@@ -132,9 +132,9 @@ def sendMail(dataToEmail):
 def checkhealthWeight():
     try: 
         return checkRequest(get , weightAPI + "/health" , True)
-    except as e:
+    except:
         global dataToEmail
-        dataToEmail = dataToEmail + "Weight ApI is down "+ str(e) +'\r\r\n'
+        dataToEmail = dataToEmail + "Weight ApI is down " +'\r\r\n'
         with open(logfile, 'a') as the_file:
             the_file.write("Weight ApI is down "+'\n')
 
