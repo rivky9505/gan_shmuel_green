@@ -250,23 +250,11 @@ def postweight():
         pformat_b = pprint.pformat(b)
         
         strip_checkin = ""
-
-        if pformat_a == pformat_b and strip_checkin == strip_true:
-            if strip_force == '1':
-                cur.execute("UPDATE weight SET bruto = '%s' WHERE truckid = '%s';" %(bruto, strip_truckid))
-                return "Is forced and updated bruto value %s"%strip_force
-            return "Error! You already checked-in, use the 'Force = 1' option to overwrite entry..."
-        if pformat_b == pformat_jsonin or pformat_b == pformat_none: 
-            if pformat_b == pformat_none and strip_checkin == strip_true:
-                return "Error! Entering None after already being checked-in isn't going to work..."
-
-            cur.execute("INSERT INTO sessions(direction, truckid, bruto) VALUES (%s, %s, %s)", (direction, truckid, bruto))
-
-                
+        
         ischeckin = "SELECT direction='in' from weight where truckid='%s' LIMIT 1;"%strip_truckid
         ischeckout = 'SELECT truckid from weight;'
         checkout_session = "SELECT id from sessions where truckid='%s' ORDER BY created_at DESC LIMIT 1;"%strip_truckid
-        isforce = "SELECT forc from weight where truckid='%s' ORDER BY created_at DESC LIMIT 1;"%strip_truckid  ### Added ORDER BY, if not working - DELETE
+#        isforce = "SELECT forc from weight where truckid='%s' ORDER BY created_at DESC LIMIT 1;"%strip_truckid  ### Added ORDER BY, if not working - DELETE
 
         cur.execute(ischeckin)
         output_ischeckin = cur.fetchall()
@@ -279,10 +267,49 @@ def postweight():
         strip_checkoutid = strip(pformat_checkout)
 
 
+
+        isforce = "SELECT forc from weight where truckid='%s' ORDER BY created_at DESC LIMIT 1;"%strip_truckid 
         cur.execute(isforce)
         output_force = cur.fetchall()
         pformat_force = pprint.pformat(output_force)
         strip_force = strip(pformat_force)
+
+
+
+        if pformat_a == pformat_b and strip_checkin == strip_true:
+            if strip_force == '1':
+                cur.execute("UPDATE weight SET bruto = '%s' WHERE truckid = '%s';" %(bruto, strip_truckid))
+                return "Is forced and updated bruto value %s"%strip_force
+            else:
+
+                return "Error! You already checked-in, use the 'Force = 1' option to overwrite entry..."
+        if pformat_b == pformat_jsonin or pformat_b == pformat_none: 
+            if pformat_b == pformat_none and strip_checkin == strip_true:
+                return "Error! Entering None after already being checked-in isn't going to work..."
+
+            cur.execute("INSERT INTO sessions(direction, truckid, bruto) VALUES (%s, %s, %s)", (direction, truckid, bruto))
+
+                
+       # ischeckin = "SELECT direction='in' from weight where truckid='%s' LIMIT 1;"%strip_truckid
+       # ischeckout = 'SELECT truckid from weight;'
+        #checkout_session = "SELECT id from sessions where truckid='%s' ORDER BY created_at DESC LIMIT 1;"%strip_truckid
+#        isforce = "SELECT forc from weight where truckid='%s' ORDER BY created_at DESC LIMIT 1;"%strip_truckid  ### Added ORDER BY, if not working - DELETE
+
+       # cur.execute(ischeckin)
+      #  output_ischeckin = cur.fetchall()
+     #   pformat_ischeckin = pprint.pformat(output_ischeckin)
+    #    strip_checkin = strip(pformat_ischeckin)
+
+   #     cur.execute(checkout_session)
+  #      output_checkout = cur.fetchall()
+ #       pformat_checkout = pprint.pformat(output_checkout)
+#        strip_checkoutid = strip(pformat_checkout)
+
+
+#        cur.execute(isforce)
+ #       output_force = cur.fetchall()
+  #      pformat_force = pprint.pformat(output_force)
+   #     strip_force = strip(pformat_force)
 
 
         last_checkinid = "SELECT id from weight where truckid='%s' ORDER BY direction LIMIT 1;"%truckid
