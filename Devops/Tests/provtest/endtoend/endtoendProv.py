@@ -76,9 +76,9 @@ def posRequest(urla , data , tof):
             return True
         return False
     else:
-        dataToEmail = dataToEmail + "SKIP!!!! the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
+        dataToEmail = dataToEmail + "SKIP!!!! the method Post " + " to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
         with open(logfile, 'a') as the_file:
-            the_file.write("SKIP!!!! the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\n')
+            the_file.write("SKIP!!!! the method Post " + " to " +str(urla)+ " got the response " +str(resp)+'\n')
             return True
 
 def putRequest(urla , data, tof ):

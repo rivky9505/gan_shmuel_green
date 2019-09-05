@@ -302,3 +302,126 @@ End2End Report Provider: 2019-09-05 11:34:27.458485
 ******************************************
 Provider ApI is down
 End Report None
+End2End Report Provider: 2019-09-05 11:38:35.160180
+******************************************
+the method GET to http://green.develeap.com:8090/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8090/unknown got the response <Response [404]>
+SKIP!!!! the method GET to http://green.develeap.com:8090/session/10001 got the response <Response [404]>
+SKIP!!!! the method GET to http://green.develeap.com:8090/session/10002 got the response <Response [404]>
+SKIP!!!! the method GET to http://green.develeap.com:8090/weight?from=100011111111&to=201901111111&filter=in got the response <Response [404]>
+the method GET to http://green.develeap.com:8090/item/T-55555?from=100011111111&to=201901111111&filter=<class 'filter'> got the response <Response [404]>
+the method Post to http://green.develeap.com:8090/weight got the response <Response [404]>
+the method Post to http://green.develeap.com:8090/batch-weight got the response <Response [404]>
+End Report False
+End2End Report Provider: 2019-09-05 11:39:57.234669
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+SKIP!!!! the method GET to http://green.develeap.com:8080/session/10001 got the response <Response [200]>
+SKIP!!!! the method GET to http://green.develeap.com:8080/session/10002 got the response <Response [200]>
+SKIP!!!! the method GET to http://green.develeap.com:8080/weight?from=100011111111&to=201901111111&filter=in got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/item/T-55555?from=100011111111&to=201901111111&filter=<class 'filter'> got the response <Response [200]>
+the method Post to http://green.develeap.com:8080/weight got the response <Response [500]>
+the method Post to http://green.develeap.com:8080/batch-weight got the response <Response [500]>
+End Report False
+End2End Report Provider: 2019-09-05 11:46:41.183225
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+SKIP!!!! the method GET to http://green.develeap.com:8080/session/10001 got the response <Response [200]>
+SKIP!!!! the method GET to http://green.develeap.com:8080/session/10002 got the response <Response [200]>
+SKIP!!!! the method GET to http://green.develeap.com:8080/weight?from=100011111111&to=201901111111&filter=in got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/item/T-55555?from=100011111111&to=201901111111&filter=<class 'filter'> got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+End Report True
+End2End Report Provider: 2019-09-05 11:47:28.529388
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10001 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10002 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/weight?from=100011111111&to=201901111111&filter=in got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/item/T-55555?from=100011111111&to=201901111111&filter=<class 'filter'> got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+End Report True
+End2End Report Provider: 2019-09-05 11:48:08.701243
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10001 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10002 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/weight?from=100011111111&to=201901111111&filter=in got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/item/T-55555?from=100011111111&to=201901111111&filter=<class 'filter'> got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+End Report True
+End2End Report Provider: 2019-09-05 11:52:51.770710
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10001 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10002 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/weight?from=100011111111&to=201901111111&filter=in got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/item/T-55555?from=100011111111&to=201901111111&filter=<class 'filter'> got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+End2End Report Provider: 2019-09-05 11:53:04.699741
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10001 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10002 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/weight?from=100011111111&to=201901111111&filter=in got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/item/T-55555?from=100011111111&to=201901111111&filter=<class 'filter'> got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+the method Post to http://green.develeap.com:8080/weight?direction=in&truckid=na&container=55&unit=kg&forc=True&produce=tomato got the response <Response [500]>
+End Report False
+End2End Report Provider: 2019-09-05 11:55:32.175363
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10001 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10002 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/weight?from=100011111111&to=201901111111&filter=in got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/item/T-55555?from=100011111111&to=201901111111&filter=<class 'filter'> got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+the method Post to http://green.develeap.com:8080/weight?direction=in&truckid=T-55934&container=T-46364&unit=kg&forc=0&produce=tomatoes got the response <Response [500]>
+End Report False
+End2End Report Provider: 2019-09-05 11:56:35.043136
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10001 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10002 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/weight?from=100011111111&to=201901111111&filter=in got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/item/T-55555?from=100011111111&to=201901111111&filter=<class 'filter'> got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+the method Post to http://green.develeap.com:8080/weight?direction=in&truckid=T-55934&container=T-46364&unit=kg&forc=0&produce=tomatoes got the response <Response [500]>
+End Report False
+End2End Report Provider: 2019-09-05 11:57:18.252021
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10001 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10002 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/weight?from=100011111111&to=201901111111&filter=in got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/item/T-55555?from=100011111111&to=201901111111&filter=<class 'filter'> got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+End2End Report Provider: 2019-09-05 11:58:18.407919
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10001 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10002 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/weight?from=100011111111&to=201901111111&filter=in got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/item/T-55555?from=100011111111&to=201901111111&filter=<class 'filter'> got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+End2End Report Provider: 2019-09-05 11:59:16.327529
+******************************************
+the method GET to http://green.develeap.com:8080/health got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/unknown got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10001 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/session/10002 got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/weight?from=100011111111&to=201901111111&filter=in got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/item/T-55555?from=100011111111&to=201901111111&filter=<class 'filter'> got the response <Response [200]>
+the method GET to http://green.develeap.com:8080/batch-weight got the response <Response [200]>
+SKIP!!!! the method Post  to http://green.develeap.com:8080/weight?direction=in&truckid=T-55934&container=T-46364&unit=kg&forc=0&produce=tomatoes got the response <Response [500]>
+End Report True
