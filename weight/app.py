@@ -399,7 +399,7 @@ def postweight():
 
 
 
-        # return "Successfully added entry: %s"%pformat_successin
+        return pformat_successin
 
         conn = getMysqlConnection()
         conn.commit()
@@ -422,13 +422,13 @@ def postweight():
 #    "containers": [ id1, id2, ...]
 # },...]
 
-@app.route('/weight', methods=['GET'])
-def getweight():
+@app.route('/weights', methods=['GET'])
+def getweights():
     if request.method == "GET":
             db = getMysqlConnection()
             serverTime = datetime.datetime.now().strftime("%Y%m%d%I%M%S")
-            t1 = request.form.get('from', default = serverTime , type = str)
-            t2 = request.form.get('to', default = "now" , type = str)
+            t1 = request.form.get('from', default = datetime.datetime.now().strftime("%Y%m%d000000") , type = str)
+            t2 = request.form.get('to', default = serverTime , type = str)
             filter = request.form.get('filter', default = "in,out,none" , type = str)
             filter = str(filter).split(',')
         # data_query = ("SELECT * FROM  sessions WHERE created_at>="  + from_t1 +" AND created_at<=" + to_t2 + " AND truckid=" + "'" +id_num +"'" + "ORDER BY created_at ASC")
@@ -441,15 +441,16 @@ def getweight():
             weightsList = []
 
             for line in output_transactions :
-                if line[2] in filter :
+                # if line[1] in filter :
+                if filter in line[1] :
                     if any(item in str(line[4]).split(',')  for item in get_unknown()):
                         neto = None
                     else:
                         neto = line[7]
-
-                    retweight = { 'id': line[0], 'truck': line[3],'direction': line[2], 'bruto': line[5], 'neto': neto, 'produce': line[8], 'containers': str(line[4]).split(',') }
-                    weightsList.append(retweight)
-    return jsonify({'weights': weightsList})                    
+                retweight = { 'id': line[0], 'truck': line[3],'direction': line[2], 'bruto': line[5], 'neto': neto, 'produce': line[8], 'containers': str(line[4]).split(',') }
+                weightsList.append(retweight)
+        
+            return jsonify({'filter':filter},{'weights': weightsList})                    
 
 
 if __name__ == "__main__":
