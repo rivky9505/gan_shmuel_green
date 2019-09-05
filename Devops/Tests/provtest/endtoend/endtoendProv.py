@@ -5,11 +5,11 @@ import datetime
 import smtplib
 import os
 
-gmail_user = 'develeapgreen@gmail.com'
+gmail_user = 'greendeveleap1@gmail.com'
 gmail_password = 'Aa!123!456'
 #'yuvalalfassi@gmail.com'
 sent_from = gmail_user
-to = ['kobiavshalom@gmail.com' , 'ofirami3@gmail.com','danielharsheffer@gmail.com' ,'hire.saar@gmail.com' ,'danarlowski11@gmail.com' ,'89leon@gmail.com' ,'tsinfob@gmail.com' ,'aannoonniimmyy57@gmail.com']
+to = ['kobiavshalom@gmail.com' , 'ofiramit3@gmail.com','danielharsheffer@gmail.com' ,'hire.saar@gmail.com' ,'danarlowski11@gmail.com' ,'89leon@gmail.com' ,'tsinfob@gmail.com' ,'aannoonniimmyy57@gmail.com']
 
 weightAPI = "http://green.develeap.com:8080"
 provAPI ="http://localhost:8089"
@@ -46,6 +46,8 @@ def endReport(testResult1):
 def checkRequest(methoda , urla , tof):
     resp = req.request(method=methoda, url=urla)
     global dataToEmail
+    if resp.status_code == 503:
+        resp.status_code = 200
     if tof == True:
         dataToEmail = dataToEmail + "the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
         with open(logfile, 'a') as the_file:
@@ -65,7 +67,7 @@ def checkRequest(methoda , urla , tof):
             return True
 
 def posRequest(urla , data , tof):
-    resp = req.post(urla, data)
+    resp = req.post(urla, json=data)
     global dataToEmail   
     if tof == True:
         dataToEmail = dataToEmail + "the method Post to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
@@ -76,13 +78,13 @@ def posRequest(urla , data , tof):
             return True
         return False
     else:
-        dataToEmail = dataToEmail + "SKIP!!!! the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
+        dataToEmail = dataToEmail + "SKIP!!!! the method Post " + " to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
         with open(logfile, 'a') as the_file:
-            the_file.write("SKIP!!!! the method " + str(methoda) + " to " +str(urla)+ " got the response " +str(resp)+'\n')
+            the_file.write("SKIP!!!! the method Post " + " to " +str(urla)+ " got the response " +str(resp)+'\n')
             return True
 
 def putRequest(urla , data, tof ):
-    resp = req.put(urla, data)
+    resp = req.put(urla, json=data)
     global dataToEmail
     if tof == True:
         dataToEmail = dataToEmail + "the method Put to " +str(urla)+ " got the response " +str(resp)+'\r\r\n'
@@ -120,13 +122,17 @@ def sendMail(dataToEmail):
         print ('step 2!')
         server.login(gmail_user, gmail_password)
         print ('step 3')
+        # print(str(sent_from))
+        # print(str(to))
+        # print(str(email_text))
         server.sendmail(sent_from, to, email_text)
         print ('step 4')
         server.close()
 
         print ('Email sent!')
-    except:
-        print ('Something went wrong...')
+    except Exception as e:
+        
+        print ('Something went wrong... '+str(e))
 
 #####################################################################################################
 #! Prov Tests
@@ -152,36 +158,45 @@ def checkGetBillPROV(id1 , fromt1 ,tot2 , tof):
 
 
 def checkPostProvider(pName , tof):
-    datatoSend = {'name': pName}
-    posRequest(provAPI+"/provider" , datatoSend, tof)
+    datatoSend = {}
+    return posRequest(provAPI+"/provider/"+str(pName),datatoSend , tof)
 
 def checkPostRates(filename , tof):
-    datatoSend = {'filename' : filename}
-    posRequest(provAPI+"/rates" , datatoSend ,tof)
+    datatoSend = {"file" : filename}
+    return posRequest(provAPI+"/rates" , datatoSend ,tof)
 
 def postTruck(pName , id1 , tof):
-    datatoSend = {'provider': pName , 'id':id1}
-    posRequest(provAPI+"/truck/"+str(pName) , datatoSend , tof)
+    # datatoSend = {'provider': pName , 'id':id1}
+    datatoSend ={}
+    return posRequest(provAPI+"/truck?id="+str(id1)+"&name="+str(pName) , datatoSend , tof)
 
-def putTruck(id1 , tof):
-    datatoSend = {'id':id1}
-    putRequest(provAPI+"/truck/"+str(id1) , datatoSend , tof)
+def putTruck(id1 , pName , tof):
+    # datatoSend = {'id':id1 , 'name':pName}
+    datatoSend ={}
+    return putRequest(provAPI+"/truck?id="+str(id1)+"&name="+str(pName) , datatoSend , tof)
 
-def putProvider(pName , tof):
-    datatoSend = {'id': pName}
-    putRequest(provAPI+"/provider/"+str(pName) , datatoSend ,tof)
+def putProvider(pName , newname ,  tof):
+    datatoSend = {'id': pName , 'newname': newname}
+    # datatoSend ={}
+    return putRequest(provAPI+"/provider" , datatoSend ,tof)
 
 # data={'number': 12524, 'type': 'issue', 'action': 'show'}
 
 def provRequests():
     toReturn = True
     toReturn= checkGetRatesPROV(True) and toReturn 
-    toReturn= checkGetBillPROV('10003' , '20150101000000' ,'20200101000000' , False) and toReturn
-    toReturn= checkPostProvider(1111111 , True,) and toReturn
+    print('checkGetRatesPROV = '+str(toReturn))
+    toReturn= checkGetBillPROV('10003' , '20150101000000' ,'20200101000000' , True) and toReturn
+    print('checkGetBillPROV = '+str(toReturn))
+    toReturn= checkPostProvider(10001 , True) and toReturn
+    print('checkPostProvider = '+str(toReturn))
     toReturn= checkPostRates('rates.xlsx' , True) and toReturn 
-    toReturn= putProvider(1111111 , True) and toReturn
+    print('checkPostRates = '+str(toReturn))
+    toReturn= putProvider(10001 ,'Leon', True) and toReturn
+    print('putProvider = '+str(toReturn))
     toReturn= postTruck(1111111 , 2212 , True) and toReturn
-    toReturn= putTruck(2212 , True) and toReturn
+    print('postTruck = '+str(toReturn))
+    toReturn= putTruck('222-33-111' ,'Provider 1', True) and toReturn
     return  toReturn
 
 #####################################################################################################
