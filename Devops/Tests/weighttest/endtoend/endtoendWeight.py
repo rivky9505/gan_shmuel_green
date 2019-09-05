@@ -132,9 +132,9 @@ def sendMail(dataToEmail):
 def checkhealthWeight():
     try: 
         return checkRequest(get , weightAPI + "/health" , True)
-    except:
+    except as e:
         global dataToEmail
-        dataToEmail = dataToEmail + "Weight ApI is down "+'\r\r\n'
+        dataToEmail = dataToEmail + "Weight ApI is down "+ str(e) +'\r\r\n'
         with open(logfile, 'a') as the_file:
             the_file.write("Weight ApI is down "+'\n')
 
