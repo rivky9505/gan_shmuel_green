@@ -61,12 +61,6 @@ CREATE TABLE IF NOT EXISTS `weight` (
 
 
 
-INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('in', 'T-55555', 'containers', '10', 'kg', '0', 'tomatoes');
-INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('in', 'TRUCKID', 'containers', '10', 'kg', '0', 'tomatoes');
-
-
-
-
 
 CREATE TABLE IF NOT EXISTS `sessions` (
   `id` int(12) NOT NULL AUTO_INCREMENT,
@@ -78,12 +72,6 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `neto` int(12) DEFAULT NULL,
 PRIMARY KEY (`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001;
 
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20000101000000', 'C-11111', '10');
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20000201000000', 'C-11112', '20');
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20000108000000', 'C-11111', '12');
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20000225000000', 'C-11112', '150');
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20000301000000', 'C-11111', '40');
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20000101000000', 't-55555', '8');
 
 show tables;
 

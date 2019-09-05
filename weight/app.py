@@ -248,28 +248,9 @@ def postweight():
         output_json2 = cur.fetchall()
         b = output_json2
         pformat_b = pprint.pformat(b)
-<<<<<<< HEAD
-        # pformat_a is the previous direction
-        # pformat_b is the current direction
-
-        ischeckin = "SELECT direction='in' from weight where truckid='%s' LIMIT 1;"%strip_truckid
-        # ischeckout = 'SELECT truckid from weight;'
-        checkout_session = "SELECT id from sessions where truckid='%s' ORDER BY created_at DESC LIMIT 1;"%strip_truckid
-        isforce = "SELECT forc from weight where truckid='%s' ORDER BY created_at DESC LIMIT 1;"%strip_truckid  ### Added ORDER BY, if not working - DELETE
-# Check if truck already checked in
-        strip_checkin =""
-        cur.execute(ischeckin)
-        output_ischeckin = cur.fetchall()
-        pformat_ischeckin = pprint.pformat(output_ischeckin)
-        strip_checkin = strip(pformat_ischeckin)
-
-        strip_force = 0
-
         
         strip_checkin = ""
 
-=======
->>>>>>> parent of 022eab7... Added more initialization data in test.sql
         if pformat_a == pformat_b and strip_checkin == strip_true:
             if strip_force == '1':
                 cur.execute("UPDATE weight SET bruto = '%s' WHERE truckid = '%s';" %(bruto, strip_truckid))
@@ -281,20 +262,7 @@ def postweight():
 
             cur.execute("INSERT INTO sessions(direction, truckid, bruto) VALUES (%s, %s, %s)", (direction, truckid, bruto))
 
-        
-<<<<<<< HEAD
-        #ischeckin = "SELECT direction='in' from weight where truckid='%s' LIMIT 1;"%strip_truckid
-        # ischeckout = 'SELECT truckid from weight;'
-        #checkout_session = "SELECT id from sessions where truckid='%s' ORDER BY created_at DESC LIMIT 1;"%strip_truckid
-        #isforce = "SELECT forc from weight where truckid='%s' ORDER BY created_at DESC LIMIT 1;"%strip_truckid  ### Added ORDER BY, if not working - DELETE
-# Check if truck already checked in
-        #strip_checkin =""
-        #cur.execute(ischeckin)
-        #output_ischeckin = cur.fetchall()
-        #pformat_ischeckin = pprint.pformat(output_ischeckin)
-       # strip_checkin = strip(pformat_ischeckin)
-=======
-        
+                
         ischeckin = "SELECT direction='in' from weight where truckid='%s' LIMIT 1;"%strip_truckid
         ischeckout = 'SELECT truckid from weight;'
         checkout_session = "SELECT id from sessions where truckid='%s' ORDER BY created_at DESC LIMIT 1;"%strip_truckid
@@ -304,7 +272,6 @@ def postweight():
         output_ischeckin = cur.fetchall()
         pformat_ischeckin = pprint.pformat(output_ischeckin)
         strip_checkin = strip(pformat_ischeckin)
->>>>>>> parent of 022eab7... Added more initialization data in test.sql
 
         cur.execute(checkout_session)
         output_checkout = cur.fetchall()
@@ -312,19 +279,11 @@ def postweight():
         strip_checkoutid = strip(pformat_checkout)
 
 
-<<<<<<< HEAD
-        # cur.execute(isforce)
-        # output_force = cur.fetchall()
-        # pformat_force = pprint.pformat(output_force)
-        # strip_force = strip(pformat_force)
-
-=======
         cur.execute(isforce)
         output_force = cur.fetchall()
         pformat_force = pprint.pformat(output_force)
         strip_force = strip(pformat_force)
-        
->>>>>>> parent of 022eab7... Added more initialization data in test.sql
+
 
         last_checkinid = "SELECT id from weight where truckid='%s' ORDER BY direction LIMIT 1;"%truckid
 
@@ -354,18 +313,10 @@ def postweight():
         pformat_truckTara = pprint.pformat(output_truckTara)
         strip_truckTara = strip(pformat_truckTara)
 
-        strip_bruto = int(strip_bruto)
-        strip_truckTara = int(strip_truckTara)
-        neto = (strip_bruto - strip_truckTara)
-<<<<<<< HEAD
-      
-        containers_on_truck_query = "select containers from weight where truckid= %s" %strip_truckid
-        cur.execute(containers_on_truck_query)
-        output_containers_on_truck = cur.fetchall()
-        if neto != output_containers_on_truck :
-            return "ERROR neto != output_containers_on_truck "
-=======
->>>>>>> parent of 022eab7... Added more initialization data in test.sql
+#        strip_bruto = int(strip_bruto)
+
+#        strip_truckTara = int(strip_truckTara)
+ #       neto = (strip_bruto - strip_truckTara)
       
         successin = "SELECT JSON_OBJECT('id', id, 'created', created_at, 'truckid', truckid, 'Bruto', bruto) from sessions ORDER BY created_at DESC LIMIT 1;"
         cur.execute(successin)
@@ -373,6 +324,11 @@ def postweight():
         pformat_successin = pprint.pformat(output_successin)
 
         if pformat_b == pformat_jsonout:
+            
+            strip_bruto = int(strip_bruto)
+            strip_truckTara = int(strip_truckTara)
+            neto = (strip_bruto - strip_truckTara)
+
             if pformat_ischeckin == pformat_true:
                 cur.execute("INSERT INTO sessions(direction, truckid, bruto, truckTara, neto) VALUES (%s, %s, %s, %s, %s)", (direction, truckid, strip_bruto, truckTara, neto))
                 successout = "SELECT JSON_OBJECT('id', id, 'created', created_at, 'truckid', truckid, 'Bruto', bruto, 'truckTara', %s, 'Neto', neto) from sessions ORDER BY created_at DESC LIMIT 1;"%strip_truckTara
@@ -412,66 +368,8 @@ def session(id):
 
 
 
-# GET /weight?from=t1&to=t2&filter=f
-# - t1,t2 - date-time stamps, formatted as yyyymmddhhmmss. server time is assumed.
-# - f - comma delimited list of directions. default is "in,out,none"
-# default t1 is "today at 000000". default t2 is "now". 
-# returns an array of json objects, one per weighing (batch NOT included):
-# [{ "id": <id>,
-#    "direction": in/out/none,
-#    "bruto": <int>, //in kg
-#    "neto": <int> or "na" // na if some of containers have unknown tara
-#    "produce": <str>,
-#    "containers": [ id1, id2, ...]
-# },...]
-
-@app.route('/weight', methods=['GET'])
-def getweight():
-    if request.method == "GET":
-            db = getMysqlConnection()
-            serverTime = datetime.datetime.now().strftime("%Y%m%d%I%M%S")
-            t1 = request.form.get('from', default = serverTime , type = str)
-            t2 = request.form.get('to', default = "now" , type = str)
-            filter = request.form.get('filter', default = "in,out,none" , type = str)
-            filter = str(filter).split(',')
-
-            lines = "select * from transactions where " + "datetime>='" + str(t1) + "' and datetime<='" + str(t2) + "'"
-            cur = db.cursor()
-            cur.execute(lines)
-            output_transactions = cur.fetchall()
-
-            weightsList = []
-
-            for line in output_transactions :
-                if line[2] in filter :
-                    if any(item in str(line[4]).split(',')  for item in get_unknown()):
-                        neto = None
-                    else:
-                        neto = line[7]
-
-                    retweight = { 'id': line[0], 'truck': line[3],'direction': line[2], 'bruto': line[5], 'neto': neto, 'produce': line[8], 'containers': str(line[4]).split(',') }
-                    weightsList.append(retweight)
-    return jsonify({'weights': weightsList})                    
 
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
 
-<<<<<<< HEAD
-@app.route('/session/<id>', methods=['GET'])
-def session(id):
-    db = getMysqlConnection()
-    if request.method == 'GET':
-
-        getsession = "SELECT JSON_ARRAYAGG(JSON_OBJECT('id', id, 'created', created_at, 'truckid', truckid, 'Bruto', bruto, 'truckTara', truckTara, 'Neto', neto)) from sessions where id='%s'" %id
-
-
-        cur = db.cursor()
-        cur.execute(getsession)
-        output_session = cur.fetchall()
-        db.close()
-        return jsonify(output_session)
-
-    return jsonify(results=output_session)
-=======
->>>>>>> parent of 022eab7... Added more initialization data in test.sql
