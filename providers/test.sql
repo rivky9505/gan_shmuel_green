@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `Trucks` (
 -- Dumping data
 --
  
-INSERT INTO Provider (`name`) VALUES ('ALL'), ('provider 1'), ('provider 2'), ('provider 3'), ('provider 4');
+INSERT INTO Provider (`name`) VALUES ('provider 1'), ('provider 2'), ('provider 3'), ('provider 4');
  
 INSERT INTO Rates (`product_id`, `rate`, `scope`) VALUES ('Navel', '93', 'All'), ('Blood', '112', 'All'), ('Mandarin', '104', 'All'), 
 ('Shamuti', '84', 'All'), ('Tangerine', '92', 'All'), ('Clementine', '113', 'All'), 

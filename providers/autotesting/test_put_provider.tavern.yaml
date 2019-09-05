@@ -38,9 +38,9 @@ stages:
 
     # ...and the expected response code and body
     response:
-      status_code: 400
+      status_code: 500
       body:
-        errorCode: -5
+        errorCode: -3
 ---
 test_name: PUT PROVIDER API
 

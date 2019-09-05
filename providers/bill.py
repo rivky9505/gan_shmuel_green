@@ -24,11 +24,20 @@ def get_all_sessions_in_array(t1,t2):
     return ( json.load(open("weight.json","r")) )
 
 def find_providers_trucks(id):
-    db = app.getMysqlConnection()
-    cur = db.cursor() 
-    query= "SELECT id FROM Trucks WHERE provider_id = " + str(id)
-    cur.execute(query)
-    return cur.fetchall() 
+    try:
+        db = app.getMysqlConnection()
+    except:
+        return -2
+    try:
+        cur = db.cursor() 
+        query= "SELECT id FROM Trucks WHERE provider_id = " + str(id)
+        cur.execute(query)
+        data=cur.fetchall()
+        cur.close()
+        db.close()
+        return data
+    except:
+        return -3   
 
 def make_get_item_api(truck_number,t1,t2):
     # req_sting="http://green.develeap.com:8080/item/"+truck_number+"?from="+t1+"&to="+t2
@@ -42,15 +51,33 @@ def make_get_item_api(truck_number,t1,t2):
 
 
 def get_provider_name(id):
-    db = app.getMysqlConnection()
-    cur = db.cursor()
-    query= "select name from Provider where id="+str(id)
-    cur.execute(query)
-    return cur.fetchone() 
+    try:
+        db = app.getMysqlConnection()
+    except:
+        return -2
+    try:
+        cur = db.cursor()
+        query= "select name from Provider where id="+str(id)
+        cur.execute(query)
+        data=cur.fetchone() 
+        cur.close()
+        db.close()
+        return data
+    except:
+        return -3
     
 def get_rates():
-    db = app.getMysqlConnection()
-    cur = db.cursor(dictionary=True)
-    query= "select * from Rates"
-    cur.execute(query)
-    return cur.fetchall()
+    try:
+        db = app.getMysqlConnection()
+    except:
+        return -2
+    try:
+        cur = db.cursor(dictionary=True)
+        query= "select * from Rates"
+        cur.execute(query)
+        data=cur.fetchall() 
+        cur.close()
+        db.close()
+        return data
+    except:
+        return -3
