@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `weight` (
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `direction` varchar(10) DEFAULT NULL,
   `truckid` varchar(50) DEFAULT NULL,
-  `containers` varchar(10000) DEFAULT NULL,
+  `containers` varchar(1000) DEFAULT NULL,
   `bruto` int(12) DEFAULT NULL,
   `unit` varchar(50) DEFAULT NULL,
   `forc` BOOLEAN NOT NULL DEFAULT 0,
