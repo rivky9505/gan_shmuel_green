@@ -11,11 +11,16 @@ post_rates_status = run("./autotesting/test_post_rates.tavern.yaml")
 post_truck_status = run("./autotesting/test_post_truck.tavern.yaml")
 put_provider_status = run("./autotesting/test_put_provider.tavern.yaml")
 put_truck_status = run("./autotesting/test_put_truck.tavern.yaml")
+get_bill_status = run("./autotesting/test_get_bill.tavern.yaml")
 
 if get_health_status == 0:
     print("[GET][HEALTH]:" + colored("SUCCED", 'green'))
 else:
     print("[GET][HEALTH]:" + colored("FAILED", 'red'))
+if get_bill_status == 0:
+    print("[GET][BILL]:" + colored("SUCCED", 'green'))
+else:
+    print("[GET][BILL]:" + colored("FAILED", 'red'))
 
 if get_rates_status == 0:
     print("[GET][RATES]:" + colored("SUCCED", 'green'))
@@ -51,6 +56,8 @@ if put_truck_status == 0:
     print("[PUT][TRUCK]:" + colored("SUCCED", 'green'))
 else:
     print("[PUT][TRUCK]:" + colored("FAILED", 'red'))
+
+
 
 # success = run("test_api.tavern.yaml")
 # print(str(success))
