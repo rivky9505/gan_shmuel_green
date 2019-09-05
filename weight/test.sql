@@ -72,16 +72,6 @@ CREATE TABLE IF NOT EXISTS `weight` (
 
 
 
-INSERT INTO weight (`created_at`, `direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('20190905104120','in', 'TRUCKID', 'G-9234', '243', 'kg', '0', 'clementine');
-INSERT INTO weight (`created_at`, `direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('20190905104120','in', 'T-55555', 'T-4256,Y-9270,J-8394,H-1234', '687', 'kg', '0', 'tomatoes');
-INSERT INTO weight (`created_at`, `direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('20190905104120','in', 'T-55432', 'T-4646,Y-9830,J-8434,H-1234', '687', 'kg', '0', 'tomatoes');
-INSERT INTO weight (`created_at`, `direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('20190905104120','in', 'T-55755', 'T-4247,Y-9246,J-8274,H-4334', '724', 'kg', '0', 'tomatoes');
-INSERT INTO weight (`created_at`, `direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('20190905104120','in', 'T-55934', 'T-4246,Y-7573,J-8394,H-3334', '599', 'kg', '0', 'tomatoes');
-INSERT INTO weight (`created_at`, `direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('20190905104120','out', 'T-55555', '', '100', 'kg', '0', 'tomatoes');
-
-
-
-
 
 CREATE TABLE IF NOT EXISTS `sessions` (
   `id` int(12) NOT NULL AUTO_INCREMENT,
@@ -92,19 +82,6 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `truckTara` int(12) DEFAULT NULL,
   `neto` int(12) DEFAULT NULL,
 PRIMARY KEY (`id`)) ENGINE=MyISAM AUTO_INCREMENT=10001;
-
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20000101000000', 'N-15311', '24');
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20000201000000', 'V-86112', '52');
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20000108000000', 'I-53174', '17');
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20000225000000', 'Y-92012', '147');
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20000301000000', 'G-13611', '48');
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20000101000000', 'T-03845', '81');
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20190905104120', 'N-15311', '24');
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20190905104230', 'V-86112', '52');
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20190905104320', 'I-53174', '17');
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20190905104420', 'Y-92012', '57');
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20190905104520', 'G-13611', '48');
-INSERT INTO sessions (`created_at`, `truckid`, `truckTara`) VALUES ('20190905104620', 'T-03845', '81');
 
 show tables;
 
