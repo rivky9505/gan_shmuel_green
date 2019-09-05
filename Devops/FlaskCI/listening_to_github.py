@@ -65,10 +65,13 @@ def test(sb):
         if sb == "master":
                 res = subprocess.call("/home/ubuntu/temp/gan_shmuel_green/Devops/Tests/test.bash %s" % ("-m"), shell=True)
                 print (res)
+                if res == 0: 
+                        mainFunc()
                 print ("*****END*****")
         if sb == "weight":
                 res = subprocess.call("/home/ubuntu/temp/gan_shmuel_green/Devops/Tests/test.bash %s" % ("-w"), shell=True)
                 print (res)
+                if res == 0:
                 print ("*****END*****")
         if sb == "provider":
                 res = subprocess.call("/home/ubuntu/temp/gan_shmuel_green/Devops/Tests/test.bash %s" % ("-p"), shell=True)
@@ -126,7 +129,7 @@ def api_gh_message():
         if branch == "master":
                 print ("its a master")
                 test("master")
-                mainFunc()
+                #mainFunc()
         if branch == "weight":
                 print ("its a weight")
                 test("weight")
