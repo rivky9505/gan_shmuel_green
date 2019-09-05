@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `weight` (
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `direction` varchar(10) DEFAULT NULL,
   `truckid` varchar(50) DEFAULT NULL,
-  `containers` varchar(10000) DEFAULT NULL,
+  `containers` varchar(1000) DEFAULT NULL,
   `bruto` int(12) DEFAULT NULL,
   `unit` varchar(50) DEFAULT NULL,
   `forc` BOOLEAN NOT NULL DEFAULT 0,
@@ -61,12 +61,8 @@ CREATE TABLE IF NOT EXISTS `weight` (
 
 
 
-INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('in', 'T-55555', 'T-4256,Y-9270,J-8394,H-1234', '687', 'kg', '0', 'tomatoes');
-INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('in', 'TRUCKID', 'G-9234', '243', 'kg', '0', 'clementine');
-INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('in', 'T-55432', 'T-4646,Y-9830,J-8434,H-1234', '687', 'kg', '0', 'tomatoes');
-INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('in', 'T-55755', 'T-4247,Y-9246,J-8274,H-4334', '724', 'kg', '0', 'tomatoes');
-INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('in', 'T-55934', 'T-4246,Y-7573,J-8394,H-3334', '599', 'kg', '0', 'tomatoes');
-INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('out', 'T-55555', '', '100', 'kg', '0', 'tomatoes');
+INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('in', 'T-55555', 'containers', '10', 'kg', '0', 'tomatoes');
+INSERT INTO weight (`direction`, `truckid`, `containers`, `bruto`, `unit`, `forc`, `produce`) VALUES ('in', 'TRUCKID', 'containers', '10', 'kg', '0', 'tomatoes');
 
 
 
