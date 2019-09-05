@@ -179,7 +179,7 @@ def weightRequests():
 startReport()
 if checkhealthWeight() == True:
     testResult = weightRequests()
-else: 
+else:
     testResult = None
 
 
